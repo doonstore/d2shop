@@ -34,11 +34,11 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: Colors.grey,
       onPressed: () {
         signInWithGoogle().then((v) {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) {
-                return FirstScreen(
-                  userName: v.displayName,
+                return HomePage(
+                  user: v,
                 );
               },
             ),

@@ -42,7 +42,7 @@ Future<FirebaseUser> signInWithGoogle() async {
   return user;
 }
 
-Future<bool> signOutGoogle() async {
+Future<void> signOutGoogle() async {
   await googleSignIn.signOut();
   return true;
 }
