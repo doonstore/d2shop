@@ -1,18 +1,17 @@
+import 'package:d2shop/components/gallery_page.dart';
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
+void main() => runApp(DoonStoreApp());
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+class DoonStoreApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DoonStore',
+      home: GalleryPage(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
     );
   }
 }
