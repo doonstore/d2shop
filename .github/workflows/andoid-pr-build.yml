@@ -23,4 +23,4 @@ jobs:
     - name: Flutter Test
       run: flutter test
     - name: Build APK
-      run: flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi --debug --verbose
+      run: flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi --debug
