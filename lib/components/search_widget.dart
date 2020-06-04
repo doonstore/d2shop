@@ -15,7 +15,7 @@ class SearchWidget extends StatelessWidget {
               child: Text(
                 "What can we get you?",
                 textScaleFactor: 2.0,
-                style: TextStyle(fontSize: 8.0, color: Colors.white),
+                style: TextStyle(fontSize: 8.0, color: Colors.white, fontWeight: FontWeight.w600),
               ),
             ),
             Card(
