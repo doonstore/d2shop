@@ -57,6 +57,5 @@ class SearchWidget extends StatelessWidget {
             ),
           ]),
     );
-    throw UnimplementedError();
   }
 }
