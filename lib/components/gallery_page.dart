@@ -2,7 +2,7 @@ import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'search_widget.dart';
 import '../config/authentication.dart';
 
 class GalleryPage extends StatefulWidget {
@@ -16,7 +16,12 @@ class _GalleryPageState extends State<GalleryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+      ),
+      body: SearchWidget(),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -65,9 +70,6 @@ class _GalleryPageState extends State<GalleryPage> {
             getUserActionTile()
           ],
         ),
-      ),
-      body: Center(
-        child: Text('Hello World!'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
