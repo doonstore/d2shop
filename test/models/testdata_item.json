@@ -1,0 +1,9 @@
+[
+  {
+    "id": "1",
+    "name": "Elite Bread",
+    "photoUrl": "assets/item/1.png",
+    "price": 30.0,
+    "categoryList": ["1"]
+  }
+]
