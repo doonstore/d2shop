@@ -26,12 +26,14 @@ class _ItemListWidget extends State<ItemListWidget> {
 
   List<Widget> getListItems() {
     List<Widget> itemList = List();
-    for (Item item in state.itemList) {
-      itemList.add(ListTile(
-        leading: Image(image: AssetImage(item.photoUrl)),
-        title: Text(item.name),
-        trailing: getQuantityScale(item.id),
-      ));
+    if (state.itemList != null) {
+      for (Item item in state.itemList) {
+        itemList.add(ListTile(
+          leading: Image(image: AssetImage(item.photoUrl)),
+          title: Text(item.name),
+          trailing: getQuantityScale(item.id),
+        ));
+      }
     }
     return itemList;
   }
