@@ -9,10 +9,10 @@ class Category {
 
   Category.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = json['photo'],
+        name = json['name'],
         photoUrl = json['photoUrl'],
         isFeatured = json['isFeatured'],
-        itemList = json['itemList'] as List<String>;
+        itemList = json['itemList'].cast<String>();
 
   Map<String, dynamic> toJson() {
     return {
@@ -41,7 +41,7 @@ class Item {
         price = json['price'].runtimeType == int
             ? (json['price'] as int).toDouble()
             : json['price'] as double,
-        categoryList = (json['categoryList'] as List<dynamic>).cast<String>();
+        categoryList = json['categoryList'].cast<String>();
 
   Map<String, dynamic> toJson() {
     return {
