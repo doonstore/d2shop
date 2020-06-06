@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:d2shop/models/doonstore_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -6,7 +7,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 final databaseReference = Firestore.instance;
 
-Future<FirebaseUser> signInWithGoogle() async {
+Future<DoonStoreUser> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
@@ -24,22 +25,27 @@ Future<FirebaseUser> signInWithGoogle() async {
 
   final FirebaseUser currentUser = await _auth.currentUser();
   assert(user.uid == currentUser.uid);
-  var data = {
-    "id": user.uid,
-    "displayName": user.displayName,
-    "email": user.email,
-    "phone": user.phoneNumber,
-    "photoUrl": user.photoUrl,
-    "lastLogin": user.metadata.lastSignInTime,
-  };
-  databaseReference
+  var userFromDB = await databaseReference
       .collection('users')
       .document(user.uid)
-      .updateData(data)
-      .catchError((ex) {
-    databaseReference.collection('users').document(user.uid).setData(data);
-  });
-  return user;
+      .snapshots()
+      .first;
+  DoonStoreUser userData;
+  if (userFromDB.data == null) {
+    userData = DoonStoreUser.fromFirebaseUser(user);
+    databaseReference
+        .collection('users')
+        .document(userData.userId)
+        .setData(userData.toMap());
+  } else {
+    userData = DoonStoreUser.fromJson(userFromDB.data);
+    userData.lastLogin = user.metadata.lastSignInTime;
+    databaseReference
+        .collection('users')
+        .document(userData.userId)
+        .updateData(userData.toMap());
+  }
+  return userData;
 }
 
 Future<void> signOutGoogle() async {

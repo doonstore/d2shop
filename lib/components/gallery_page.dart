@@ -1,3 +1,5 @@
+import 'package:d2shop/components/category_list_widget.dart';
+import 'package:d2shop/components/item_list_widget.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -12,6 +14,11 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
+  var _childWidgets;
+
+  _GalleryPageState() {
+    _childWidgets = [ItemListWidget(state: state), CategoryList(state: state)];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,11 @@ class _GalleryPageState extends State<GalleryPage> {
         bottomOpacity: 0.0,
         elevation: 0.0,
       ),
+<<<<<<< HEAD
       body: SearchWidget(),
+=======
+      body: _childWidgets[state.bottomNavBarSelectedIndex],
+>>>>>>> 0a54650dcccb9be585c66b56bbc59dbb0aa07769
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
