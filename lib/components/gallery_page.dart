@@ -28,11 +28,7 @@ class _GalleryPageState extends State<GalleryPage> {
         bottomOpacity: 0.0,
         elevation: 0.0,
       ),
-<<<<<<< HEAD
-      body: SearchWidget(),
-=======
       body: _childWidgets[state.bottomNavBarSelectedIndex],
->>>>>>> 0a54650dcccb9be585c66b56bbc59dbb0aa07769
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
