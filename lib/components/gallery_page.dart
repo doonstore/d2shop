@@ -13,10 +13,9 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
-  var _childWidgets;
 
   _GalleryPageState() {
-    _childWidgets = [CategoryList(state: state)];
+    CategoryList(state: state);
   }
 
   @override
