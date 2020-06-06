@@ -1,10 +1,8 @@
-import 'package:d2shop/components/category_list_widget.dart';
-import 'package:d2shop/components/item_list_widget.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'search_widget.dart';
 import '../config/authentication.dart';
 
 class GalleryPage extends StatefulWidget {
@@ -14,12 +12,12 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
-  var _childWidgets;
+  //var _childWidgets;
 
-  _GalleryPageState() {
+ /* _GalleryPageState() {
     _childWidgets = [ItemListWidget(state: state), CategoryList(state: state)];
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +26,73 @@ class _GalleryPageState extends State<GalleryPage> {
         bottomOpacity: 0.0,
         elevation: 0.0,
       ),
-      body: _childWidgets[state.bottomNavBarSelectedIndex],
+      body: new SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                SearchWidget(),
+                new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new GestureDetector(
+                        onTap: () {
+                          Fluttertoast.showToast(msg: "Heelo");
+                        },
+                        child: new Text(
+                          'Date Section',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ]),
+                new Container(
+                  margin: EdgeInsets.only(
+                      left: 5.0, right: 0.0, top: 115.0, bottom: 0.0),
+                ),
+                new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new GestureDetector(
+                        onTap: () {
+                          Fluttertoast.showToast(msg: "Heelo");
+                        },
+                        child: new Text(
+                          'Featured Section',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ]),
+                new Container(
+                  margin: EdgeInsets.only(
+                      left: 5.0, right: 0.0, top: 115.0, bottom: 0.0),
+                ),
+                new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      new GestureDetector(
+                        onTap: () {
+                          Fluttertoast.showToast(msg: "Heelo");
+                        },
+                        child: new Text(
+                          'Categories',
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ]),
+              ],
+            ),
+          )),
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
@@ -40,9 +104,9 @@ class _GalleryPageState extends State<GalleryPage> {
                   : state.user.email),
               currentAccountPicture: CircleAvatar(
                 backgroundColor:
-                    Theme.of(context).platform == TargetPlatform.iOS
-                        ? Colors.blue
-                        : Colors.white,
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? Colors.blue
+                    : Colors.white,
                 child: getDisplayPicture(),
               ),
             ),
@@ -99,7 +163,7 @@ class _GalleryPageState extends State<GalleryPage> {
           setState(() {
             state.bottomNavBarSelectedIndex = index;
             state.appBarTitle =
-                state.bottomNavBarTitles[state.bottomNavBarSelectedIndex];
+            state.bottomNavBarTitles[state.bottomNavBarSelectedIndex];
           });
           Fluttertoast.showToast(msg: "${state.appBarTitle} pressed");
         },
