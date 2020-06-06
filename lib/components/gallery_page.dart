@@ -4,6 +4,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'search_widget.dart';
 import '../config/authentication.dart';
+import 'package:d2shop/components/category_list_widget.dart';
 
 class GalleryPage extends StatefulWidget {
   @override
@@ -12,12 +13,12 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
-  //var _childWidgets;
+  var _childWidgets;
 
- /* _GalleryPageState() {
-    _childWidgets = [ItemListWidget(state: state), CategoryList(state: state)];
+  _GalleryPageState() {
+    _childWidgets = [CategoryList(state: state)];
   }
-*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +31,7 @@ class _GalleryPageState extends State<GalleryPage> {
           child: Container(
             child: Column(
               children: <Widget>[
-                SearchWidget(),
+                SearchWidget(state: state),
                 new Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

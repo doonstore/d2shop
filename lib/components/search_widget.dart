@@ -1,7 +1,14 @@
+import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'category_list_widget.dart';
+
 
 class SearchWidget extends StatelessWidget {
+  final ApplicationState state;
+
+  SearchWidget({this.state});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,6 +48,7 @@ class SearchWidget extends StatelessWidget {
                       ),
                       onTap: () {
                         Fluttertoast.showToast(msg: 'Search Pressed...');
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryList(state: state)));
                       },
                     ),
                     SizedBox(
