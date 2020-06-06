@@ -17,6 +17,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
   _GalleryPageState() {
     _childWidgets = [CategoryList(state: state)];
+  }
 
   @override
   Widget build(BuildContext context) {
