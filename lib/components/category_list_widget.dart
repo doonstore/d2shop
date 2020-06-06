@@ -2,7 +2,6 @@ import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CategoryList extends StatefulWidget {
   final ApplicationState state;
@@ -20,37 +19,43 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      children: getCategoryGridItems(),
+    return Scaffold(
+      body: GridView.count(
+        childAspectRatio: 1.0,
+        padding: EdgeInsets.fromLTRB(10,125,10,0),
+        crossAxisCount: 3,
+        crossAxisSpacing: 18,
+        mainAxisSpacing: 18,
+        children: getCategoryGridItems(),
+      ),
     );
   }
 
   List<Widget> getCategoryGridItems() {
+    var color = 0xffd4ebf2;
     List<Widget> categoryWidgetList = List();
     if (state.categoryList != null) {
       for (Category category in state.categoryList) {
-        categoryWidgetList.add(GestureDetector(
-          onTap: () {
-            Fluttertoast.showToast(msg: 'Clicked on ${category.name}');
-          },
-          child: Card(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  width: 115,
-                  child: Image(
-                    image: AssetImage(category.photoUrl),
-                  ),
+        categoryWidgetList.add(Container(
+          decoration: BoxDecoration(
+              color: Color(color), borderRadius: BorderRadius.circular(10)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                category.photoUrl,
+                width: 42,
+              ),
+              SizedBox(
+                height: 14,
+              ),
+              Text(
+                category.name,
+                style: TextStyle(
+                    fontSize: 15
                 ),
-                ListTile(
-                  title: Text(category.name),
-                  subtitle: Text(category.isFeatured
-                      ? 'Featured Category'
-                      : 'Popular Category'),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ));
       }
