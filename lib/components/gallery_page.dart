@@ -14,12 +14,12 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
-  var _childWidgets;
+  //var _childWidgets;
 
-  _GalleryPageState() {
+ /* _GalleryPageState() {
     _childWidgets = [ItemListWidget(state: state), CategoryList(state: state)];
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
