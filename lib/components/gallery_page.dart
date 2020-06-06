@@ -1,5 +1,3 @@
-import 'package:d2shop/components/category_list_widget.dart';
-import 'package:d2shop/components/item_list_widget.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
