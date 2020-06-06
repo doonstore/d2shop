@@ -12,3 +12,8 @@ Future<Item> getItem(String id) async {
   var q = await databaseReference.collection('item').document(id).get();
   return Item.fromJson(q.data);
 }
+
+Future<List<Category>> getCategories() async {
+  var q = await databaseReference.collection('category').getDocuments();
+  return q.documents.map((e) => Category.fromJson(e.data)).toList();
+}

@@ -9,6 +9,7 @@ class ApplicationState {
   DoonStoreUser user;
   List<Item> itemList;
   Map<String, int> cart = Map();
+  List<Category> categoryList;
 
   ApplicationState() {
     getItems().then((value) {
@@ -17,5 +18,6 @@ class ApplicationState {
         cart[item.id] = 0;
       }
     });
+    getCategories().then((value) => categoryList = value);
   }
 }

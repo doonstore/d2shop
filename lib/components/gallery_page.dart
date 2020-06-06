@@ -1,3 +1,4 @@
+import 'package:d2shop/components/category_list_widget.dart';
 import 'package:d2shop/components/item_list_widget.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,11 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   var state = ApplicationState();
+  var _childWidgets;
+
+  _GalleryPageState() {
+    _childWidgets = [ItemListWidget(state: state), CategoryList(state: state)];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +28,7 @@ class _GalleryPageState extends State<GalleryPage> {
         bottomOpacity: 0.0,
         elevation: 0.0,
       ),
-      body: ItemListWidget(
-        state: state,
-      ),
+      body: _childWidgets[state.bottomNavBarSelectedIndex],
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
