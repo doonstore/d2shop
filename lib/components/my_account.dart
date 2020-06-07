@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class Account_Screen extends StatefulWidget {
+class AccountScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => account();
+  State<StatefulWidget> createState() => Account();
 }
 
-class account extends State<Account_Screen> {
+class Account extends State<AccountScreen> {
   String username = 'Abhishek';
-  String mobilenumber = '8437166707';
+  String mobileNumber = '8437166707';
   String eid = 'abhishekgarg5800@gmail.com';
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    Icon ofericon = new Icon(
+    Icon offerIcon = new Icon(
       Icons.edit,
       color: Colors.black38,
     );
@@ -111,7 +111,7 @@ class account extends State<Account_Screen> {
                                     ),
                                     _verticalDivider(),
                                     new Text(
-                                      mobilenumber,
+                                      mobileNumber,
                                       style: TextStyle(
                                           color: Colors.black45,
                                           fontSize: 13.0,
@@ -133,7 +133,7 @@ class account extends State<Account_Screen> {
                               new Container(
                                 alignment: Alignment.centerLeft,
                                 child: IconButton(
-                                    icon: ofericon,
+                                    icon: offerIcon,
                                     color: Colors.blueAccent,
                                     onPressed: null),
                               )

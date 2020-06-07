@@ -26,7 +26,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 title: new Text("Abhishek"),
                 trailing: new Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Account_Screen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountScreen()));
                 }),
             new Divider(),
             new ListTile(
