@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:d2shop/state/application_state.dart';
-import 'myaccount.dart';
+import 'my_account.dart';
 
 class AppDrawer extends StatefulWidget {
   final ApplicationState state;

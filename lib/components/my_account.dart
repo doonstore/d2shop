@@ -30,12 +30,6 @@ class account extends State<Account_Screen> {
       Icons.do_not_disturb_on,
       color: Colors.black38,
     );
-
-    Icon menu = new Icon(
-      Icons.more_vert,
-      color: Colors.black38,
-    );
-
     Icon address = new Icon(
       Icons.location_city,
       color: Colors.black38,
