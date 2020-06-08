@@ -102,43 +102,4 @@ class Account extends State<AccountScreen> {
       ),
     );
   }
-
-  _verticalDivider() => Container(
-    padding: EdgeInsets.all(2.0),
-  );
-
-  _verticalD() => Container(
-    margin: EdgeInsets.only(left: 3.0, right: 0.0, top: 0.0, bottom: 0.0),
-  );
-
-  Icon offerIcon = new Icon(
-    Icons.edit,
-    color: Colors.black38,
-  );
-  Icon keyloch = new Icon(
-    Icons.vpn_key,
-    color: Colors.black38,
-  );
-  Icon bell = new Icon(
-    Icons.hearing,
-    color: Colors.black38,
-  );
-  Icon logout = new Icon(
-    Icons.do_not_disturb_on,
-    color: Colors.black38,
-  );
-  Icon address = new Icon(
-    Icons.location_city,
-    color: Colors.black38,
-  );
-
-  Icon privacy = new Icon(
-    Icons.priority_high,
-    color: Colors.black38,
-  );
-  Icon cookie = new Icon(
-    Icons.priority_high,
-    color: Colors.black38,
-  );
-
 }

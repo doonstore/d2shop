@@ -53,17 +53,6 @@ class EditUserDetails {
                         hintText: "Email",
                         icon: Icon(Icons.alternate_email),
                         border: InputBorder.none),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        Pattern pattern =
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                        RegExp regex = new RegExp(pattern);
-                        if (!regex.hasMatch(value))
-                          return 'Please make sure your email address is valid';
-                        else
-                          return null;
-                      }
-                    },
                   ),
                 ),
                 ListTile(
