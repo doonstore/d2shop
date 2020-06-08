@@ -2,9 +2,10 @@ import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'search_widget.dart';
 import '../config/authentication.dart';
 import 'package:d2shop/components/category_list_widget.dart';
+import 'search_widget.dart';
+import 'drawer.dart';
 
 class GalleryPage extends StatefulWidget {
   @override
@@ -30,6 +31,7 @@ class _GalleryPageState extends State<GalleryPage> {
           child: Container(
             child: Column(
               children: <Widget>[
+                // Home Page - Search Widget - It takes us to the Categories
                 SearchWidget(state: state),
                 new Row(
                     mainAxisSize: MainAxisSize.max,
@@ -38,6 +40,7 @@ class _GalleryPageState extends State<GalleryPage> {
                       new GestureDetector(
                         onTap: () {
                           Fluttertoast.showToast(msg: "Heelo");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> SearchWidget(state: state)));
                         },
                         child: new Text(
                           'Date Section',
@@ -93,55 +96,7 @@ class _GalleryPageState extends State<GalleryPage> {
               ],
             ),
           )),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                  state.user == null ? 'Anonymous' : state.user.displayName),
-              accountEmail: Text(state.user == null
-                  ? 'anonymous@nomail.com'
-                  : state.user.email),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor:
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? Colors.blue
-                    : Colors.white,
-                child: getDisplayPicture(),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.category),
-              title: Text('Category'),
-              onTap: () {
-                Fluttertoast.showToast(msg: 'Category pressed');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.list),
-              title: Text('My Orders'),
-              onTap: () {
-                Fluttertoast.showToast(msg: 'Order pressed');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.shopping_cart),
-              title: Text('View Cart'),
-              onTap: () {
-                Fluttertoast.showToast(msg: 'Cart pressed');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.help_outline),
-              title: Text('Help'),
-              onTap: () {
-                Fluttertoast.showToast(msg: 'Help pressed');
-              },
-            ),
-            getUserActionTile()
-          ],
-        ),
-      ),
+      drawer: AppDrawer(state: state),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
