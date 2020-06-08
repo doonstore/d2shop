@@ -1,48 +1,22 @@
 import 'package:flutter/material.dart';
 
+import 'edit_user_details.dart';
+
 class AccountScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => Account();
 }
 
 class Account extends State<AccountScreen> {
-  String username = 'Abhishek';
+  String username = 'Abhishek Garg';
   String mobileNumber = '8437166707';
   String eid = 'abhishekgarg5800@gmail.com';
+  String appartmentName = "XYZ Apartment";
 
+  EditUserDetails editUserDetails = new EditUserDetails();
+  
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
-    Icon offerIcon = new Icon(
-      Icons.edit,
-      color: Colors.black38,
-    );
-    Icon keyloch = new Icon(
-      Icons.vpn_key,
-      color: Colors.black38,
-    );
-    Icon bell = new Icon(
-      Icons.hearing,
-      color: Colors.black38,
-    );
-    Icon logout = new Icon(
-      Icons.do_not_disturb_on,
-      color: Colors.black38,
-    );
-    Icon address = new Icon(
-      Icons.location_city,
-      color: Colors.black38,
-    );
-
-    Icon privacy = new Icon(
-      Icons.priority_high,
-      color: Colors.black38,
-    );
-    Icon cookie = new Icon(
-      Icons.priority_high,
-      color: Colors.black38,
-    );
 
     //List<address> addresLst = loadAddress() as List<address> ;
     return new Scaffold(
@@ -57,206 +31,75 @@ class Account extends State<AccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 textDirection: TextDirection.ltr,
                 children: <Widget>[
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    alignment: Alignment.topCenter,
-                    height: 260.0,
-                    child: new Card(
-                      elevation: 3.0,
-                      child: Column(
-                        children: <Widget>[
-                          new Container(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                margin: const EdgeInsets.all(10.0),
-                                // padding: const EdgeInsets.all(3.0),
-                                child: ClipOval(
-                                  child: Image.network(
-                                      'https://www.fakenamegenerator.com/images/sil-female.png'),
-                                ),
-                              )),
-
-                          new FlatButton(
-                            onPressed: null,
-                            child: Text(
-                              'Change',
-                              style:
-                              TextStyle(fontSize: 13.0, color: Colors.blueAccent),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: new BorderRadius.circular(30.0),
-                                side: BorderSide(color: Colors.blueAccent)),
+                  const SizedBox(height: 30.0),
+                  Row(
+                    children: <Widget>[
+                      /*Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: new ExactAssetImage('assets/iconsPerson.png'),
+                            fit: BoxFit.cover,
                           ),
-
-                          new Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              new Container(
-                                margin: EdgeInsets.only(
-                                    left: 10.0, top: 20.0, right: 5.0, bottom: 5.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    new Text(
-                                      username,
-                                      style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                    _verticalDivider(),
-                                    new Text(
-                                      mobileNumber,
-                                      style: TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 13.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.5),
-                                    ),
-                                    _verticalDivider(),
-                                    new Text(
-                                      eid,
-                                      style: TextStyle(
-                                          color: Colors.black45,
-                                          fontSize: 13.0,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 0.5),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              new Container(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                    icon: offerIcon,
-                                    color: Colors.blueAccent,
-                                    onPressed: null),
-                              )
-                            ],
-                          ),
-                          // VerticalDivider(),
-                        ],
+                          border: Border.all(color: Colors.grey,width: 1.0,),
+                        ),
+                      ), */
+                      const SizedBox(width: 15.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(username, style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                            ),),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: address, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Address',
-                            style: TextStyle(fontSize: 15.0, color: Colors.black87),
-                          )
-                        ],
-                      ),
-                    ),
+                  const SizedBox(height: 20.0),
+                  ListTile(
+                    title: Text("Address"),
+                    subtitle: Text(appartmentName),
+                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
+                    onTap: null,
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: bell, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Doorbell Settings',
-                            style: TextStyle(fontSize: 15.0, color: Colors.black87),
-                          )
-                        ],
-                      ),
-                    ),
+                  ListTile(
+                    title: Text("Profile Settings"),
+                    subtitle: Text(username +", " + mobileNumber + " " + eid ),
+                    isThreeLine: true,
+                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
+                    onTap: () => editUserDetails.mainBottomSheet(context),
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: keyloch, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Change Password',
-                            style: TextStyle(fontSize: 15.0, color: Colors.black87),
-                          )
-                        ],
-                      ),
-                    ),
+                  SwitchListTile(
+                    title: Text("Doorbell Settings"),
+                    subtitle: Text("off"),
+                    value: true,
+                    onChanged: (val){},
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: privacy, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Privacy policy',
-                            style: TextStyle(fontSize: 15.0, color: Colors.black87),
-                          )
-                        ],
-                      ),
-                    ),
+                  ListTile(
+                    title: Text("Privacy Policy"),
+                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
+                    onTap: (){},
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: cookie, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Cookie policy',
-                            style: TextStyle(fontSize: 15.0, color: Colors.black87),
-                          )
-                        ],
-                      ),
-                    ),
+                  ListTile(
+                    title: Text("Cookie Policy"),
+                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
+                    onTap: (){},
                   ),
-                  new Container(
-                    margin: EdgeInsets.all(7.0),
-                    child: Card(
-                      elevation: 1.0,
-                      child: Row(
-                        children: <Widget>[
-                          new IconButton(icon: logout, onPressed: null),
-                          _verticalD(),
-                          new Text(
-                            'Log out ',
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.redAccent,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
+                  ListTile(
+                    title: Text("Logout"),
+                    trailing: Icon(Icons.do_not_disturb_on,color: Colors.grey.shade400,),
+                    onTap: (){},
+                  ),
                 ],
               )
           )
       ),
     );
   }
-
-  _verticalDivider() => Container(
-    padding: EdgeInsets.all(2.0),
-  );
-
-  _verticalD() => Container(
-    margin: EdgeInsets.only(left: 3.0, right: 0.0, top: 0.0, bottom: 0.0),
-  );
-
-
 }
