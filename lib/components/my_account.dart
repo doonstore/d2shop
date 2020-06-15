@@ -1,3 +1,4 @@
+import 'package:d2shop/components/edit_address.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_user_details.dart';
@@ -66,7 +67,7 @@ class Account extends State<AccountScreen> {
                     title: Text("Address"),
                     subtitle: Text(appartmentName),
                     trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
-                    onTap: null,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> AddressScreen())),
                   ),
                   ListTile(
                     title: Text("Profile Settings"),
