@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'edit_user_details.dart';
-
 class AddressScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => Address();
@@ -13,9 +11,6 @@ class Address extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Color hexToColor(String code) {
-      return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-    }
     return new Scaffold(
       appBar: new AppBar(
         title: Text(
