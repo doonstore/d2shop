@@ -1,23 +1,27 @@
+import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'edit_user_details.dart';
 
 class AccountScreen extends StatefulWidget {
+  final ApplicationState state;
+
+  AccountScreen({this.state});
+
   @override
-  State<StatefulWidget> createState() => Account();
+  State<StatefulWidget> createState() => Account(state: state);
 }
 
 class Account extends State<AccountScreen> {
-  String username = 'Abhishek Garg';
-  String mobileNumber = '8437166707';
-  String eid = 'abhishekgarg5800@gmail.com';
-  String appartmentName = "XYZ Apartment";
+  final ApplicationState state;
 
   EditUserDetails editUserDetails = new EditUserDetails();
-  
+
+  Account({this.state});
+
   @override
   Widget build(BuildContext context) {
-
     //List<address> addresLst = loadAddress() as List<address> ;
     return new Scaffold(
       appBar: new AppBar(
@@ -28,13 +32,13 @@ class Account extends State<AccountScreen> {
       body: new Container(
           child: SingleChildScrollView(
               child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection: TextDirection.ltr,
-                children: <Widget>[
-                  const SizedBox(height: 30.0),
-                  Row(
-                    children: <Widget>[
-                      /*Container(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        textDirection: TextDirection.ltr,
+        children: <Widget>[
+          const SizedBox(height: 30.0),
+          Row(
+            children: <Widget>[
+              /*Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
@@ -47,59 +51,86 @@ class Account extends State<AccountScreen> {
                           border: Border.all(color: Colors.grey,width: 1.0,),
                         ),
                       ), */
-                      const SizedBox(width: 15.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(username, style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),),
-                          ],
-                        ),
+              const SizedBox(width: 15.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      state.user != null ? state.user.displayName : "",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20.0),
-                  ListTile(
-                    title: Text("Address"),
-                    subtitle: Text(appartmentName),
-                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
-                    onTap: null,
-                  ),
-                  ListTile(
-                    title: Text("Profile Settings"),
-                    subtitle: Text(username +", " + mobileNumber + " " + eid ),
-                    isThreeLine: true,
-                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
-                    onTap: () => editUserDetails.mainBottomSheet(context),
-                  ),
-                  SwitchListTile(
-                    title: Text("Doorbell Settings"),
-                    subtitle: Text("off"),
-                    value: true,
-                    onChanged: (val){},
-                  ),
-                  ListTile(
-                    title: Text("Privacy Policy"),
-                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
-                    onTap: (){},
-                  ),
-                  ListTile(
-                    title: Text("Cookie Policy"),
-                    trailing: Icon(Icons.keyboard_arrow_right,color: Colors.grey.shade400,),
-                    onTap: (){},
-                  ),
-                  ListTile(
-                    title: Text("Logout"),
-                    trailing: Icon(Icons.do_not_disturb_on,color: Colors.grey.shade400,),
-                    onTap: (){},
-                  ),
-                ],
-              )
-          )
-      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20.0),
+          ListTile(
+            title: Text("Address"),
+            subtitle: Text(
+                state.user != null && state.user.getAddressList().length > 0
+                    ? state.user.getAddressList()[0]
+                    : "No address on record"),
+            trailing: Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.grey.shade400,
+            ),
+            onTap: null,
+          ),
+          ListTile(
+            title: Text("Profile Settings"),
+            subtitle: Text(state.user != null ? state.user.email : ""),
+            isThreeLine: true,
+            trailing: Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.grey.shade400,
+            ),
+            onTap: () => editUserDetails.mainBottomSheet(context),
+          ),
+          SwitchListTile(
+            title: Text("Doorbell Settings"),
+            subtitle: Text(state.user != null && state.user.doorBellStatus
+                ? "Ring door bell"
+                : "Don't ring door bell"),
+            value: state.user != null ? state.user.doorBellStatus : false,
+            onChanged: (val) {
+              setState(() {
+                state.user.doorBellStatus = val;
+              });
+            },
+          ),
+          ListTile(
+            title: Text("Privacy Policy"),
+            trailing: Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.grey.shade400,
+            ),
+            onTap: () {
+              Fluttertoast.showToast(
+                  msg:
+                      "We respect your privacy. We don't store any data that is not essential for our working.",
+                  toastLength: Toast.LENGTH_LONG);
+            },
+          ),
+          ListTile(
+            title: Text("Cookie Policy"),
+            trailing: Icon(
+              Icons.keyboard_arrow_right,
+              color: Colors.grey.shade400,
+            ),
+            onTap: () {
+              Fluttertoast.showToast(
+                  msg:
+                      "We don't use tracking cookies. We don't share usage data with anyone.",
+                  toastLength: Toast.LENGTH_LONG);
+            },
+          ),
+        ],
+      ))),
     );
   }
 }
