@@ -9,6 +9,7 @@ class DoonStoreUser {
   List<Address> addressList = List();
   String photoUrl;
   DateTime lastLogin;
+  bool doorBellStatus = false;
 
   DoonStoreUser(this.userId, this.displayName, this.email, this.phone,
       this.addressList, this.photoUrl, this.lastLogin);
