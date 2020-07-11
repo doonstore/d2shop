@@ -13,7 +13,7 @@ class SearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 110,
-      color: Colors.lightBlue,
+      color: Colors.blue,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -34,10 +34,10 @@ class SearchWidget extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(10.0, 1.0, 10.0, 1.0),
               elevation: 3.0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -48,7 +48,7 @@ class SearchWidget extends StatelessWidget {
                       ),
                       onTap: () {
                         Fluttertoast.showToast(msg: 'Search Pressed...');
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryList(state: state)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryList.name(state)));
                       },
                     ),
                     SizedBox(
