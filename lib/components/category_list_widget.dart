@@ -1,12 +1,12 @@
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class CategoryList extends StatefulWidget {
   final ApplicationState state;
 
-  const CategoryList({Key key, this.state}) : super(key: key);
+  CategoryList.name(this.state);
 
   @override
   _CategoryListState createState() => _CategoryListState(state);
@@ -19,14 +19,11 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.count(
-        childAspectRatio: 1.0,
-        padding: EdgeInsets.fromLTRB(10,125,10,0),
-        crossAxisCount: 3,
-        crossAxisSpacing: 18,
-        mainAxisSpacing: 18,
+    return Container(
+      height: 150,
+      child: ListView(
         children: getCategoryGridItems(),
+        scrollDirection: Axis.horizontal,
       ),
     );
   }
@@ -38,24 +35,32 @@ class _CategoryListState extends State<CategoryList> {
       for (Category category in state.categoryList) {
         categoryWidgetList.add(Container(
           decoration: BoxDecoration(
-              color: Color(color), borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                category.photoUrl,
-                width: 42,
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Text(
-                category.name,
-                style: TextStyle(
-                    fontSize: 15
+              color: Color(color), borderRadius: BorderRadius.circular(5)),
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+          padding: EdgeInsets.all(5),
+          child: GestureDetector(
+            onTap: () {
+              Fluttertoast.showToast(
+                msg: category.name + " pressed",
+                toastLength: Toast.LENGTH_SHORT,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  category.photoUrl,
+                  height: 110,
                 ),
-              )
-            ],
+                SizedBox(
+                  width: 14,
+                ),
+                Text(
+                  category.name,
+                  style: TextStyle(fontSize: 15),
+                )
+              ],
+            ),
           ),
         ));
       }

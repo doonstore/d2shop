@@ -20,8 +20,6 @@ jobs:
       run: flutter pub get
     - name: Flutter Analyze
       run: flutter analyze .
-    - name: Flutter Test
-      run: flutter test
     - name: Build APK
       run: flutter build apk --debug && cd android && ./gradlew build && cd .. && flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
     - uses: actions/upload-artifact@v2
