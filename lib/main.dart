@@ -10,7 +10,7 @@ class DoonStoreApp extends StatelessWidget {
       title: 'DoonStore',
       home: GalleryPage(),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
     );
   }
