@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/components/gallery_page.dart';
+import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
@@ -9,6 +10,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
+
+Future<bool> isSignedIn() async {
+  final FirebaseUser firebaseUser = await _auth.currentUser();
+  if (firebaseUser != null)
+    return true;
+  else
+    return false;
+}
 
 Future<DoonStoreUser> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -33,7 +42,6 @@ Future<void> signOutGoogle() async {
 
 Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
   String verificationID;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   _auth.verifyPhoneNumber(
     phoneNumber: '+91' + number,
@@ -48,62 +56,7 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
       FlutterError(e.message);
       print("Error Code: ${e.code}, Error Message: ${e.message}");
     },
-    codeSent: (String verificationId, [int]) async {
-      String smsCode;
-      showBottomSheet(
-        context: context,
-        builder: (context) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              width: width(context),
-              height: height(context) * 0.40,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(height: 10),
-                  Form(
-                    key: formKey,
-                    child: TextFormField(
-                      validator: (value) => value.length != 6
-                          ? 'OTP length should be of 6 digits'
-                          : null,
-                      keyboardType: TextInputType.number,
-                      onSaved: (newValue) => smsCode = newValue.trim(),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: MaterialButton(
-                          onPressed: () {
-                            if (formKey.currentState.validate())
-                              formKey.currentState.save();
-                          },
-                          child: Text('Verify & Continue'),
-                          color: Colors.teal,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        },
-      );
-
-      final AuthCredential credential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-
-      final AuthResult result = await _auth.signInWithCredential(credential);
-
-      getUser(result.user).then((value) {
-        if (value != null) MyRoute.push(context, GalleryPage());
-      });
-    },
+    codeSent: (String verificationId, [int]) {},
     codeAutoRetrievalTimeout: (String verificationId) {
       verificationID = verificationId;
       print(verificationID);
@@ -127,5 +80,6 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
     userData.lastLogin = user.metadata.lastSignInTime;
     userRef.document(userData.userId).updateData(userData.toMap());
   }
+  await SharedService.setUserLoggedIn();
   return userData;
 }

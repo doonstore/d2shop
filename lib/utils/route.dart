@@ -3,7 +3,7 @@ import 'package:animations/animations.dart';
 
 class MyRoute {
   static Future<void> push(BuildContext context, Widget child,
-      {bool replaced}) {
+      {bool replaced = false}) {
     return replaced
         ? Navigator.pushReplacement(context, _builder(child))
         : Navigator.push(context, _builder(child));
