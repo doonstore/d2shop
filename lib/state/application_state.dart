@@ -10,6 +10,7 @@ class ApplicationState {
   List<Item> itemList;
   Map<String, int> cart = Map();
   List<Category> categoryList;
+  DateTime deliveryDate = DateTime.now();
 
   ApplicationState() {
     getItems().then((value) {
