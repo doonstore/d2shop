@@ -68,7 +68,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     if (state.user == null) {
       return Text(
         "G",
-        style: TextStyle(fontSize: 30.0),
+        style: TextStyle(fontSize: 40.0),
       );
     } else {
       return Container(
