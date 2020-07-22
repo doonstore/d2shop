@@ -1,4 +1,4 @@
-import 'package:d2shop/screens/login_screen.dart';
+import 'package:d2shop/components/gallery_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(DoonStoreApp());
@@ -8,9 +8,9 @@ class DoonStoreApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DoonStore',
-      home: LoginScreen(),
+      home: GalleryPage(),
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
         dialogTheme: DialogTheme(
           shape: RoundedRectangleBorder(
@@ -18,6 +18,7 @@ class DoonStoreApp extends StatelessWidget {
           ),
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        platform: TargetPlatform.android,
       ),
     );
   }

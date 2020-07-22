@@ -31,7 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
             children: [
-              headContainer(context),
+              headContainer(
+                context,
+                heading: 'Sample Heading #1',
+                description: 'Sample Description',
+              ),
               phoneVerificationArea(),
               sendOTPButton(),
               divider(),
@@ -66,10 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget sendOTPButton() {
-    if (isLoading)
-      return Utils.loadingWidget(context);
-    else
-      return Container(
+    return AnimatedCrossFade(
+      firstChild: Utils.loadingWidget(context),
+      secondChild: Container(
         width: width(context) * 0.90,
         child: ElevatedButton.icon(
           onPressed: () {
@@ -94,9 +97,14 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: MaterialStateProperty.all(
               EdgeInsets.symmetric(vertical: 5),
             ),
+            backgroundColor: MaterialStateProperty.all(Colors.teal),
           ),
         ),
-      );
+      ),
+      crossFadeState:
+          isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      duration: Duration(milliseconds: 400),
+    );
   }
 
   Container phoneVerificationArea() {
@@ -148,7 +156,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Flexible headContainer(BuildContext context) {
+  Flexible headContainer(BuildContext context,
+      {String heading, String description}) {
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -178,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Text(
-                  'Sample Heading #1',
+                  heading,
                   style: GoogleFonts.montserrat(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -186,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Text(
-                  'Sample Description #1',
+                  description,
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w600,

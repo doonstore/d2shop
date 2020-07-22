@@ -27,7 +27,6 @@ class _GalleryPageState extends State<GalleryPage> {
         title: Text(state.appBarTitle),
       ),
       body: ListView(
-        scrollDirection: Axis.vertical,
         children: <Widget>[
           SearchWidget(state: state),
           Container(
