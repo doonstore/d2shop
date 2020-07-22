@@ -17,6 +17,8 @@ class DoonStoreApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        platform: TargetPlatform.android,
       ),
     );
   }
