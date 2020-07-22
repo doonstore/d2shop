@@ -64,6 +64,10 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
       print("Error Code: ${e.code}, Error Message: ${e.message}");
     },
     codeSent: (String verificationId, [int]) {},
+      FlutterError(e.message);
+      print("Error Code: ${e.code}, Error Message: ${e.message}");
+    },
+    codeSent: (String verificationId, [int]) {},
     codeAutoRetrievalTimeout: (String verificationId) {
       verificationID = verificationId;
       print(verificationID);
