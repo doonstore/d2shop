@@ -1,5 +1,6 @@
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/components/edit_address.dart';
+import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -16,8 +17,6 @@ class AccountScreen extends StatefulWidget {
 
 class Account extends State<AccountScreen> {
   final ApplicationState state;
-
-  EditUserDetails editUserDetails = new EditUserDetails();
 
   Account({this.state});
 
@@ -80,7 +79,8 @@ class Account extends State<AccountScreen> {
               Icons.keyboard_arrow_right,
               color: Colors.grey.shade400,
             ),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> AddressScreen())),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddressScreen())),
           ),
           ListTile(
             title: Text("Profile Settings"),
@@ -90,7 +90,15 @@ class Account extends State<AccountScreen> {
               Icons.keyboard_arrow_right,
               color: Colors.grey.shade400,
             ),
-            onTap: () => editUserDetails.mainBottomSheet(context),
+            onTap: () {
+              if (state.user != null) {
+                EditUserDetails editUserDetails =
+                    EditUserDetails(doonStoreUser: state.user);
+                editUserDetails.mainBottomSheet(context);
+              } else {
+                Utils.showMessage('Sign in required!.', error: true);
+              }
+            },
           ),
           SwitchListTile(
             title: Text("Doorbell Settings"),

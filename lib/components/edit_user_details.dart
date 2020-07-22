@@ -8,12 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class EditUserDetails {
   final DoonStoreUser doonStoreUser;
 
-  EditUserDetails({this.doonStoreUser});
+  EditUserDetails({@required this.doonStoreUser});
 
   String _name, _email, _phoneNumber;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   mainBottomSheet(BuildContext context) {
+    ScreenUtil.init(context, height: height(context), width: width(context));
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(

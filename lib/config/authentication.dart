@@ -19,6 +19,14 @@ Future<bool> isSignedIn() async {
     return false;
 }
 
+Future<DoonStoreUser> getCurrentUser() async {
+  final FirebaseUser firebaseUser = await _auth.currentUser();
+  if (firebaseUser != null)
+    return DoonStoreUser.fromFirebaseUser(firebaseUser);
+  else
+    return null;
+}
+
 Future<DoonStoreUser> signInWithGoogle() async {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
@@ -53,7 +61,6 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
       });
     },
     verificationFailed: (AuthException e) {
-      FlutterError(e.message);
       print("Error Code: ${e.code}, Error Message: ${e.message}");
     },
     codeSent: (String verificationId, [int]) {},

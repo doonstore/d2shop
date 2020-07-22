@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: height(context), width: width(context));
     return Scaffold(
       body: SafeArea(
         bottom: false,
@@ -74,7 +75,10 @@ class _LoginScreenState extends State<LoginScreen> {
       firstChild: Utils.loadingWidget(context),
       secondChild: Container(
         width: width(context) * 0.90,
-        child: ElevatedButton.icon(
+        height: 40,
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+        child: MaterialButton(
+          elevation: 5,
           onPressed: () {
             final String number = numberTEC.text;
 
@@ -83,7 +87,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   isLoading = true;
                 });
-                loginUsingPhoneNumber(context, number);
+                loginUsingPhoneNumber(context, number).catchError((e) {
+                  print('Error: $e');
+                  setState(() {
+                    isLoading = false;
+                  });
+                });
               }
             } else
               Utils.showMessage(
@@ -91,13 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 error: true,
               );
           },
-          icon: Text('Send OTP'),
-          label: FaIcon(FontAwesomeIcons.comment, size: 30),
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all(
-              EdgeInsets.symmetric(vertical: 5),
-            ),
-            backgroundColor: MaterialStateProperty.all(Colors.teal),
+          textColor: Colors.white,
+          child: Text('Send OTP'),
+          color: Colors.teal,
+          shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
       ),
@@ -109,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Container phoneVerificationArea() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -183,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.topCenter,
                   child: Image.asset(
                     'assets/category/2.png',
-                    width: width(context) * (isTyping ? 0.40 : 0.80),
+                    width: width(context) * 0.45,
                   ),
                 ),
                 Text(
