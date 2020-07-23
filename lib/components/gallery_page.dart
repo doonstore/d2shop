@@ -44,7 +44,7 @@ class _GalleryPageState extends State<GalleryPage> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20.sp,
                     ),
-                  ),
+                  ],
                 ),
                 Container(
                   height: 180,
