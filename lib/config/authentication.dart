@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/screens/login_screen.dart';
 import 'package:d2shop/utils/constants.dart';
