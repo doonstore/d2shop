@@ -5,13 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
-  static Future<bool> showMessage(String message, {bool error = false}) {
+  static Future<bool> showMessage(String message,
+      {bool error = false, bool basic = false}) {
     return Fluttertoast.showToast(
       msg: message,
       textColor: Colors.white,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      backgroundColor: error ? Colors.red : Colors.green,
+      backgroundColor:
+          error ? Colors.red : basic ? kPrimaryColor : Colors.green,
       fontSize: 15.sp,
     );
   }
@@ -41,6 +43,26 @@ class Utils {
           SpinKitThreeBounce(color: Colors.white, size: 30),
         ],
       ),
+    );
+  }
+
+  static InputDecoration inputDecoration(String label,
+      {String hint, Widget icon}) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint != null ? hint : "Enter your ${label.toLowerCase()}",
+      icon: icon,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      isDense: true,
+    );
+  }
+
+  static TextStyle formTextStyle() {
+    return TextStyle(
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w600,
     );
   }
 }

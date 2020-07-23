@@ -1,145 +1,207 @@
-import 'package:d2shop/state/application_state.dart';
-import 'package:d2shop/components/edit_address.dart';
-import 'package:d2shop/utils/utils.dart';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:d2shop/config/authentication.dart';
+import 'package:d2shop/screens/user_input.dart';
+import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'edit_user_details.dart';
-
-class AccountScreen extends StatefulWidget {
-  final ApplicationState state;
-
-  AccountScreen({this.state});
-
+class AccountScreen extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => Account(state: state);
+  Widget build(BuildContext context) {
+    return Consumer<ApplicationState>(
+      builder: (context, value, child) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor.withOpacity(0.7),
+            elevation: 0.0,
+            centerTitle: true,
+            title: Text(
+              'My Account',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                AccountSectionHeader(),
+                SizedBox(height: 10),
+                AccountSectionCards(
+                  title: 'Profile Details',
+                  subtitle:
+                      '${value.user.displayName.isNotEmpty ? value.user.displayName + ',' : ''} ${value.user.phone}\n${value.user.email}',
+                  leadingIcon: FontAwesomeIcons.userCheck,
+                  onTapCallback: () {
+                    MyRoute.push(context, UserInput(doonStoreUser: value.user));
+                  },
+                  isThreeLine: value.user.email.isNotEmpty,
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'My Address',
+                  subtitle: 'No address',
+                  leadingIcon: FontAwesomeIcons.locationArrow,
+                  onTapCallback: () {},
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'Super Wallet',
+                  subtitle: '\u20b90 Balance',
+                  leadingIcon: FontAwesomeIcons.rupeeSign,
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'Doorbell Settings',
+                  subtitle: 'Do not ring the doorbell.',
+                  leadingIcon: FontAwesomeIcons.bellSlash,
+                  onTapCallback: () {},
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'WhatsApp Notification',
+                  subtitle: 'Do not send updates on WhatsApp',
+                  leadingIcon: FontAwesomeIcons.whatsapp,
+                  onTapCallback: () {},
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'Privacy Policy',
+                  leadingIcon: FontAwesomeIcons.infoCircle,
+                  onTapCallback: () async {
+                    final String url = 'https:www.google.com';
+                    if (await canLaunch(url)) launch(url);
+                  },
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'Content Policy',
+                  leadingIcon: FontAwesomeIcons.infoCircle,
+                  onTapCallback: () async {
+                    final String url = 'https:www.google.com';
+                    if (await canLaunch(url)) launch(url);
+                  },
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                AccountSectionCards(
+                  title: 'Logout',
+                  leadingIcon: FontAwesomeIcons.signOutAlt,
+                  onTapCallback: () => signOut(context),
+                ),
+                Divider(color: Colors.black12, indent: 5, endIndent: 5)
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
-class Account extends State<AccountScreen> {
-  final ApplicationState state;
-
-  Account({this.state});
+class AccountSectionHeader extends StatelessWidget {
+  const AccountSectionHeader({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //List<address> addresLst = loadAddress() as List<address> ;
-    return new Scaffold(
-      appBar: new AppBar(
-        title: Text(
-          'My Account',
+    ApplicationState state = Provider.of<ApplicationState>(context);
+    return Container(
+      height: height(context) * 0.33,
+      width: width(context),
+      decoration: BoxDecoration(
+        color: kPrimaryColor.withOpacity(0.7),
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(30),
         ),
       ),
-      body: new Container(
-          child: SingleChildScrollView(
-              child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        textDirection: TextDirection.ltr,
-        children: <Widget>[
-          const SizedBox(height: 30.0),
-          Row(
-            children: <Widget>[
-              /*Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: new ExactAssetImage('assets/iconsPerson.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          border: Border.all(color: Colors.grey,width: 1.0,),
-                        ),
-                      ), */
-              const SizedBox(width: 15.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      state.user != null ? state.user.displayName : "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20.0),
-          ListTile(
-            title: Text("Address"),
-            subtitle: Text(
-                state.user != null && state.user.getAddressList().length > 0
-                    ? state.user.getAddressList()[0]
-                    : "No address on record"),
-            trailing: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.grey.shade400,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: width(context) * 0.18,
+            backgroundColor: kPrimaryColor.withOpacity(0.7),
+            child: Center(
+              child: state.user.photoUrl.isEmpty
+                  ? FaIcon(
+                      FontAwesomeIcons.user,
+                      color: Colors.white70,
+                      size: width(context) * 0.12,
+                    )
+                  : Image.network(state.user.photoUrl),
             ),
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AddressScreen())),
           ),
-          ListTile(
-            title: Text("Profile Settings"),
-            subtitle: Text(state.user != null ? state.user.email : ""),
-            isThreeLine: true,
-            trailing: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.grey.shade400,
+          SizedBox(height: 15),
+          Text(
+            state.user.displayName.isEmpty ? 'Guest' : state.user.displayName,
+            style: TextStyle(
+              fontSize: 20.sp,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
-            onTap: () {
-              if (state.user != null) {
-                EditUserDetails editUserDetails =
-                    EditUserDetails(doonStoreUser: state.user);
-                editUserDetails.mainBottomSheet(context);
-              } else {
-                Utils.showMessage('Sign in required!.', error: true);
-              }
-            },
-          ),
-          SwitchListTile(
-            title: Text("Doorbell Settings"),
-            subtitle: Text(state.user != null && state.user.doorBellStatus
-                ? "Ring door bell"
-                : "Don't ring door bell"),
-            value: state.user != null ? state.user.doorBellStatus : false,
-            onChanged: (val) {
-              setState(() {
-                state.user.doorBellStatus = val;
-              });
-            },
-          ),
-          ListTile(
-            title: Text("Privacy Policy"),
-            trailing: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.grey.shade400,
-            ),
-            onTap: () {
-              Fluttertoast.showToast(
-                  msg:
-                      "We respect your privacy. We don't store any data that is not essential for our working.",
-                  toastLength: Toast.LENGTH_LONG);
-            },
-          ),
-          ListTile(
-            title: Text("Cookie Policy"),
-            trailing: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.grey.shade400,
-            ),
-            onTap: () {
-              Fluttertoast.showToast(
-                  msg:
-                      "We don't use tracking cookies. We don't share usage data with anyone.",
-                  toastLength: Toast.LENGTH_LONG);
-            },
           ),
         ],
-      ))),
+      ),
+    );
+  }
+}
+
+class AccountSectionCards extends StatelessWidget {
+  const AccountSectionCards(
+      {Key key,
+      this.title,
+      this.subtitle,
+      this.leadingIcon,
+      this.onTapCallback,
+      this.isThreeLine = false})
+      : super(key: key);
+
+  final String title, subtitle;
+  final IconData leadingIcon;
+  final Function onTapCallback;
+  final bool isThreeLine;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      onTap: onTapCallback,
+      tileColor: Colors.white,
+      leading: FaIcon(
+        leadingIcon,
+        color: kPrimaryColor.withOpacity(0.7),
+      ),
+      isThreeLine: isThreeLine,
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w700,
+          fontSize: 16.sp,
+        ),
+      ),
+      subtitle: subtitle != null
+          ? Text(
+              subtitle,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.black54,
+                fontSize: 13.sp,
+              ),
+            )
+          : null,
+      trailing: FaIcon(
+        FontAwesomeIcons.chevronRight,
+        color: kPrimaryColor.withOpacity(0.7),
+      ),
     );
   }
 }

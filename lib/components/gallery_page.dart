@@ -1,8 +1,11 @@
 import 'package:d2shop/components/category_list_widget.dart';
 import 'package:d2shop/components/my_account.dart';
 import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'drawer.dart';
@@ -14,18 +17,20 @@ class GalleryPage extends StatefulWidget {
 }
 
 class _GalleryPageState extends State<GalleryPage> {
-  var state = ApplicationState();
+  ApplicationState state = ApplicationState();
 
   _GalleryPageState();
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: height(context), width: width(context));
     return Scaffold(
       appBar: AppBar(
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Text(state.appBarTitle),
       ),
+      drawer: CustomDrawer(),
       body: ListView(
         children: <Widget>[
           SearchWidget(state: state),
@@ -37,7 +42,7 @@ class _GalleryPageState extends State<GalleryPage> {
                 DatePicker(
                   DateTime.now(),
                   initialSelectedDate: DateTime.now(),
-                  selectionColor: Colors.blue,
+                  selectionColor: kPrimaryColor,
                   selectedTextColor: Colors.white,
                   onDateChange: (date) {
                     setState(() {
@@ -73,7 +78,6 @@ class _GalleryPageState extends State<GalleryPage> {
           CategoryList.name(state),
         ],
       ),
-      drawer: DrawerWidget(state: state),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
@@ -99,12 +103,7 @@ class _GalleryPageState extends State<GalleryPage> {
           });
           if (state.bottomNavBarSelectedIndex == 2) {
             if (state.user != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AccountScreen(state: state),
-                ),
-              );
+              MyRoute.push(context, AccountScreen());
             } else {
               Fluttertoast.showToast(
                 msg: "Please login to view accounts page",

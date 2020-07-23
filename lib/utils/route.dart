@@ -11,7 +11,7 @@ class MyRoute {
 
   static PageRouteBuilder _builder(Widget child) {
     return PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 300),
+      transitionDuration: Duration(milliseconds: 350),
       pageBuilder: (context, animation, secondaryAnimation) => child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           FadeScaleTransition(
