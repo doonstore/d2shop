@@ -1,76 +1,57 @@
-import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/components/category_explorer.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'category_list_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchWidget extends StatelessWidget {
-  final ApplicationState state;
-
-  SearchWidget({this.state});
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 110,
-      color: kPrimaryColor,
-      child: Column(
+    return GestureDetector(
+      onTap: () => MyRoute.push(context, CategoryExplorer()),
+      child: Container(
+        width: width(context),
+        color: kPrimaryColor,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.fromLTRB(15, 20, 0, 5),
-              child: Text(
-                "What can we get you?",
-                textScaleFactor: 2.0,
-                style: TextStyle(
-                    fontSize: 8.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
+          children: [
+            Text(
+              'What can we get you?',
+              style: GoogleFonts.ptSans(
+                fontSize: 18.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
               ),
             ),
+            SizedBox(height: 5),
             Card(
-              semanticContainer: true,
-              borderOnForeground: true,
-              margin: EdgeInsets.fromLTRB(10.0, 1.0, 10.0, 1.0),
-              elevation: 3.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
+              elevation: 5,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black54,
-                      ),
-                      onTap: () {
-                        Fluttertoast.showToast(msg: 'Search Pressed...');
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CategoryList.name(state)));
-                      },
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.search,
+                      color: kPrimaryColor.withOpacity(0.7),
                     ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Search for milk & groceries..."),
-                        onSubmitted: (String item) {},
+                    SizedBox(width: 10),
+                    Text(
+                      'Search for milk & groceries...',
+                      style: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w600,
                       ),
                     )
                   ],
                 ),
               ),
-            ),
-          ]),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

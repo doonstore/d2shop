@@ -19,6 +19,10 @@ class DoonStoreApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white,
+          bottomSheetTheme: BottomSheetThemeData(
+              shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          )),
           dialogTheme: DialogTheme(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

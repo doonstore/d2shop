@@ -11,9 +11,8 @@ class Utils {
       msg: message,
       textColor: Colors.white,
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      backgroundColor:
-          error ? Colors.red : basic ? kPrimaryColor : Colors.green,
+      gravity: basic ? ToastGravity.BOTTOM : ToastGravity.CENTER,
+      backgroundColor: error ? Colors.red : basic ? Colors.black : Colors.green,
       fontSize: 15.sp,
     );
   }

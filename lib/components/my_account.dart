@@ -22,6 +22,20 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   double _value = 1.0;
 
+  bool doorBellSetting = false, whatsAppNotification = false;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    doorBellSetting = await SharedService.doorBellSetting;
+    whatsAppNotification = await SharedService.whatsappNotificationSettings;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
@@ -61,11 +75,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         onTapCallback: () {
                           showBottomSheet(
                             context: context,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                            ),
                             builder: (context) => UserInput(
                               doonStoreUser: value.user,
                             ),
@@ -82,11 +91,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           showBottomSheet(
                             context: context,
                             builder: (context) => AddressScreen(),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                            ),
                           );
                         },
                       ),
@@ -99,8 +103,12 @@ class _AccountScreenState extends State<AccountScreen> {
                       Divider(color: Colors.black12, indent: 5, endIndent: 5),
                       AccountSectionCards(
                         title: 'Doorbell Settings',
-                        subtitle: 'Do not ring the doorbell.',
-                        leadingIcon: FontAwesomeIcons.bellSlash,
+                        subtitle: doorBellSetting
+                            ? 'Ring the bell'
+                            : 'Do not ring the doorbell.',
+                        leadingIcon: doorBellSetting
+                            ? FontAwesomeIcons.bell
+                            : FontAwesomeIcons.bellSlash,
                         onTapCallback: () async {
                           setState(() {
                             _value = 0.3;
@@ -112,11 +120,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               value: value ? 1 : 0,
                               type: PreferncesType.DoorBell,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
-                            ),
                           );
                           controller.closed.then((value) => this.setState(() {
                                 _value = 1.0;
@@ -126,7 +129,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       Divider(color: Colors.black12, indent: 5, endIndent: 5),
                       AccountSectionCards(
                         title: 'WhatsApp Notification',
-                        subtitle: 'Do not send updates on WhatsApp',
+                        subtitle: whatsAppNotification
+                            ? 'Recieve updates on WhatsApp'
+                            : 'Do not send updates on WhatsApp',
                         leadingIcon: FontAwesomeIcons.whatsapp,
                         onTapCallback: () async {
                           setState(() {
@@ -139,11 +144,6 @@ class _AccountScreenState extends State<AccountScreen> {
                             builder: (context) => EditUserPrefernces(
                               value: value ? 1 : 0,
                               type: PreferncesType.WhatsApp,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(20),
-                              ),
                             ),
                           );
                           controller.closed.then((value) => this.setState(() {

@@ -27,4 +27,9 @@ class ApplicationState extends ChangeNotifier {
     this.user = doonStoreUser;
     notifyListeners();
   }
+
+  setDeliveryDate(DateTime dateTime) {
+    this.deliveryDate = dateTime;
+    notifyListeners();
+  }
 }
