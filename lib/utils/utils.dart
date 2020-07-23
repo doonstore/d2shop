@@ -5,13 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
-  static Future<bool> showMessage(String message, {bool error = false}) {
+  static Future<bool> showMessage(String message,
+      {bool error = false, bool basic = false}) {
     return Fluttertoast.showToast(
       msg: message,
       textColor: Colors.white,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
-      backgroundColor: error ? Colors.red : Colors.green,
+      backgroundColor:
+          error ? Colors.red : basic ? kPrimaryColor : Colors.green,
       fontSize: 15.sp,
     );
   }
@@ -40,6 +42,48 @@ class Utils {
           SizedBox(width: 10),
           SpinKitThreeBounce(color: Colors.white, size: 30),
         ],
+      ),
+    );
+  }
+
+  static InputDecoration inputDecoration(String label,
+      {String hint, Widget icon}) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint != null ? hint : "Enter your ${label.toLowerCase()}",
+      icon: icon,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      isDense: true,
+    );
+  }
+
+  static TextStyle formTextStyle() {
+    return TextStyle(
+      fontSize: 15.sp,
+      fontWeight: FontWeight.w600,
+    );
+  }
+
+  static Widget basicBtn(BuildContext context, {String text, Function onTap}) {
+    return Container(
+      width: width(context) * 0.90,
+      height: 50,
+      child: RaisedButton(
+        onPressed: onTap,
+        disabledColor: Colors.grey.shade300,
+        textColor: Colors.white,
+        disabledTextColor: Colors.black,
+        animationDuration: Duration(milliseconds: 300),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        color: kPrimaryColor,
       ),
     );
   }

@@ -1,8 +1,8 @@
 import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'category_list_widget.dart';
-
 
 class SearchWidget extends StatelessWidget {
   final ApplicationState state;
@@ -13,7 +13,7 @@ class SearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 110,
-      color: Colors.blue,
+      color: kPrimaryColor,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -48,7 +48,11 @@ class SearchWidget extends StatelessWidget {
                       ),
                       onTap: () {
                         Fluttertoast.showToast(msg: 'Search Pressed...');
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryList.name(state)));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CategoryList.name(state)));
                       },
                     ),
                     SizedBox(

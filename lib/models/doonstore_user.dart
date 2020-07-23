@@ -15,32 +15,32 @@ class DoonStoreUser {
       this.addressList, this.photoUrl, this.lastLogin);
 
   DoonStoreUser.fromFirebaseUser(FirebaseUser user) {
-    this.userId = user.uid;
-    this.displayName = user.displayName;
-    this.email = user.email;
-    this.photoUrl = user.photoUrl;
-    this.phone = user.phoneNumber;
+    this.userId = user.uid ?? '';
+    this.displayName = user.displayName ?? '';
+    this.email = user.email ?? '';
+    this.photoUrl = user.photoUrl ?? '';
+    this.phone = user.phoneNumber ?? '';
     this.lastLogin = user.metadata.lastSignInTime;
     this.addressList = List();
   }
 
   DoonStoreUser.fromJson(Map data) {
-    this.userId = data['userId'];
-    this.displayName = data['displayName'];
-    this.email = data['email'];
-    this.photoUrl = data['photoUrl'];
-    this.phone = data['phone'];
+    this.userId = data['userId'] ?? '';
+    this.displayName = data['displayName'] ?? '';
+    this.email = data['email'] ?? '';
+    this.photoUrl = data['photoUrl'] ?? '';
+    this.phone = data['phone'] ?? '';
     this.lastLogin = (data['lastLogin'] as Timestamp).toDate();
     setAddressList(data['addressList']);
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
-      'displayName': displayName,
-      'email': email,
-      'photoUrl': photoUrl,
-      'phone': phone,
+      'userId': userId ?? '',
+      'displayName': displayName ?? '',
+      'email': email ?? '',
+      'photoUrl': photoUrl ?? '',
+      'phone': phone ?? '',
       'lastLogin': Timestamp.fromDate(lastLogin),
       'addressList': getAddressList()
     };
@@ -92,3 +92,5 @@ class Address {
         "$contactNumber";
   }
 }
+
+enum PreferncesType { DoorBell, WhatsApp }

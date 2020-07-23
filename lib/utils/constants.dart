@@ -12,4 +12,4 @@ double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 
 /// Colors
-const Color kPrimaryColor = Colors.blue;
+const Color kPrimaryColor = Colors.teal;

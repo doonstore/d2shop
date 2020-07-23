@@ -1,14 +1,17 @@
 import 'dart:async';
 
-import 'package:d2shop/components/gallery_page.dart';
-import 'package:d2shop/config/authentication.dart';
-import 'package:d2shop/config/shared_services.dart';
-import 'package:d2shop/screens/login_screen.dart';
-import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:d2shop/state/application_state.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import 'login_screen.dart';
+import '../utils/constants.dart';
+import '../utils/route.dart';
+import '../models/doonstore_user.dart';
+import '../config/authentication.dart';
+import '../components/gallery_page.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -16,20 +19,18 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  bool isOldUser = false, isUserSignedIn = false;
-
   @override
   void initState() {
     super.initState();
-    // init();
+    init();
   }
 
   init() async {
-    isUserSignedIn = await isSignedIn();
-    isOldUser = await SharedService.isOldUser;
+    DoonStoreUser user = await getCurrentUser();
 
-    if (isUserSignedIn || isOldUser)
+    if (user != null)
       Timer(Duration(milliseconds: 300), () {
+        Provider.of<ApplicationState>(context, listen: false).setUser(user);
         MyRoute.push(context, GalleryPage(), replaced: true);
       });
     else
@@ -45,33 +46,11 @@ class _StartScreenState extends State<StartScreen> {
       body: Container(
         width: size.width,
         height: size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.blue[100],
-              radius: MediaQuery.of(context).size.width * 0.35,
-              child: Text('App Logo'),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'App Name',
-              style: GoogleFonts.ptSans(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'App Description',
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.black45,
-              ),
-            ),
-          ],
+        child: Center(
+          child: SpinKitRipple(
+            color: kPrimaryColor,
+            size: 100,
+          ),
         ),
       ),
     );
