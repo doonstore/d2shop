@@ -25,6 +25,11 @@ class CustomDrawer extends StatelessWidget {
             child: Column(
               children: [
                 userProfileHeader(context, value.user?.displayName ?? 'Guest'),
+                Divider(
+                  color: Colors.black54,
+                  indent: 10,
+                  endIndent: 10,
+                ),
                 dataCard(
                   title: 'My Subscriptions',
                   iconData: FontAwesomeIcons.retweet,
@@ -59,30 +64,22 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  DrawerHeader userProfileHeader(BuildContext context, String name) {
-    return DrawerHeader(
-      child: Center(
-        child: Card(
-          elevation: 5,
-          shadowColor: kPrimaryColor.withOpacity(0.8),
-          child: ListTile(
-            onTap: () => MyRoute.push(context, AccountScreen()),
-            leading: FaIcon(FontAwesomeIcons.user, color: kPrimaryColor),
-            title: Text(
-              name,
-              style: GoogleFonts.ptSans(
-                fontSize: 17.sp,
-                color: Colors.black87,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            trailing: FaIcon(
-              FontAwesomeIcons.chevronRight,
-              size: 20,
-              color: Colors.black,
-            ),
-          ),
+  Widget userProfileHeader(BuildContext context, String name) {
+    return ListTile(
+      onTap: () => MyRoute.push(context, AccountScreen()),
+      leading: FaIcon(FontAwesomeIcons.user, color: kPrimaryColor),
+      title: Text(
+        name,
+        style: GoogleFonts.ptSans(
+          fontSize: 17.sp,
+          color: Colors.black87,
+          fontWeight: FontWeight.w700,
         ),
+      ),
+      trailing: FaIcon(
+        FontAwesomeIcons.chevronRight,
+        size: 20,
+        color: Colors.black,
       ),
     );
   }

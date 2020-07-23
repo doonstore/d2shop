@@ -11,13 +11,10 @@ class MyRoute {
 
   static PageRouteBuilder _builder(Widget child) {
     return PageRouteBuilder(
-      transitionDuration: Duration(milliseconds: 350),
+      transitionDuration: Duration(milliseconds: 400),
       pageBuilder: (context, animation, secondaryAnimation) => child,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeScaleTransition(
-        animation: animation,
-        child: child,
-      ),
+          FadeScaleTransition(animation: animation, child: child),
     );
   }
 }

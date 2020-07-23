@@ -1,4 +1,5 @@
 import 'package:d2shop/components/gallery_page.dart';
+import 'package:d2shop/screens/user_input.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/screens/login_screen.dart';
-import 'package:d2shop/screens/user_input.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
@@ -28,7 +28,7 @@ Future<DoonStoreUser> getCurrentUser() async {
 }
 
 Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
-  String code;
+  String code, verifyId;
 
   _auth.verifyPhoneNumber(
     phoneNumber: '+91' + number,
@@ -42,9 +42,11 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
       print("Error Code: ${e.code}, Error Message: ${e.message}");
     },
     codeSent: (String verificationId, [int]) {
+      verifyId = verificationId;
       Utils.showMessage('OTP has been sent to +91-$number');
     },
     codeAutoRetrievalTimeout: (String verificationId) {
+      verifyId = verificationId;
       print(
         'codeAutoRetrievalTimeout: True, Showing Alert Dialog to get OTP from the user',
       );
@@ -58,9 +60,7 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
           title: Text('Enter OTP'),
           content: TextField(
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'OTP',
-            ),
+            decoration: InputDecoration(labelText: 'OTP'),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.indigo,
@@ -74,8 +74,9 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
             FlatButton(
               onPressed: () async {
                 if (code.length == 6) {
+                  Navigator.pop(context);
                   AuthCredential credential = PhoneAuthProvider.getCredential(
-                      verificationId: verificationId, smsCode: code);
+                      verificationId: verifyId, smsCode: code);
                   final AuthResult result =
                       await _auth.signInWithCredential(credential);
                   redirectUser(result, context);
@@ -99,10 +100,11 @@ redirectUser(AuthResult result, BuildContext context) {
     if (user != null) {
       Provider.of<ApplicationState>(context, listen: false).setUser(user);
       Utils.showMessage('Successfully Signed In.');
-      if (user.displayName.isNotEmpty)
-        MyRoute.push(context, GalleryPage(), replaced: true);
+      if (user.displayName.isEmpty)
+        MyRoute.push(context, UserInput(doonStoreUser: user, isSettingUp: true),
+            replaced: true);
       else
-        MyRoute.push(context, UserInput(doonStoreUser: user), replaced: true);
+        MyRoute.push(context, GalleryPage(), replaced: true);
     }
   });
 }
@@ -126,6 +128,5 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
     userData.lastLogin = user.metadata.lastSignInTime;
     userRef.document(userData.userId).updateData(userData.toMap());
   }
-  await SharedService.setUserLoggedIn();
   return userData;
 }

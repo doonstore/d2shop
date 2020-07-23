@@ -65,4 +65,26 @@ class Utils {
       fontWeight: FontWeight.w600,
     );
   }
+
+  static Widget basicBtn(BuildContext context, {String text, Function onTap}) {
+    return Container(
+      width: width(context) * 0.90,
+      height: 50,
+      child: RaisedButton(
+        onPressed: onTap,
+        disabledColor: Colors.grey.shade300,
+        textColor: Colors.white,
+        disabledTextColor: Colors.black,
+        animationDuration: Duration(milliseconds: 300),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        color: kPrimaryColor,
+      ),
+    );
+  }
 }

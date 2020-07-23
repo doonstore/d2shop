@@ -92,3 +92,5 @@ class Address {
         "$contactNumber";
   }
 }
+
+enum PreferncesType { DoorBell, WhatsApp }
