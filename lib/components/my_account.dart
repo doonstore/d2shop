@@ -174,7 +174,6 @@ class AccountSectionCards extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20),
       onTap: onTapCallback,
-      tileColor: Colors.white,
       leading: FaIcon(
         leadingIcon,
         color: kPrimaryColor.withOpacity(0.7),
