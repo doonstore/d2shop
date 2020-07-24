@@ -16,3 +16,8 @@ Future<List<Category>> getCategories() async {
   QuerySnapshot querySnapshot = await categoryRef.getDocuments();
   return querySnapshot.documents.map((e) => Category.fromJson(e.data)).toList();
 }
+
+Stream<List<Category>> get listOfCategories {
+  return categoryRef.snapshots().map((querySnapsot) =>
+      querySnapsot.documents.map((e) => Category.fromJson(e.data)).toList());
+}

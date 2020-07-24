@@ -98,11 +98,11 @@ class _EditUserPreferncesState extends State<EditUserPrefernces> {
   submit() {
     if (widget.type == PreferncesType.DoorBell) {
       SharedService.changeDoorBellSettings(_selectedValue != 0 ? true : false);
-      Utils.showMessage("DoorBell Settings have been changed.");
+      Utils.showMessage("DoorBell Settings Updated Successfully.");
     } else {
       SharedService.changeWhatsappNotificationSettings(
           _selectedValue != 0 ? true : false);
-      Utils.showMessage("WhatsApp Notification Settings have been changed.");
+      Utils.showMessage("WhatsApp Setting Updated Successfully.");
     }
     Future.delayed(Duration(milliseconds: 300), () {
       Navigator.pop(context);

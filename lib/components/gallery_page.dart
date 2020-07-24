@@ -1,9 +1,8 @@
-import 'package:d2shop/components/category_list_widget.dart';
+import 'package:d2shop/components/calender_widget.dart';
 import 'package:d2shop/components/my_account.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
-import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,57 +26,56 @@ class _GalleryPageState extends State<GalleryPage> {
       builder: (context, state, child) {
         return Scaffold(
           appBar: AppBar(
-            bottomOpacity: 0.0,
-            elevation: 0.0,
             title: Text(state.appBarTitle),
+            elevation: 0.0,
           ),
           drawer: CustomDrawer(),
-          body: ListView(
-            children: <Widget>[
-              SearchWidget(state: state),
-              Container(
-                height: 100,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    DatePicker(
-                      DateTime.now(),
-                      initialSelectedDate: DateTime.now(),
-                      selectionColor: kPrimaryColor,
-                      selectedTextColor: Colors.white,
-                      onDateChange: (date) {
-                        setState(() {
-                          state.deliveryDate = date;
-                        });
-                      },
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchWidget(),
+                CalenderWidget(),
+                Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Text(
+                    'Featured',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.sp,
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Container(
-                height: 100,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Fluttertoast.showToast(msg: "Hello");
-                      },
-                      child: Text(
-                        'Featured Section',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
+                Container(
+                  height: 180,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Container(
+                      margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
+                      width: width(context) * 0.60,
+                      color: Colors.grey[100],
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          'https://uploads-ssl.webflow.com/5a9ee6416e90d20001b20038/5dfb574eb0741828a44a3c55_reddit-banner-size%20(1).png',
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
-                  ],
+                    itemCount: 5,
+                    scrollDirection: Axis.horizontal,
+                  ),
                 ),
-              ),
-              CategoryList.name(state),
-            ],
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Fluttertoast.showToast(
+                msg: 'Show shopping cart!',
+                toastLength: Toast.LENGTH_SHORT,
+              );
+            },
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: [
@@ -112,15 +110,6 @@ class _GalleryPageState extends State<GalleryPage> {
                   );
                 }
               }
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.shopping_cart),
-            onPressed: () {
-              Fluttertoast.showToast(
-                msg: 'Show shopping cart!',
-                toastLength: Toast.LENGTH_SHORT,
-              );
             },
           ),
         );
