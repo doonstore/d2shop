@@ -65,12 +65,10 @@ class ShowDataItems extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: Text('10 items'),
-      tilePadding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-      childrenPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       children: List.generate(
         2,
         (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: GestureDetector(
             onTap: () {
               showBottomSheet(
