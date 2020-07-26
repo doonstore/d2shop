@@ -29,10 +29,9 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
 
   _auth.verifyPhoneNumber(
     phoneNumber: '+91' + number,
-    timeout: Duration(seconds: 10),
+    timeout: Duration(seconds: 20),
     verificationCompleted: (AuthCredential credential) async {
       final AuthResult result = await _auth.signInWithCredential(credential);
-      Utils.showMessage('Redirect.');
       redirectUser(result, context);
     },
     verificationFailed: (AuthException e) {
@@ -95,7 +94,6 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
 
 redirectUser(AuthResult result, BuildContext context) {
   getUser(result.user).then((DoonStoreUser user) {
-    Utils.showMessage('Entered.');
     if (user != null) {
       Utils.showMessage('Successfully Signed In.');
       if (user.displayName.isEmpty)
@@ -104,12 +102,16 @@ redirectUser(AuthResult result, BuildContext context) {
       else
         MyRoute.push(context, HomePage(), replaced: true);
     }
+  }).catchError((e) {
+    Utils.showMessage('Error: $e', error: true);
   });
 }
 
 signOut(BuildContext context) {
   _auth.signOut().then((value) {
     MyRoute.push(context, LoginScreen(), replaced: true);
+  }).catchError((e) {
+    Utils.showMessage('Error: $e', error: true);
   });
 }
 

@@ -73,6 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         title: TextField(
           controller: queryController,
+          autofocus: true,
           decoration: InputDecoration(
             border: InputBorder.none,
             labelText: 'Search',

@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: height(context), width: width(context));
     return Scaffold(
       key: _globalKey,
       body: SafeArea(
@@ -50,35 +51,33 @@ class _LoginScreenState extends State<LoginScreen> {
           FadeTransition(opacity: animation, child: child),
       child: isLoading
           ? Utils.loadingWidget(context)
-          : Builder(
-              builder: (context) => Container(
-                width: width(context) * 0.90,
-                height: 45,
-                margin: EdgeInsets.symmetric(vertical: 7),
-                child: MaterialButton(
-                  elevation: 7,
-                  onPressed: () {
-                    final String number = numberTEC.text;
+          : Container(
+              width: width(context) * 0.90,
+              height: 45,
+              margin: EdgeInsets.symmetric(vertical: 7),
+              child: MaterialButton(
+                elevation: 7,
+                onPressed: () {
+                  final String number = numberTEC.text;
 
-                    if (number.isNotEmpty && number.length == 10) {
-                      if (RegExp('[6-9]{1}[0-9]{9}').hasMatch(number)) {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        loginUsingPhoneNumber(context, number);
-                      }
-                    } else
-                      Utils.showMessage(
-                        'Please enter a valid phone number',
-                        error: true,
-                      );
-                  },
-                  textColor: Colors.white,
-                  child: Text('Send OTP'),
-                  color: Colors.teal,
-                  shape: ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  if (number.isNotEmpty && number.length == 10) {
+                    if (RegExp('[6-9]{1}[0-9]{9}').hasMatch(number)) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      loginUsingPhoneNumber(context, number);
+                    }
+                  } else
+                    Utils.showMessage(
+                      'Please enter a valid phone number',
+                      error: true,
+                    );
+                },
+                textColor: Colors.white,
+                child: Text('Send OTP'),
+                color: Colors.teal,
+                shape: ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
               ),
             ),

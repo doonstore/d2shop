@@ -1,4 +1,4 @@
-import 'package:d2shop/components/my_account.dart';
+import 'package:d2shop/screens/my_account.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:flutter/foundation.dart';

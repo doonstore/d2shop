@@ -12,6 +12,10 @@ final CollectionReference featuredRef = _firestore.collection('featured');
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 
+RoundedRectangleBorder rounded(double circluar) => RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    );
+
 /// Colors
 const Color kPrimaryColor = Colors.teal;
 

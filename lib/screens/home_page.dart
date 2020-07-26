@@ -43,9 +43,10 @@ class _HomePageState extends State<HomePage> {
       drawer: CustomDrawer(),
       body: PageTransitionSwitcher(
         transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
-          return FadeThroughTransition(
+          return SharedAxisTransition(
             animation: primaryAnimation,
             secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.scaled,
             child: child,
           );
         },

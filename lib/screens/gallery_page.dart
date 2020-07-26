@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/components/calender_widget.dart';
 import 'package:d2shop/components/category_explorer.dart';
+import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
+import 'package:d2shop/repository/shopping_repository.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -35,35 +36,74 @@ class _GalleryPageState extends State<GalleryPage> {
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),
-              featuredWidget(),
+              featuredSection(),
               SizedBox(height: 5),
-              FutureBuilder<QuerySnapshot>(
-                future: categoryRef.getDocuments(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData)
-                    return FractionallySizedBox(
-                      widthFactor: 1.0,
-                      child: Center(
-                        child: SpinKitCubeGrid(color: kPrimaryColor),
-                      ),
-                    );
-                  final List<DocumentSnapshot> docs = snapshot.data.documents;
-
-                  double size = getSize(docs.length);
-
-                  return Container(
-                    height: size,
-                    child: Builder(
-                      builder: (context) {
-                        List<Category> dataList =
-                            docs.map((e) => Category.fromJson(e.data)).toList();
-                        return DataList(dataList: dataList);
-                      },
-                    ),
-                  );
-                },
-              ),
+              categoriesSection(),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  StreamBuilder<List<FeaturedModel>> featuredSection() {
+    return StreamBuilder<List<FeaturedModel>>(
+      stream: listOfFeaturedHeaders,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Container(
+            height: 180,
+            decoration: BoxDecoration(color: Colors.grey[200]),
+          );
+        final List<FeaturedModel> docs = snapshot.data;
+
+        return Container(
+          height: 180,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
+                width: width(context) * 0.60,
+                color: Colors.grey[100],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: docs.length == 0
+                      ? Placeholder()
+                      : Image.network(
+                          docs[index].photoUrl,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              );
+            },
+            itemCount: docs.isEmpty ? 5 : docs.length,
+            scrollDirection: Axis.horizontal,
+          ),
+        );
+      },
+    );
+  }
+
+  StreamBuilder<List<Category>> categoriesSection() {
+    return StreamBuilder<List<Category>>(
+      stream: listOfCategories,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return FractionallySizedBox(
+            widthFactor: 1.0,
+            child: Center(
+              child: SpinKitCubeGrid(color: kPrimaryColor),
+            ),
+          );
+
+        final List<Category> dataList = snapshot.data;
+
+        double size = getSize(dataList.length);
+
+        return Container(
+          height: size,
+          child: Builder(
+            builder: (context) => DataList(dataList: dataList),
           ),
         );
       },
@@ -85,26 +125,21 @@ class _GalleryPageState extends State<GalleryPage> {
       return 150;
   }
 
-  FutureBuilder<QuerySnapshot> featuredWidget() {
-    return FutureBuilder<QuerySnapshot>(
-      future: featuredRef.getDocuments(),
+  FutureBuilder<List<FeaturedModel>> featuredWidget() {
+    return FutureBuilder<List<FeaturedModel>>(
+      future: getFeaturedHeader(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
-          return FractionallySizedBox(
-            widthFactor: 1.0,
-            child: Center(
-              child: SpinKitCubeGrid(color: kPrimaryColor),
-            ),
+          return Container(
+            height: 180,
+            decoration: BoxDecoration(color: Colors.grey[200]),
           );
-        final List<DocumentSnapshot> docs = snapshot.data.documents;
+        final List<FeaturedModel> docs = snapshot.data;
 
         return Container(
           height: 180,
           child: ListView.builder(
             itemBuilder: (context, index) {
-              // final FeaturedModel featured =
-              //     FeaturedModel.fromJSON(docs[index].data);
-
               return Container(
                 margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
                 width: width(context) * 0.60,
@@ -114,13 +149,13 @@ class _GalleryPageState extends State<GalleryPage> {
                   child: docs.length == 0
                       ? Placeholder()
                       : Image.network(
-                          docs[index].data['photoUrl'],
+                          docs[index].photoUrl,
                           fit: BoxFit.cover,
                         ),
                 ),
               );
             },
-            itemCount: docs.length == 0 ? 5 : docs.length,
+            itemCount: docs.isEmpty ? 5 : docs.length,
             scrollDirection: Axis.horizontal,
           ),
         );
