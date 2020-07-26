@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/components/calender_widget.dart';
 import 'package:d2shop/components/category_explorer.dart';
-import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -98,33 +97,33 @@ class _GalleryPageState extends State<GalleryPage> {
             ),
           );
         final List<DocumentSnapshot> docs = snapshot.data.documents;
-        if (docs.length > 0) {
-          return Container(
-            height: 180,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                final FeaturedModel featured =
-                    FeaturedModel.fromJSON(docs[index].data);
 
-                return Container(
-                  margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
-                  width: width(context) * 0.60,
-                  color: Colors.grey[100],
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      featured.photoUrl,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-              itemCount: docs.length,
-              scrollDirection: Axis.horizontal,
-            ),
-          );
-        } else
-          return Container();
+        return Container(
+          height: 180,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              // final FeaturedModel featured =
+              //     FeaturedModel.fromJSON(docs[index].data);
+
+              return Container(
+                margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
+                width: width(context) * 0.60,
+                color: Colors.grey[100],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: docs.length == 0
+                      ? Placeholder()
+                      : Image.network(
+                          docs[index].data['photoUrl'],
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              );
+            },
+            itemCount: docs.length == 0 ? 5 : docs.length,
+            scrollDirection: Axis.horizontal,
+          ),
+        );
       },
     );
   }
