@@ -1,6 +1,6 @@
+import 'package:d2shop/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:d2shop/screens/start_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +14,16 @@ class DoonStoreApp extends StatelessWidget {
       create: (context) => ApplicationState(),
       child: MaterialApp(
         title: 'DoonStore',
-        home: StartScreen(),
+        home: HomePage(),
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white,
           bottomSheetTheme: BottomSheetThemeData(
-              shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          )),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
           dialogTheme: DialogTheme(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

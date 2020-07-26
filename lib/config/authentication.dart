@@ -1,4 +1,4 @@
-import 'package:d2shop/components/gallery_page.dart';
+import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/screens/user_input.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +29,10 @@ Future<DoonStoreUser> getCurrentUser() async {
 Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
   String code, verifyId;
 
+  if (!number.contains('+')) number = '+91' + number;
+
   _auth.verifyPhoneNumber(
-    phoneNumber: '+91' + number,
+    phoneNumber: number,
     timeout: Duration(seconds: 10),
     verificationCompleted: (AuthCredential credential) async {
       final AuthResult result = await _auth.signInWithCredential(credential);
@@ -103,7 +105,7 @@ redirectUser(AuthResult result, BuildContext context) {
         MyRoute.push(context, UserInput(doonStoreUser: user, isSettingUp: true),
             replaced: true);
       else
-        MyRoute.push(context, GalleryPage(), replaced: true);
+        MyRoute.push(context, HomePage(), replaced: true);
     }
   });
 }

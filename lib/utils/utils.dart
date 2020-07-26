@@ -1,8 +1,11 @@
+import 'package:d2shop/components/category_explorer.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Utils {
   static Future<bool> showMessage(String message,
@@ -41,6 +44,30 @@ class Utils {
           SizedBox(width: 10),
           SpinKitThreeBounce(color: Colors.white, size: 30),
         ],
+      ),
+    );
+  }
+
+  static Widget searchCard(Color color, BuildContext context) {
+    return GestureDetector(
+      onTap: () => MyRoute.push(context, CategoryExplorer()),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              FaIcon(FontAwesomeIcons.search, color: color),
+              SizedBox(width: 10),
+              Text(
+                'Search for milk & groceries...',
+                style: TextStyle(
+                  color: Colors.black38,
+                  fontWeight: FontWeight.w600,
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

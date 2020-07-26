@@ -1,5 +1,7 @@
+import 'package:d2shop/components/category_explorer.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -27,7 +29,9 @@ class CalenderWidget extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   DateTime dateTime = DateTime.now().add(Duration(days: index));
-                  String date = DateFormat.MEd().format(dateTime);
+                  final String date = DateFormat.MEd().format(dateTime);
+                  final String day = date.split(',').first;
+                  final String dateValue = DateFormat.d().format(dateTime);
 
                   bool selectedValue = value.deliveryDate.day == dateTime.day;
 
@@ -53,9 +57,12 @@ class CalenderWidget extends StatelessWidget {
                       width: width(context) * 0.14,
                       child: Center(
                         child: Text(
-                          date,
+                          '$dateValue' +
+                              (dateTime.day == DateTime.now().day
+                                  ? '\nToday'
+                                  : '\n$day'),
                           style: GoogleFonts.stylish(
-                            fontSize: selectedValue ? 19.sp : 16.sp,
+                            fontSize: selectedValue ? 18.sp : 16.sp,
                             color: selectedValue ? Colors.white : Colors.black,
                           ),
                           textAlign: TextAlign.center,
@@ -77,30 +84,34 @@ class CalenderWidget extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: kPrimaryColor.withOpacity(0.7),
-                    child: FaIcon(
-                      FontAwesomeIcons.plus,
-                      color: Colors.white,
+            GestureDetector(
+              onTap: () => MyRoute.push(context, CategoryExplorer()),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 25,
+                      backgroundColor: kPrimaryColor.withOpacity(0.7),
+                      child: FaIcon(
+                        FontAwesomeIcons.plus,
+                        color: Colors.white70,
+                        size: 18,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Add item',
-                    style: GoogleFonts.ptSans(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: kPrimaryColor.withOpacity(0.7),
-                      letterSpacing: 1.1,
+                    SizedBox(height: 5),
+                    Text(
+                      'Add item',
+                      style: GoogleFonts.ptSans(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: kPrimaryColor.withOpacity(0.7),
+                        letterSpacing: 1.1,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

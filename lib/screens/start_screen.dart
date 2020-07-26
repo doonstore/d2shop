@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:d2shop/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -11,7 +12,6 @@ import '../utils/constants.dart';
 import '../utils/route.dart';
 import '../models/doonstore_user.dart';
 import '../config/authentication.dart';
-import '../components/gallery_page.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -31,7 +31,7 @@ class _StartScreenState extends State<StartScreen> {
     if (user != null)
       Timer(Duration(milliseconds: 300), () {
         Provider.of<ApplicationState>(context, listen: false).setUser(user);
-        MyRoute.push(context, GalleryPage(), replaced: true);
+        MyRoute.push(context, HomePage(), replaced: true);
       });
     else
       MyRoute.push(context, LoginScreen(), replaced: true);

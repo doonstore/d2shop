@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:d2shop/components/gallery_page.dart';
+import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,7 @@ class _UserInputState extends State<UserInput> {
           .updateData(user.toMap())
           .then((value) {
         if (widget.isSettingUp)
-          MyRoute.push(context, GalleryPage(), replaced: true);
+          MyRoute.push(context, HomePage(), replaced: true);
         else
           Navigator.pop(context);
       });
