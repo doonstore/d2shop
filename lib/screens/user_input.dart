@@ -30,8 +30,6 @@ class _UserInputState extends State<UserInput> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context, height: height(context), width: width(context));
-
     if (widget.isSettingUp)
       return Scaffold(
         backgroundColor: Colors.grey[100],

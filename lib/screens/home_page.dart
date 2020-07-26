@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<List<dynamic>> bottomTabs = [
+  List bottomTabs = [
     ['Home', FontAwesomeIcons.home],
     ['Orders', FontAwesomeIcons.shoppingCart],
     ['Wallet', FontAwesomeIcons.wallet],
@@ -50,14 +50,10 @@ class _HomePageState extends State<HomePage> {
           );
         },
         duration: Duration(milliseconds: 400),
-        child: IndexedStack(
-          children: _tabs,
-          index: _currentIndex,
-        ),
+        child: _tabs[_currentIndex],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
         onTap: (int n) => this.setState(() => _currentIndex = n),
-        curve: Curves.easeInOut,
         items: bottomTabs
             .map(
               (item) => TitledNavigationBarItem(

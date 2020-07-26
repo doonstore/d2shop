@@ -34,7 +34,7 @@ class CustomDrawer extends StatelessWidget {
                 dataCard(
                   title: 'My Subscriptions',
                   iconData: FontAwesomeIcons.retweet,
-                  onTapCallback: () => MyRoute.push(context, AccountScreen()),
+                  onTapCallback: () {},
                 ),
                 dataCard(
                   title: 'Super Wallet',
@@ -67,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
 
   Widget userProfileHeader(BuildContext context, String name) {
     return ListTile(
-      // onTap: () => MyRoute.push(context, AccountScreen()),
+      onTap: () => MyRoute.push(context, AccountScreen()),
       leading: FaIcon(FontAwesomeIcons.user, color: kPrimaryColor),
       title: Text(
         name,

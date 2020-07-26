@@ -1,9 +1,9 @@
-import 'package:d2shop/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:d2shop/screens/home_page.dart';
 
 void main() => runApp(DoonStoreApp());
 

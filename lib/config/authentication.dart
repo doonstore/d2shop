@@ -1,6 +1,5 @@
 import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/screens/user_input.dart';
-import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animations/animations.dart';
@@ -11,7 +10,6 @@ import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -29,13 +27,12 @@ Future<DoonStoreUser> getCurrentUser() async {
 Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
   String code, verifyId;
 
-  if (!number.contains('+')) number = '+91' + number;
-
   _auth.verifyPhoneNumber(
-    phoneNumber: number,
+    phoneNumber: '+91' + number,
     timeout: Duration(seconds: 10),
     verificationCompleted: (AuthCredential credential) async {
       final AuthResult result = await _auth.signInWithCredential(credential);
+      Utils.showMessage('Redirect.');
       redirectUser(result, context);
     },
     verificationFailed: (AuthException e) {
@@ -98,8 +95,8 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
 
 redirectUser(AuthResult result, BuildContext context) {
   getUser(result.user).then((DoonStoreUser user) {
+    Utils.showMessage('Entered.');
     if (user != null) {
-      Provider.of<ApplicationState>(context, listen: false).setUser(user);
       Utils.showMessage('Successfully Signed In.');
       if (user.displayName.isEmpty)
         MyRoute.push(context, UserInput(doonStoreUser: user, isSettingUp: true),
