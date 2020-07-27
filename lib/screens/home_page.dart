@@ -6,7 +6,6 @@ import 'package:d2shop/screens/gallery_page.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
-import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

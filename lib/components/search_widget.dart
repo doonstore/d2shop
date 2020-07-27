@@ -13,15 +13,18 @@ class SearchWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'What can we get you?',
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+          Padding(
+            padding: const EdgeInsets.only(left: 6),
+            child: Text(
+              'What can we get you?',
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 10),
           Utils.searchCard(kPrimaryColor.withOpacity(0.7), context)
         ],
       ),

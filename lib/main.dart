@@ -4,9 +4,22 @@ import 'package:flutter/material.dart';
 
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(DoonStoreApp());
+void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarColor: kPrimaryColor,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(DoonStoreApp());
+}
 
 class DoonStoreApp extends StatelessWidget {
   @override
@@ -15,6 +28,7 @@ class DoonStoreApp extends StatelessWidget {
       create: (context) => ApplicationState(),
       child: MaterialApp(
         title: 'DoonStore',
+        debugShowCheckedModeBanner: false,
         home: StartScreen(),
         theme: ThemeData(
           primarySwatch: Colors.blue,

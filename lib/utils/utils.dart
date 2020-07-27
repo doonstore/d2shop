@@ -80,6 +80,7 @@ class Utils {
     return GestureDetector(
       onTap: () => MyRoute.push(context, CategoryExplorer()),
       child: Card(
+        elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(

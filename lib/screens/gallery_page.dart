@@ -53,7 +53,8 @@ class _GalleryPageState extends State<GalleryPage> {
               ),
               onPressed: () => widget.globalKey.currentState.openDrawer(),
             ),
-            title: _value > 90
+            centerTitle: true,
+            title: _value > 95
                 ? Utils.searchCard(kPrimaryColor, context)
                 : Text('Home'),
             elevation: 0.0,
