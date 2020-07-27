@@ -5,13 +5,18 @@ import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/repository/shopping_repository.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../components/search_widget.dart';
 
 class GalleryPage extends StatefulWidget {
+  final GlobalKey<ScaffoldState> globalKey;
+  const GalleryPage({this.globalKey});
+
   @override
   _GalleryPageState createState() => _GalleryPageState();
 }
@@ -19,27 +24,59 @@ class GalleryPage extends StatefulWidget {
 class _GalleryPageState extends State<GalleryPage> {
   _GalleryPageState();
 
+  ScrollController scrollController;
+  double _value = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      double value = scrollController.offset;
+
+      setState(() {
+        _value = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context, state, child) {
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SearchWidget(),
-              CalenderWidget(),
-              Padding(
-                padding: const EdgeInsets.all(18),
-                child: Text(
-                  'Featured',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: FaIcon(
+                FontAwesomeIcons.bars,
+                size: 25,
               ),
-              featuredSection(),
-              SizedBox(height: 5),
-              categoriesSection(),
-            ],
+              onPressed: () => widget.globalKey.currentState.openDrawer(),
+            ),
+            title: _value > 90
+                ? Utils.searchCard(kPrimaryColor, context)
+                : Text('Home'),
+            elevation: 0.0,
+          ),
+          body: SingleChildScrollView(
+            controller: scrollController,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SearchWidget(),
+                CalenderWidget(),
+                Padding(
+                  padding: const EdgeInsets.all(18),
+                  child: Text(
+                    'Featured',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                featuredSection(),
+                SizedBox(height: 5),
+                categoriesSection(),
+              ],
+            ),
           ),
         );
       },
