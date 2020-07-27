@@ -6,10 +6,15 @@ final Firestore _firestore = Firestore.instance;
 final CollectionReference userRef = _firestore.collection('users');
 final CollectionReference itemRef = _firestore.collection('item');
 final CollectionReference categoryRef = _firestore.collection('category');
+final CollectionReference featuredRef = _firestore.collection('featured');
 
 /// Resposniveness
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
+
+RoundedRectangleBorder rounded(double circluar) => RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    );
 
 /// Colors
 const Color kPrimaryColor = Colors.teal;

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/utils/constants.dart';
 
@@ -20,4 +21,17 @@ Future<List<Category>> getCategories() async {
 Stream<List<Category>> get listOfCategories {
   return categoryRef.snapshots().map((querySnapsot) =>
       querySnapsot.documents.map((e) => Category.fromJson(e.data)).toList());
+}
+
+Future<List<FeaturedModel>> getFeaturedHeader() async {
+  QuerySnapshot querySnapshot = await featuredRef.getDocuments();
+  return querySnapshot.documents
+      .map((e) => FeaturedModel.fromJSON(e.data))
+      .toList();
+}
+
+Stream<List<FeaturedModel>> get listOfFeaturedHeaders {
+  return featuredRef.snapshots().map((querySnapsot) => querySnapsot.documents
+      .map((e) => FeaturedModel.fromJSON(e.data))
+      .toList());
 }

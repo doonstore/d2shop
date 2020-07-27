@@ -1,6 +1,7 @@
-import 'package:d2shop/components/my_account.dart';
+import 'package:d2shop/screens/my_account.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,7 +34,7 @@ class CustomDrawer extends StatelessWidget {
                 dataCard(
                   title: 'My Subscriptions',
                   iconData: FontAwesomeIcons.retweet,
-                  onTapCallback: () => MyRoute.push(context, AccountScreen()),
+                  onTapCallback: () {},
                 ),
                 dataCard(
                   title: 'Super Wallet',

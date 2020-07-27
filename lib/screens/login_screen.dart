@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, height: height(context), width: width(context));
     return Scaffold(
       key: _globalKey,
       body: SafeArea(
@@ -100,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(height: 15),
           TextFormField(
             controller: numberTEC,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: 'Enter Phone Number',
               hintText: 'Enter your phone number',

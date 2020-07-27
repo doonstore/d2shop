@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:d2shop/components/edit_address.dart';
-import 'package:d2shop/components/edit_user_prefernces.dart';
+import 'package:d2shop/components/address_screnn.dart';
+import 'package:d2shop/helper/edit_user_prefernces.dart';
 import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:flutter/material.dart';
