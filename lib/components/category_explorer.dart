@@ -1,6 +1,7 @@
 import 'package:d2shop/components/category_info.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/repository/shopping_repository.dart';
+import 'package:d2shop/screens/request_product.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,6 @@ class _SearchScreenState extends State<SearchScreen> {
           autofocus: true,
           decoration: InputDecoration(
             border: InputBorder.none,
-            labelText: 'Search',
             hintText: 'Search for milk & groceries...',
             isDense: true,
           ),
@@ -220,7 +220,7 @@ class NoDataWidget extends StatelessWidget {
                   child: OutlineButton(
                     borderSide: BorderSide(color: Colors.blue[400]),
                     splashColor: Colors.blue,
-                    onPressed: null,
+                    onPressed: () => MyRoute.push(context, RequestProduct()),
                     child: Text('Request a product'),
                   ),
                 )

@@ -7,6 +7,7 @@ final CollectionReference userRef = _firestore.collection('users');
 final CollectionReference itemRef = _firestore.collection('item');
 final CollectionReference categoryRef = _firestore.collection('category');
 final CollectionReference featuredRef = _firestore.collection('featured');
+final CollectionReference requestRef = _firestore.collection('requests');
 
 /// Resposniveness
 double width(BuildContext context) => MediaQuery.of(context).size.width;
