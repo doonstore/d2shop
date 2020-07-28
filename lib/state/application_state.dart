@@ -17,16 +17,6 @@ class ApplicationState extends ChangeNotifier {
     categoryList = <Category>[];
   }
 
-  SnackBar get getSnackBar {
-    return SnackBar(
-      content: showCart(),
-      backgroundColor: Colors.white,
-      duration: Duration(hours: 1),
-      margin: EdgeInsets.zero,
-      behavior: SnackBarBehavior.floating,
-    );
-  }
-
   addItemToTheCart(Item item) {
     if (cart.containsKey(item.id))
       cart.update(
