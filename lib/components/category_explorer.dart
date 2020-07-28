@@ -43,9 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
     queryController.addListener(() {
       if (queryController.text.isNotEmpty) {
         filteredList = dataList
-            .where((e) => e.name
-                .toLowerCase()
-                .contains(queryController.text.toLowerCase()))
+            .where((e) => e.name.toLowerCase().contains(queryController.text))
             .toList();
 
         setState(() {});
@@ -90,11 +88,29 @@ class _SearchScreenState extends State<SearchScreen> {
       body: queryController.text.isEmpty
           ? CategoryData(dataList: categoryList)
           : filteredList.isNotEmpty
-              ? ListView.separated(
-                  separatorBuilder: (context, index) => Divider(),
-                  itemBuilder: (context, index) =>
-                      ItemInfo(item: dataList[index]),
-                  itemCount: dataList.length,
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        '${filteredList.length} results found for "${queryController.text}"',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.black45,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => Divider(),
+                        itemBuilder: (context, index) =>
+                            ItemInfo(item: filteredList[index]),
+                        itemCount: filteredList.length,
+                      ),
+                    )
+                  ],
                 )
               : NoDataWidget(),
     );
