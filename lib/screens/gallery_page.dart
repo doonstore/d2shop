@@ -1,8 +1,8 @@
 import 'package:d2shop/components/calender_widget.dart';
-import 'package:d2shop/components/category_explorer.dart';
+import 'package:d2shop/components/category_data.dart';
+import 'package:d2shop/config/firestore_services.dart';
 import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
-import 'package:d2shop/repository/shopping_repository.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/utils.dart';
@@ -136,12 +136,15 @@ class _GalleryPageState extends State<GalleryPage> {
 
         final List<Category> dataList = snapshot.data;
 
+        Provider.of<ApplicationState>(context, listen: false)
+            .setCategoryList(dataList);
+
         double size = getSize(dataList.length);
 
         return Container(
           height: size,
           child: Builder(
-            builder: (context) => DataList(dataList: dataList),
+            builder: (context) => CategoryData(dataList: dataList),
           ),
         );
       },
@@ -161,43 +164,5 @@ class _GalleryPageState extends State<GalleryPage> {
       return 1200;
     else
       return 150;
-  }
-
-  FutureBuilder<List<FeaturedModel>> featuredWidget() {
-    return FutureBuilder<List<FeaturedModel>>(
-      future: getFeaturedHeader(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Container(
-            height: 180,
-            decoration: BoxDecoration(color: Colors.grey[200]),
-          );
-        final List<FeaturedModel> docs = snapshot.data;
-
-        return Container(
-          height: 180,
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(left: index == 0 ? 15 : 8),
-                width: width(context) * 0.60,
-                color: Colors.grey[100],
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: docs.length == 0
-                      ? Placeholder()
-                      : Image.network(
-                          docs[index].photoUrl,
-                          fit: BoxFit.cover,
-                        ),
-                ),
-              );
-            },
-            itemCount: docs.isEmpty ? 5 : docs.length,
-            scrollDirection: Axis.horizontal,
-          ),
-        );
-      },
-    );
   }
 }

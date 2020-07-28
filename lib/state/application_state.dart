@@ -1,29 +1,15 @@
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
-import 'package:d2shop/repository/shopping_repository.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationState extends ChangeNotifier {
-  final bottomNavBarTitles = ['Home', 'Categories', 'Account'];
-  String appBarTitle = 'Home';
   DoonStoreUser user;
-  List<Item> itemList;
   Map<String, int> cart = Map();
-  List<Category> categoryList;
   DateTime deliveryDate = DateTime.now();
-
-  ApplicationState() {
-    getItems().then((value) {
-      itemList = value;
-      for (Item item in itemList) {
-        cart[item.id] = 0;
-      }
-    });
-    getCategories().then((value) => categoryList = value);
-  }
+  List<Category> categoryList = <Category>[];
 
   setUser(DoonStoreUser doonStoreUser) {
     this.user = doonStoreUser;
@@ -33,6 +19,10 @@ class ApplicationState extends ChangeNotifier {
   setDeliveryDate(DateTime dateTime) {
     this.deliveryDate = dateTime;
     notifyListeners();
+  }
+
+  setCategoryList(List<Category> dataList) {
+    this.categoryList = dataList;
   }
 
   Widget showCart() {

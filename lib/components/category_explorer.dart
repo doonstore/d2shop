@@ -1,8 +1,9 @@
-import 'package:d2shop/components/category_info.dart';
+import 'package:d2shop/components/category_data.dart';
+import 'package:d2shop/config/firestore_services.dart';
+import 'package:d2shop/components/item_info.dart';
 import 'package:d2shop/models/shopping_model.dart';
-import 'package:d2shop/repository/shopping_repository.dart';
 import 'package:d2shop/screens/request_product.dart';
-import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,8 +19,8 @@ class CategoryExplorer extends StatefulWidget {
 class _CategoryExplorerState extends State<CategoryExplorer> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Category>>.value(
-      value: listOfCategories,
+    return StreamProvider<List<Item>>.value(
+      value: listOfItems,
       builder: (context, child) => SearchScreen(),
     );
   }
@@ -33,7 +34,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController queryController = TextEditingController();
 
-  List<Category> dataList = [], filteredList = [];
+  List<Item> dataList = [], filteredList = [];
+  List<Category> categoryList = <Category>[];
 
   @override
   void initState() {
@@ -45,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 .toLowerCase()
                 .contains(queryController.text.toLowerCase()))
             .toList();
+
         setState(() {});
       } else {
         filteredList.clear();
@@ -61,7 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dataList = Provider.of<List<Category>>(context) ?? [];
+    dataList = Provider.of<List<Item>>(context) ?? [];
+    categoryList = Provider.of<ApplicationState>(context).categoryList;
 
     return Scaffold(
       appBar: AppBar(
@@ -83,94 +87,17 @@ class _SearchScreenState extends State<SearchScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-      body: DataList(
-        dataList: queryController.text.isEmpty ? dataList : filteredList,
-      ),
+      body: queryController.text.isEmpty
+          ? CategoryData(dataList: categoryList)
+          : filteredList.isNotEmpty
+              ? ListView.separated(
+                  separatorBuilder: (context, index) => Divider(),
+                  itemBuilder: (context, index) =>
+                      ItemInfo(item: dataList[index]),
+                  itemCount: dataList.length,
+                )
+              : NoDataWidget(),
     );
-  }
-}
-
-class DataList extends StatelessWidget {
-  const DataList({
-    Key key,
-    @required this.dataList,
-  }) : super(key: key);
-
-  final List<Category> dataList;
-
-  @override
-  Widget build(BuildContext context) {
-    return dataList.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Text(
-                    'Explore Categories',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15.sp,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 15),
-                Expanded(
-                  child: GridView.builder(
-                    itemCount: dataList.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 35,
-                    ),
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () => MyRoute.push(
-                        context,
-                        CategoryInfo(
-                          category: dataList[index],
-                          colorCode: index % 8,
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: kBackgroundColorsList[index % 8]
-                                    .withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              padding: EdgeInsets.all(2),
-                              child: Image.asset(
-                                dataList[index].photoUrl,
-                                width: width(context) * 0.23,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              dataList[index].name,
-                              style: GoogleFonts.ubuntu(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13.sp,
-                              ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.clip,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        : NoDataWidget();
   }
 }
 
