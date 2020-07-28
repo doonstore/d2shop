@@ -36,38 +36,13 @@ class _ItemInfoState extends State<ItemInfo> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Material(
-                      color: Colors.grey[200],
-                      elevation: 1,
-                      shadowColor: kPrimaryColor,
-                      shape: rounded(30),
-                      animationDuration: Duration(milliseconds: 300),
-                      child: IconButton(
-                        iconSize: 15,
-                        color: Colors.black,
-                        icon: Icon(FontAwesomeIcons.minus),
-                        onPressed: () =>
-                            value.removeItemFromTheCart(widget.item),
-                      ),
-                    ),
+                    changeBtn(value, false),
                     Text(
                       '${value.cart[widget.item.id]['quantity'].toInt()}',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                     ),
-                    Material(
-                      elevation: 1,
-                      animationDuration: Duration(milliseconds: 300),
-                      shadowColor: kPrimaryColor,
-                      color: Colors.grey[200],
-                      shape: rounded(30),
-                      child: IconButton(
-                        iconSize: 15,
-                        color: Colors.black,
-                        icon: Icon(FontAwesomeIcons.plus),
-                        onPressed: () => value.addItemToTheCart(widget.item),
-                      ),
-                    ),
+                    changeBtn(value, true)
                   ],
                 ),
               )
@@ -83,6 +58,27 @@ class _ItemInfoState extends State<ItemInfo> {
                 textColor: kPrimaryColor,
                 label: Text('Add'),
               ),
+      ),
+    );
+  }
+
+  Widget changeBtn(ApplicationState value, bool inc) {
+    return GestureDetector(
+      onTap: () => inc
+          ? value.addItemToTheCart(widget.item)
+          : value.removeItemFromTheCart(widget.item),
+      child: Material(
+        color: kPrimaryColor.withOpacity(0.7),
+        elevation: 5,
+        borderRadius: BorderRadius.circular(8),
+        animationDuration: Duration(milliseconds: 300),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: FaIcon(
+            inc ? FontAwesomeIcons.plus : FontAwesomeIcons.minus,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

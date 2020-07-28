@@ -74,7 +74,8 @@ class ApplicationState extends ChangeNotifier {
   Widget showCart() {
     return Container(
       height: 60,
-      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
+      color: Colors.transparent,
       child: Card(
         color: kPrimaryColor,
         shape: rounded(10),

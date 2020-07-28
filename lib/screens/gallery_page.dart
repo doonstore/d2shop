@@ -40,13 +40,7 @@ class _GalleryPageState extends State<GalleryPage> {
             title: Text('Home'),
             elevation: 0.0,
           ),
-          bottomSheet: state.cart.isNotEmpty
-              ? Container(
-                  margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  color: Colors.transparent,
-                  child: state.showCart(),
-                )
-              : null,
+          bottomSheet: state.cart.isNotEmpty ? state.showCart() : null,
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

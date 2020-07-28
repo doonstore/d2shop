@@ -28,13 +28,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
     return Consumer<ApplicationState>(
       builder: (context, value, child) => Scaffold(
         key: _globalKey,
-        bottomSheet: value.cart.isNotEmpty
-            ? Container(
-                margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
-                color: Colors.transparent,
-                child: value.showCart(),
-              )
-            : null,
+        bottomSheet: value.cart.isNotEmpty ? value.showCart() : null,
         body: Builder(
           builder: (context) => CustomScrollView(
             slivers: [

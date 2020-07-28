@@ -65,54 +65,57 @@ class _SearchScreenState extends State<SearchScreen> {
     dataList = Provider.of<List<Item>>(context) ?? [];
     categoryList = Provider.of<ApplicationState>(context).categoryList;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: FaIcon(FontAwesomeIcons.chevronLeft),
-          onPressed: () => Navigator.pop(context),
-          color: Colors.black54,
-        ),
-        title: TextField(
-          controller: queryController,
-          autofocus: true,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Search for milk & groceries...',
-            isDense: true,
+    return Consumer<ApplicationState>(
+      builder: (context, value, child) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: IconButton(
+            icon: FaIcon(FontAwesomeIcons.chevronLeft),
+            onPressed: () => Navigator.pop(context),
+            color: Colors.black54,
           ),
-          style: TextStyle(fontWeight: FontWeight.bold),
+          title: TextField(
+            controller: queryController,
+            autofocus: true,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: 'Search for milk & groceries...',
+              isDense: true,
+            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      body: queryController.text.isEmpty
-          ? CategoryData(dataList: categoryList)
-          : filteredList.isNotEmpty
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        '${filteredList.length} results found for "${queryController.text}"',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.black45,
-                          fontWeight: FontWeight.w500,
+        bottomSheet: value.cart.isNotEmpty ? value.showCart() : null,
+        body: queryController.text.isEmpty
+            ? CategoryData(dataList: categoryList)
+            : filteredList.isNotEmpty
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          '${filteredList.length} results found for "${queryController.text}"',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.black45,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        separatorBuilder: (context, index) => Divider(),
-                        itemBuilder: (context, index) =>
-                            ItemInfo(item: filteredList[index]),
-                        itemCount: filteredList.length,
-                      ),
-                    )
-                  ],
-                )
-              : NoDataWidget(),
+                      Expanded(
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => Divider(),
+                          itemBuilder: (context, index) =>
+                              ItemInfo(item: filteredList[index]),
+                          itemCount: filteredList.length,
+                        ),
+                      )
+                    ],
+                  )
+                : NoDataWidget(),
+      ),
     );
   }
 }
