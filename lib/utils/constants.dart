@@ -7,17 +7,18 @@ final CollectionReference userRef = _firestore.collection('users');
 final CollectionReference itemRef = _firestore.collection('item');
 final CollectionReference categoryRef = _firestore.collection('category');
 final CollectionReference featuredRef = _firestore.collection('featured');
+final CollectionReference requestRef = _firestore.collection('requests');
 
 /// Resposniveness
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 
 RoundedRectangleBorder rounded(double circluar) => RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(circluar),
     );
 
 /// Colors
-const Color kPrimaryColor = Colors.teal;
+const Color kPrimaryColor = Color.fromRGBO(65, 160, 209, 1);
 
 List<Color> kBackgroundColorsList = [
   Colors.blue[200],

@@ -26,13 +26,20 @@ class Category {
 }
 
 class Item {
-  String id;
-  String name;
-  String photoUrl;
+  String id, name, quantityUnit, photoUrl, brand;
+  int quantityValue;
   double price;
   List<String> categoryList = List();
 
-  Item(this.id, this.name, this.photoUrl, this.price, this.categoryList);
+  Item(
+      {this.id,
+      this.name,
+      this.photoUrl,
+      this.price,
+      this.categoryList,
+      this.brand,
+      this.quantityUnit,
+      this.quantityValue});
 
   Item.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -41,6 +48,9 @@ class Item {
         price = json['price'].runtimeType == int
             ? (json['price'] as int).toDouble()
             : json['price'] as double,
+        brand = json['brand'],
+        quantityValue = json['quantityValue'],
+        quantityUnit = json['quantityUnit'],
         categoryList = json['categoryList'].cast<String>();
 
   Map<String, dynamic> toJson() {
@@ -49,7 +59,10 @@ class Item {
       'name': name,
       'photoUrl': photoUrl,
       'price': price,
-      'categoryList': categoryList
+      'categoryList': categoryList,
+      'brand': brand,
+      'quantityUnit': quantityUnit,
+      'quantityValue': quantityValue,
     };
   }
 }

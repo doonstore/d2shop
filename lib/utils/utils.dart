@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Utils {
   static Future<bool> showMessage(String message,
@@ -17,6 +18,33 @@ class Utils {
       gravity: basic ? ToastGravity.BOTTOM : ToastGravity.CENTER,
       backgroundColor: error ? Colors.red : basic ? Colors.black : Colors.green,
       fontSize: 15.sp,
+    );
+  }
+
+  static AppBar appBar(BuildContext context,
+      {@required String title,
+      Color color,
+      Color backgroudColor,
+      List<Widget> actions}) {
+    return AppBar(
+      title: Text(
+        title,
+        style: GoogleFonts.stylish(
+          letterSpacing: 1.1,
+          color: color ?? Colors.white,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      leading: IconButton(
+        icon: FaIcon(FontAwesomeIcons.chevronLeft),
+        onPressed: () => Navigator.pop(context),
+        color: color ?? Colors.white,
+      ),
+      centerTitle: true,
+      backgroundColor: backgroudColor ?? kPrimaryColor,
+      actions: actions,
+      elevation: 0.0,
     );
   }
 
@@ -52,6 +80,7 @@ class Utils {
     return GestureDetector(
       onTap: () => MyRoute.push(context, CategoryExplorer()),
       child: Card(
+        elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(

@@ -8,7 +8,7 @@ BottomSheetThemeData bottomSheetThemeData = BottomSheetThemeData(
 DialogTheme dialogTheme = DialogTheme(shape: rounded(8));
 
 CardTheme cardTheme = CardTheme(
-  shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(20)),
 );
 
 ButtonThemeData buttonThemeData = ButtonThemeData(shape: rounded(8));
