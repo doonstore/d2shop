@@ -1,8 +1,8 @@
 class Category {
-  final String id, name, photoUrl;
-  final bool isFeatured;
-  final List itemCategoryList;
-  final Map<String, dynamic> itemList;
+  String id, name, photoUrl;
+  bool isFeatured;
+  List itemCategoryList;
+  Map<String, dynamic> itemList;
 
   Category(
       {this.id,
@@ -21,16 +21,14 @@ class Category {
         itemList: json['itemList'],
       );
 
-  Map<String, dynamic> toJson(Category category) {
-    return {
-      'id': category.id,
-      'name': category.name,
-      'photoUrl': category.photoUrl,
-      'isFeatured': category.isFeatured,
-      'itemCategoryList': category.itemCategoryList,
-      'itemList': category.itemList
-    };
-  }
+  Map<String, dynamic> toJson(Category category) => {
+        'id': category.id,
+        'name': category.name,
+        'photoUrl': category.photoUrl,
+        'isFeatured': category.isFeatured,
+        'itemCategoryList': category.itemCategoryList,
+        'itemList': category.itemList
+      };
 }
 
 class Item {

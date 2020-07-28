@@ -27,7 +27,7 @@ class UserInput extends StatefulWidget {
 class _UserInputState extends State<UserInput> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _name, _phoneNumber, _emailAddress;
+  String _name, _emailAddress;
   bool enabled = false;
 
   @override
@@ -55,7 +55,6 @@ class _UserInputState extends State<UserInput> {
       DoonStoreUser user = widget.doonStoreUser;
       user.displayName = _name;
       user.email = _emailAddress;
-      user.phone = _phoneNumber;
 
       Utils.showMessage('User Profile has been successfully updated.');
 
@@ -135,10 +134,6 @@ class _UserInputState extends State<UserInput> {
               style: Utils.formTextStyle(),
             ),
             SizedBox(height: 10.0),
-            // Container(
-            //   color: Colors.grey[200],
-            //   child: Text(_phoneNumber),
-            // ),
             GestureDetector(
               onTap: () => Fluttertoast.showToast(
                   msg: 'You cannot edit the contact number.'),
@@ -151,7 +146,6 @@ class _UserInputState extends State<UserInput> {
                   icon: FaIcon(FontAwesomeIcons.phoneAlt),
                   fillColor: Colors.grey[200],
                 ),
-                onSaved: (newValue) => _phoneNumber = newValue.trim(),
                 style: Utils.formTextStyle(),
               ),
             ),

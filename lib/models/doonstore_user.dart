@@ -2,63 +2,61 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DoonStoreUser {
-  String userId;
-  String displayName;
-  String email;
-  String phone;
-  List<Address> addressList = List();
-  String photoUrl;
+  String userId, displayName, email, phone, photoUrl;
+  Map<String, dynamic> address;
   DateTime lastLogin;
-  bool doorBellStatus = false;
+  bool doorBellStatus, whatsAppNotificationSetting;
 
-  DoonStoreUser(this.userId, this.displayName, this.email, this.phone,
-      this.addressList, this.photoUrl, this.lastLogin);
+  DoonStoreUser(
+      {this.userId,
+      this.displayName,
+      this.email,
+      this.doorBellStatus,
+      this.whatsAppNotificationSetting,
+      this.phone,
+      this.address,
+      this.photoUrl,
+      this.lastLogin});
 
-  DoonStoreUser.fromFirebaseUser(FirebaseUser user) {
-    this.userId = user.uid ?? '';
-    this.displayName = user.displayName ?? '';
-    this.email = user.email ?? '';
-    this.photoUrl = user.photoUrl ?? '';
-    this.phone = user.phoneNumber ?? '';
-    this.lastLogin = user.metadata.lastSignInTime;
-    this.addressList = List();
-  }
+  factory DoonStoreUser.fromFirebase(FirebaseUser user) => DoonStoreUser(
+        userId: user.uid,
+        displayName: user.displayName ?? '',
+        photoUrl: user.photoUrl ?? '',
+        address: {},
+        doorBellStatus: false,
+        whatsAppNotificationSetting: false,
+        email: user.email ?? '',
+        lastLogin: user.metadata.lastSignInTime ?? DateTime.now(),
+        phone: user.phoneNumber,
+      );
 
-  DoonStoreUser.fromJson(Map data) {
-    this.userId = data['userId'] ?? '';
-    this.displayName = data['displayName'] ?? '';
-    this.email = data['email'] ?? '';
-    this.photoUrl = data['photoUrl'] ?? '';
-    this.phone = data['phone'] ?? '';
-    this.lastLogin = (data['lastLogin'] as Timestamp).toDate();
-    setAddressList(data['addressList']);
-  }
+  factory DoonStoreUser.fromJson(Map data) => DoonStoreUser(
+      userId: data['userId'],
+      email: data['email'] ?? '',
+      address: data['address'] ?? {},
+      displayName: data['displayName'] ?? '',
+      doorBellStatus: data['doorBellStatus'] ?? false,
+      lastLogin: (data['lastLogin'] as Timestamp).toDate(),
+      phone: data['phone'],
+      photoUrl: data['photoUrl'] ?? '',
+      whatsAppNotificationSetting:
+          data['whatsAppNotificationSetting'] ?? false);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'userId': userId ?? '',
-      'displayName': displayName ?? '',
-      'email': email ?? '',
-      'photoUrl': photoUrl ?? '',
-      'phone': phone ?? '',
-      'lastLogin': Timestamp.fromDate(lastLogin),
-      'addressList': getAddressList()
-    };
-  }
+  Map<String, dynamic> toMap() => {
+        'userId': userId,
+        'displayName': displayName ?? '',
+        'address': address ?? {},
+        'doorBellStatus': doorBellStatus ?? false,
+        'whatsAppNotificationSetting': whatsAppNotificationSetting ?? false,
+        'email': email ?? '',
+        'photoUrl': photoUrl ?? '',
+        'phone': phone,
+        'lastLogin': Timestamp.fromDate(lastLogin),
+      };
+}
 
-  List<String> getAddressList() {
-    List<String> addressList = List();
-    for (Address address in this.addressList) {
-      addressList.add(address.toString());
-    }
-    return addressList;
-  }
-
-  void setAddressList(List<dynamic> addressList) {
-    addressList.cast<String>().forEach((element) {
-      this.addressList.add(Address.fromString(element));
-    });
-  }
+List<String> getAddress(Map<String, dynamic> map) {
+  return [map['Apartment'], map['Block'], map['House No']];
 }
 
 class Address {

@@ -37,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
                   onTapCallback: () {},
                 ),
                 dataCard(
-                  title: 'Super Wallet',
+                  title: 'Wallet Balance',
                   iconData: FontAwesomeIcons.wallet,
                   onTapCallback: () {},
                   trailing: tralingContainer('\u20b9 2'),

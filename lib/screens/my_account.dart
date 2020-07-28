@@ -84,18 +84,21 @@ class _AccountScreenState extends State<AccountScreen> {
                       Divider(color: Colors.black12, indent: 5, endIndent: 5),
                       AccountSectionCards(
                         title: 'My Address',
-                        subtitle: 'No address',
+                        subtitle: value.user.address != null
+                            ? '${getAddress(value.user.address)[0]}\n${getAddress(value.user.address)[1]}, ${getAddress(value.user.address)[2]}'
+                            : 'No address',
                         leadingIcon: FontAwesomeIcons.locationArrow,
                         onTapCallback: () {
                           showBottomSheet(
                             context: context,
-                            builder: (context) => AddressScreen(),
+                            builder: (context) =>
+                                AddressScreen(doonStoreUser: value.user),
                           );
                         },
                       ),
                       Divider(color: Colors.black12, indent: 5, endIndent: 5),
                       AccountSectionCards(
-                        title: 'Super Wallet',
+                        title: 'Wallet',
                         subtitle: '\u20b90 Balance',
                         leadingIcon: FontAwesomeIcons.rupeeSign,
                       ),
@@ -112,11 +115,11 @@ class _AccountScreenState extends State<AccountScreen> {
                           setState(() {
                             _value = 0.3;
                           });
-                          bool value = await SharedService.doorBellSetting;
+                          bool val = await SharedService.doorBellSetting;
                           var controller = showBottomSheet(
                             context: context,
                             builder: (context) => EditUserPrefernces(
-                              value: value ? 1 : 0,
+                              value: val ? 1 : 0,
                               type: PreferncesType.DoorBell,
                             ),
                           );
@@ -136,12 +139,12 @@ class _AccountScreenState extends State<AccountScreen> {
                           setState(() {
                             _value = 0.3;
                           });
-                          bool value =
+                          bool val =
                               await SharedService.whatsappNotificationSettings;
                           var controller = showBottomSheet(
                             context: context,
                             builder: (context) => EditUserPrefernces(
-                              value: value ? 1 : 0,
+                              value: val ? 1 : 0,
                               type: PreferncesType.WhatsApp,
                             ),
                           );

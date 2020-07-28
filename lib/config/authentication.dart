@@ -121,7 +121,7 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
   DocumentSnapshot userFromDB = await userRef.document(user.uid).get();
   DoonStoreUser userData;
   if (userFromDB.data == null) {
-    userData = DoonStoreUser.fromFirebaseUser(user);
+    userData = DoonStoreUser.fromFirebase(user);
     userRef.document(userData.userId).setData(userData.toMap());
   } else {
     userData = DoonStoreUser.fromJson(userFromDB.data);
