@@ -10,7 +10,7 @@ class RequestProduct extends StatefulWidget {
 }
 
 class _RequestProductState extends State<RequestProduct> {
-  TextEditingController textEditingController;
+  TextEditingController textEditingController, quantityTEC;
 
   bool enabled = false;
 
@@ -18,6 +18,7 @@ class _RequestProductState extends State<RequestProduct> {
   void initState() {
     super.initState();
     textEditingController = TextEditingController();
+    quantityTEC = TextEditingController();
     textEditingController.addListener(() {
       if (textEditingController.text.isNotEmpty)
         setState(() => enabled = true);
@@ -30,6 +31,7 @@ class _RequestProductState extends State<RequestProduct> {
     String userId = Provider.of<ApplicationState>(context).user.userId;
     Map<String, dynamic> data = {
       'user': userId,
+      'quantity': quantityTEC.text ?? '',
       'date': DateTime.now().toString(),
       'info': textEditingController.text.trim()
     };
@@ -49,58 +51,80 @@ class _RequestProductState extends State<RequestProduct> {
         backgroudColor: Colors.white,
         color: Colors.black,
       ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Give us some details of the product(s) you want on {APP NAME}',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Describe the product(s)',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: Colors.black54,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Give us some details of the product(s) you want on {APP NAME}',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
+              SizedBox(height: 15),
+              Text(
+                'Describe the product(s)',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
               ),
-              height: 200,
-              child: TextField(
-                controller: textEditingController,
+              SizedBox(height: 10),
+              AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                height: 200,
+                child: TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Type here',
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.words,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Example: Amul Butter',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.black38,
+                ),
+              ),
+              TextField(
+                controller: quantityTEC,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Type here',
+                  hintText: 'Quantity (Optional)',
+                  filled: true,
+                  fillColor: Colors.grey[100],
                 ),
-                keyboardType: TextInputType.multiline,
                 textCapitalization: TextCapitalization.words,
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Example: Amul Butter',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
-                color: Colors.black38,
+              SizedBox(height: 8),
+              Text(
+                'Example: 100 ML, 1 KG etc',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.black38,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Utils.basicBtn(
-              context,
-              text: 'Submit',
-              onTap: enabled ? submit : null,
-            )
-          ],
+              SizedBox(height: 15),
+              Utils.basicBtn(
+                context,
+                text: 'Submit',
+                onTap: enabled ? submit : null,
+              )
+            ],
+          ),
         ),
       ),
     );

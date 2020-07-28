@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserInput extends StatefulWidget {
   final DoonStoreUser doonStoreUser;
@@ -133,18 +135,42 @@ class _UserInputState extends State<UserInput> {
               style: Utils.formTextStyle(),
             ),
             SizedBox(height: 10.0),
+            // Container(
+            //   color: Colors.grey[200],
+            //   child: Text(_phoneNumber),
+            // ),
             GestureDetector(
               onTap: () => Fluttertoast.showToast(
                   msg: 'You cannot edit the contact number.'),
               child: TextFormField(
                 initialValue: widget.doonStoreUser?.phone ?? '',
                 enabled: false,
-                decoration: Utils.inputDecoration(
-                  'Phone Number',
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  filled: true,
                   icon: FaIcon(FontAwesomeIcons.phoneAlt),
+                  fillColor: Colors.grey[200],
                 ),
                 onSaved: (newValue) => _phoneNumber = newValue.trim(),
                 style: Utils.formTextStyle(),
+              ),
+            ),
+            SizedBox(height: 12),
+            RichText(
+              text: TextSpan(
+                text: 'To change your phone number, ',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black45,
+                  fontWeight: FontWeight.w500,
+                ),
+                children: [
+                  TextSpan(
+                    text: 'contact us',
+                    style: TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()..onTap = contactUs,
+                  )
+                ],
               ),
             ),
             SizedBox(height: 15),
@@ -157,5 +183,11 @@ class _UserInputState extends State<UserInput> {
         ),
       ),
     );
+  }
+
+  contactUs() async {
+    if (await canLaunch('mailto:test@gmail.com')) {
+      launch('mailto:test@gmail.com');
+    }
   }
 }

@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:d2shop/components/address_screnn.dart';
 import 'package:d2shop/helper/edit_user_prefernces.dart';
 import 'package:d2shop/config/shared_services.dart';
+import 'package:d2shop/helper/user_input.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/config/authentication.dart';
-import 'package:d2shop/screens/user_input.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,9 +75,8 @@ class _AccountScreenState extends State<AccountScreen> {
                         onTapCallback: () {
                           showBottomSheet(
                             context: context,
-                            builder: (context) => UserInput(
-                              doonStoreUser: value.user,
-                            ),
+                            builder: (context) =>
+                                UserInput(doonStoreUser: value.user),
                           );
                         },
                         isThreeLine: value.user.email.isNotEmpty,
