@@ -7,9 +7,45 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationState extends ChangeNotifier {
   DoonStoreUser user;
-  Map<String, int> cart = Map();
-  DateTime deliveryDate = DateTime.now();
-  List<Category> categoryList = <Category>[];
+  Map<String, Map<String, double>> cart;
+  DateTime deliveryDate;
+  List<Category> categoryList;
+
+  ApplicationState() {
+    cart = Map<String, Map<String, double>>();
+    deliveryDate = DateTime.now();
+    categoryList = <Category>[];
+  }
+
+  addItemToTheCart(Item item) {
+    if (cart.containsKey(item.id))
+      cart.update(
+        item.id,
+        (value) => {
+          'quantity': value['quantity'] + 1,
+          'totalPrice': value['totalPrice'] + item.price
+        },
+      );
+    else
+      cart[item.id] = {'quantity': 1, 'totalPrice': item.price};
+
+    notifyListeners();
+  }
+
+  removeItemFromTheCart(Item item) {
+    if (cart[item.id]['quantity'] > 1)
+      cart.update(
+        item.id,
+        (value) => {
+          'quantity': value['quantity'] - 1,
+          'totalPrice': value['totalPrice'] - item.price
+        },
+      );
+    else
+      cart.remove(item.id);
+
+    notifyListeners();
+  }
 
   setUser(DoonStoreUser doonStoreUser) {
     this.user = doonStoreUser;
@@ -28,7 +64,8 @@ class ApplicationState extends ChangeNotifier {
   Widget showCart() {
     return Container(
       height: 60,
-      color: Colors.white,
+      margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
+      color: Colors.transparent,
       child: Card(
         color: kPrimaryColor,
         shape: rounded(10),
@@ -43,7 +80,7 @@ class ApplicationState extends ChangeNotifier {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    '1 Item',
+                    '${cart.length} Item(s)',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -51,7 +88,7 @@ class ApplicationState extends ChangeNotifier {
                     ),
                   ),
                   Text(
-                    '\u20b920.0',
+                    '\u20b9${_getCurrentPrice()}',
                     style: GoogleFonts.stylish(
                       color: Colors.white,
                       fontSize: 20,
@@ -80,5 +117,13 @@ class ApplicationState extends ChangeNotifier {
         ),
       ),
     );
+  }
+
+  double _getCurrentPrice() {
+    double val = 0.0;
+    cart.forEach((key, value) {
+      val += value['totalPrice'];
+    });
+    return val;
   }
 }

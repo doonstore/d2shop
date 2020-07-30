@@ -28,6 +28,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
     return Consumer<ApplicationState>(
       builder: (context, value, child) => Scaffold(
         key: _globalKey,
+        bottomSheet: value.cart.isNotEmpty ? value.showCart() : null,
         body: Builder(
           builder: (context) => CustomScrollView(
             slivers: [
@@ -47,13 +48,26 @@ class _CategoryInfoState extends State<CategoryInfo> {
                   [InfoCard(color: color, category: widget.category)],
                 ),
               ),
-              // SliverList(
-              //   delegate: SliverChildBuilderDelegate(
-              //     (BuildContext context, int i) =>
-              //         ShowDataItems(color: color, index: i),
-              //     childCount: widget.category.itemList.length,
-              //   ),
-              // )
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int i) {
+                    String title = widget.category.itemList.keys.elementAt(i);
+                    List<dynamic> itemList = widget.category.itemList[title]
+                        .map((e) => Item.fromJson(e))
+                        .toList();
+
+                    return ExpansionTile(
+                      title: Text(
+                        title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('${itemList.length} items'),
+                      children: itemList.map((e) => ItemInfo(item: e)).toList(),
+                    );
+                  },
+                  childCount: widget.category.itemList.length,
+                ),
+              )
             ],
           ),
         ),
@@ -72,25 +86,16 @@ class ShowDataItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-        title: Text(
-          'Heading #$index',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text('10 items'),
-        children: [
-          ListView.builder(
-              itemBuilder: (context, index) => ItemInfo(item: null))
-        ]);
+      title: Text(
+        'Heading #$index',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text('10 items'),
+      children: [
+        ListView.builder(itemBuilder: (context, index) => ItemInfo(item: null))
+      ],
+    );
   }
-
-  // Scaffold.of(context).showSnackBar(SnackBar(
-  //               content: ApplicationState().showCart(),
-  //               backgroundColor: Colors.white,
-  //               duration: Duration(hours: 1),
-  //               margin: EdgeInsets.zero,
-  //               behavior: SnackBarBehavior.floating,
-  //             ));
-
 }
 
 class InfoCard extends StatelessWidget {

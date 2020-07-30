@@ -1,5 +1,5 @@
 import 'package:d2shop/screens/home_page.dart';
-import 'package:d2shop/screens/user_input.dart';
+import 'package:d2shop/helper/user_input.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animations/animations.dart';
@@ -121,7 +121,7 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
   DocumentSnapshot userFromDB = await userRef.document(user.uid).get();
   DoonStoreUser userData;
   if (userFromDB.data == null) {
-    userData = DoonStoreUser.fromFirebaseUser(user);
+    userData = DoonStoreUser.fromFirebase(user);
     userRef.document(userData.userId).setData(userData.toMap());
   } else {
     userData = DoonStoreUser.fromJson(userFromDB.data);

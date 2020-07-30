@@ -1,35 +1,41 @@
 class Category {
-  String id;
-  String name;
-  String photoUrl;
+  String id, name, photoUrl;
   bool isFeatured;
-  List<String> itemList = List();
+  List itemCategoryList;
+  Map<String, dynamic> itemList;
 
-  Category(this.id, this.name, this.photoUrl, this.isFeatured, this.itemList);
+  Category(
+      {this.id,
+      this.name,
+      this.photoUrl,
+      this.isFeatured,
+      this.itemList,
+      this.itemCategoryList});
 
-  Category.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        photoUrl = json['photoUrl'],
-        isFeatured = json['isFeatured'],
-        itemList = json['itemList'].cast<String>();
+  factory Category.fromJson(Map<String, dynamic> json) => Category(
+        id: json['id'],
+        name: json['name'],
+        photoUrl: json['photoUrl'],
+        isFeatured: json['isFeatured'],
+        itemCategoryList: json['itemCategoryList'],
+        itemList: json['itemList'],
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'photoUrl': photoUrl,
-      'isFeatured': isFeatured,
-      'itemList': itemList
-    };
-  }
+  Map<String, dynamic> toJson(Category category) => {
+        'id': category.id,
+        'name': category.name,
+        'photoUrl': category.photoUrl,
+        'isFeatured': category.isFeatured,
+        'itemCategoryList': category.itemCategoryList,
+        'itemList': category.itemList
+      };
 }
 
 class Item {
   String id, name, quantityUnit, photoUrl, brand;
   int quantityValue;
   double price;
-  List<String> categoryList = List();
+  List categoryList = List();
 
   Item(
       {this.id,
@@ -51,7 +57,7 @@ class Item {
         brand = json['brand'],
         quantityValue = json['quantityValue'],
         quantityUnit = json['quantityUnit'],
-        categoryList = json['categoryList'].cast<String>();
+        categoryList = json['categoryList'];
 
   Map<String, dynamic> toJson() {
     return {

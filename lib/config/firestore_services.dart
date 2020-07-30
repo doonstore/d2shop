@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/utils/constants.dart';
 
 Stream<List<Category>> get listOfCategories {
-  return categoryRef
-      .snapshots()
-      .map((q) => q.documents.map((e) => Category.fromJson(e.data)).toList());
+  return categoryRef.snapshots().map((QuerySnapshot q) => q.documents
+      .map((DocumentSnapshot doc) => Category.fromJson(doc.data))
+      .toList());
 }
 
 Stream<List<FeaturedModel>> get listOfFeaturedHeaders {

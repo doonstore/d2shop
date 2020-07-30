@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/components/calender_widget.dart';
 import 'package:d2shop/components/category_data.dart';
 import 'package:d2shop/config/firestore_services.dart';
@@ -5,7 +6,6 @@ import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
-import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,23 +24,6 @@ class GalleryPage extends StatefulWidget {
 class _GalleryPageState extends State<GalleryPage> {
   _GalleryPageState();
 
-  ScrollController scrollController;
-  double _value = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    scrollController = ScrollController();
-    scrollController.addListener(() {
-      double value = scrollController.offset;
-
-      setState(() {
-        _value = value;
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context, state, child) {
@@ -54,13 +37,11 @@ class _GalleryPageState extends State<GalleryPage> {
               onPressed: () => widget.globalKey.currentState.openDrawer(),
             ),
             centerTitle: true,
-            title: _value > 95
-                ? Utils.searchCard(kPrimaryColor, context)
-                : Text('Home'),
+            title: Text('Home'),
             elevation: 0.0,
           ),
+          bottomSheet: state.cart.isNotEmpty ? state.showCart() : null,
           body: SingleChildScrollView(
-            controller: scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -122,9 +103,9 @@ class _GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  StreamBuilder<List<Category>> categoriesSection() {
-    return StreamBuilder<List<Category>>(
-      stream: listOfCategories,
+  StreamBuilder<QuerySnapshot> categoriesSection() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: categoryRef.snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return FractionallySizedBox(
@@ -134,7 +115,9 @@ class _GalleryPageState extends State<GalleryPage> {
             ),
           );
 
-        final List<Category> dataList = snapshot.data;
+        final List<Category> dataList = snapshot.data.documents
+            .map((e) => Category.fromJson(e.data))
+            .toList();
 
         Provider.of<ApplicationState>(context, listen: false)
             .setCategoryList(dataList);
