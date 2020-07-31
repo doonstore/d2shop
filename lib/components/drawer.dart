@@ -1,4 +1,5 @@
 import 'package:d2shop/screens/my_account.dart';
+import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:flutter/foundation.dart';
@@ -39,8 +40,8 @@ class CustomDrawer extends StatelessWidget {
                 dataCard(
                   title: 'Wallet Balance',
                   iconData: FontAwesomeIcons.wallet,
-                  onTapCallback: () {},
-                  trailing: tralingContainer('\u20b9 2'),
+                  onTapCallback: () => MyRoute.push(context, WalletScreen()),
+                  trailing: tralingContainer('\u20b9 0.0'),
                 ),
                 dataCard(
                     title: 'Wallet Transactions',

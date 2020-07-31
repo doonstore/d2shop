@@ -1,18 +1,19 @@
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
+import 'package:d2shop/screens/cart_screen.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationState extends ChangeNotifier {
   DoonStoreUser user;
-  Map<String, Map<String, double>> cart;
+  Map<String, Map<String, dynamic>> cart;
   DateTime deliveryDate;
   List<Category> categoryList;
 
   ApplicationState() {
-    cart = Map<String, Map<String, double>>();
+    cart = Map<String, Map<String, dynamic>>();
     deliveryDate = DateTime.now();
     categoryList = <Category>[];
   }
@@ -23,26 +24,32 @@ class ApplicationState extends ChangeNotifier {
         item.id,
         (value) => {
           'quantity': value['quantity'] + 1,
-          'totalPrice': value['totalPrice'] + item.price
+          'totalPrice': value['totalPrice'] + item.price,
+          'item': item
         },
       );
     else
-      cart[item.id] = {'quantity': 1, 'totalPrice': item.price};
+      cart[item.id] = {'quantity': 1, 'totalPrice': item.price, 'item': item};
 
     notifyListeners();
   }
 
-  removeItemFromTheCart(Item item) {
-    if (cart[item.id]['quantity'] > 1)
-      cart.update(
-        item.id,
-        (value) => {
-          'quantity': value['quantity'] - 1,
-          'totalPrice': value['totalPrice'] - item.price
-        },
-      );
-    else
+  removeItemFromTheCart(Item item, {bool full = false}) {
+    if (full)
       cart.remove(item.id);
+    else {
+      if (cart[item.id]['quantity'] > 1)
+        cart.update(
+          item.id,
+          (value) => {
+            'quantity': value['quantity'] - 1,
+            'totalPrice': value['totalPrice'] - item.price,
+            'item': item
+          },
+        );
+      else
+        cart.remove(item.id);
+    }
 
     notifyListeners();
   }
@@ -61,65 +68,69 @@ class ApplicationState extends ChangeNotifier {
     this.categoryList = dataList;
   }
 
-  Widget showCart() {
-    return Container(
-      height: 60,
-      margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
-      color: Colors.transparent,
-      child: Card(
-        color: kPrimaryColor,
-        shape: rounded(10),
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Row(
-            children: [
-              FaIcon(FontAwesomeIcons.shoppingBag, color: Colors.white),
-              Spacer(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    '${cart.length} Item(s)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+  Widget showCart(BuildContext context) {
+    return InkWell(
+      onTap: () => MyRoute.push(context, CartScreen()),
+      child: Container(
+        height: 55,
+        margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
+        color: Colors.transparent,
+        child: Card(
+          color: kPrimaryColor,
+          shape: rounded(6),
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                FaIcon(FontAwesomeIcons.shoppingBag, color: Colors.white),
+                Spacer(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${cart.length} Item${cart.length > 1 ? '(s)' : ''}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '\u20b9${_getCurrentPrice()}',
-                    style: GoogleFonts.stylish(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
+                    Text(
+                      '\u20b9${getCurrentPrice()}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Text(
-                'Proceed to cart',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  ],
                 ),
-              ),
-              SizedBox(width: 10),
-              FaIcon(
-                FontAwesomeIcons.angleRight,
-                color: Colors.white,
-                size: 15,
-              ),
-            ],
+                Spacer(),
+                Text(
+                  'Proceed to cart',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(width: 10),
+                FaIcon(
+                  FontAwesomeIcons.angleRight,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  double _getCurrentPrice() {
+  double getCurrentPrice() {
     double val = 0.0;
     cart.forEach((key, value) {
       val += value['totalPrice'];
