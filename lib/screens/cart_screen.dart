@@ -190,7 +190,6 @@ class _CartScreenState extends State<CartScreen> {
 
   ListTile text(String title, String desc) {
     return ListTile(
-      visualDensity: VisualDensity.comfortable,
       contentPadding: EdgeInsets.symmetric(horizontal: 5),
       title: Text(
         title,
