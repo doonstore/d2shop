@@ -6,80 +6,82 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class ItemInfo extends StatefulWidget {
+class ItemInfo extends StatelessWidget {
   final Item item;
-  const ItemInfo({@required this.item});
+  final bool isCart;
+  const ItemInfo({@required this.item, this.isCart = false});
 
-  @override
-  _ItemInfoState createState() => _ItemInfoState();
-}
-
-class _ItemInfoState extends State<ItemInfo> {
-  // int _itemValue = 0;
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
-      builder: (context, value, child) => ListTile(
-        leading: Image.asset(widget.item.photoUrl),
-        title: Text(
-          widget.item.name,
-          style: GoogleFonts.ptSans(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          '\u20b9${widget.item.price} (${widget.item.quantityValue} ${widget.item.quantityUnit})',
-          style: GoogleFonts.montserrat(fontWeight: FontWeight.w700),
-        ),
-        trailing: value.cart.containsKey(widget.item.id)
-            ? FractionallySizedBox(
-                widthFactor: 0.40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    changeBtn(value, false),
-                    Text(
-                      '${value.cart[widget.item.id]['quantity'].toInt()}',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    changeBtn(value, true)
-                  ],
-                ),
-              )
-            : OutlineButton.icon(
-                onPressed: () => value.addItemToTheCart(widget.item),
-                borderSide: BorderSide(color: kPrimaryColor),
-                shape: rounded(20),
-                icon: FaIcon(
-                  FontAwesomeIcons.plus,
-                  size: 15,
-                  color: kPrimaryColor,
-                ),
-                textColor: kPrimaryColor,
-                label: Text('Add'),
-              ),
-      ),
-    );
-  }
-
-  Widget changeBtn(ApplicationState value, bool inc) {
-    return GestureDetector(
-      onTap: () => inc
-          ? value.addItemToTheCart(widget.item)
-          : value.removeItemFromTheCart(widget.item),
-      child: Material(
-        color: kPrimaryColor.withOpacity(0.7),
-        elevation: 5,
-        borderRadius: BorderRadius.circular(8),
-        animationDuration: Duration(milliseconds: 300),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: FaIcon(
-            inc ? FontAwesomeIcons.plus : FontAwesomeIcons.minus,
-            color: Colors.white,
+      builder: (context, value, child) {
+        return ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+          leading: Image.asset(item.photoUrl),
+          title: Text(
+            item.name,
+            style: GoogleFonts.ptSans(fontWeight: FontWeight.bold),
           ),
-        ),
-      ),
+          subtitle: Text(
+            '\u20b9${item.price} (${item.quantityValue} ${item.quantityUnit})',
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.w700),
+          ),
+          trailing: !isCart
+              ? value.cart.containsKey(item.id)
+                  ? FractionallySizedBox(
+                      widthFactor: 0.37,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.minus,
+                                color: kPrimaryColor,
+                                size: 15,
+                              ),
+                              onPressed: () =>
+                                  value.removeItemFromTheCart(item),
+                            ),
+                          ),
+                          Text(
+                            '${value.cart[item.id]['quantity']}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
+                          Flexible(
+                            child: IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: kPrimaryColor,
+                                size: 15,
+                              ),
+                              onPressed: () => value.addItemToTheCart(item),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : OutlineButton.icon(
+                      onPressed: () => value.addItemToTheCart(item),
+                      borderSide: BorderSide(color: kPrimaryColor),
+                      shape: rounded(20),
+                      icon: FaIcon(
+                        FontAwesomeIcons.plus,
+                        size: 15,
+                        color: kPrimaryColor,
+                      ),
+                      textColor: kPrimaryColor,
+                      label: Text('Add'),
+                    )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    '${item.price} * ${value.cart[item.id]['quantity']} = ${item.price * value.cart[item.id]['quantity']}',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+        );
+      },
     );
   }
 }

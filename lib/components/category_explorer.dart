@@ -86,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        bottomSheet: value.cart.isNotEmpty ? value.showCart() : null,
+        bottomSheet: value.cart.isNotEmpty ? value.showCart(context) : null,
         body: queryController.text.isEmpty
             ? CategoryData(dataList: categoryList)
             : filteredList.isNotEmpty
