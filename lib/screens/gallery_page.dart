@@ -32,7 +32,7 @@ class _GalleryPageState extends State<GalleryPage> {
             leading: IconButton(
               icon: FaIcon(
                 FontAwesomeIcons.bars,
-                size: 25,
+                size: 20,
               ),
               onPressed: () => widget.globalKey.currentState.openDrawer(),
             ),

@@ -40,7 +40,10 @@ class CustomDrawer extends StatelessWidget {
                 dataCard(
                   title: 'Wallet Balance',
                   iconData: FontAwesomeIcons.wallet,
-                  onTapCallback: () => MyRoute.push(context, WalletScreen()),
+                  onTapCallback: () => MyRoute.push(
+                    context,
+                    WalletScreen(fromCart: true),
+                  ),
                   trailing: tralingContainer('\u20b9 0.0'),
                 ),
                 dataCard(

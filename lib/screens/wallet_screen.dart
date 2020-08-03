@@ -44,21 +44,18 @@ class _WalletScreenState extends State<WalletScreen> {
     DoonStoreUser doonStoreUser =
         Provider.of<ApplicationState>(context, listen: false).user;
 
-    Map<String, Object> data = {
-      'amount': int.parse(amountTEC.text),
-      'date': DateTime.now().toString(),
-      'type': 'Credited'
-    };
+    num amount = int.parse(amountTEC.text);
+
+    Map<String, Object> data = getWalletMap(amount, TransactionType.Credited);
 
     doonStoreUser.transactions.add(data);
-    doonStoreUser.wallet += int.parse(amountTEC.text);
+    doonStoreUser.wallet += amount;
 
     userRef
         .document(doonStoreUser.userId)
         .updateData(doonStoreUser.toMap())
         .then((value) {
-      Utils.showMessage(
-          "Wallet credited with $rupeeUniCode ${int.parse(amountTEC.text)} amount.");
+      Utils.showMessage("Wallet credited with $rupeeUniCode $amount amount.");
       Provider.of<ApplicationState>(context, listen: false)
           .setUser(doonStoreUser);
     });
@@ -108,7 +105,7 @@ class _WalletScreenState extends State<WalletScreen> {
           leading: widget.fromCart
               ? IconButton(
                   icon: FaIcon(
-                    FontAwesomeIcons.chevronLeft,
+                    FontAwesomeIcons.times,
                     color: Colors.black,
                   ),
                   onPressed: () => Navigator.pop(context),
@@ -193,9 +190,11 @@ class _WalletScreenState extends State<WalletScreen> {
                     text: 'ADD MONEY',
                     onTap: () {
                       if (amountTEC.text.isNotEmpty) {
-                        int amount = int.parse(amountTEC.text) * 100;
+                        // int amount = int.parse(amountTEC.text) * 100;
 
-                        openCheckout(amount);
+                        Utils.showMessage("Please add key to contiue.",
+                            basic: true);
+                        // openCheckout(amount);
                       } else
                         Utils.showMessage(
                             "Please enter some amount to contiue.",

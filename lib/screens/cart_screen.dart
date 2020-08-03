@@ -22,7 +22,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.now().add(addOneDay);
-    if (dateTime.hour >= 22 && dateTime.hour < 23) dateTime.add(addOneDay);
+    if (dateTime.hour > 22 && dateTime.hour <= 23) dateTime.add(addOneDay);
 
     return Consumer<ApplicationState>(builder: (context, value, child) {
       int cartLength = value.cart.length;
@@ -51,7 +51,7 @@ class _CartScreenState extends State<CartScreen> {
           child: Center(
             child: Utils.basicBtn(
               context,
-              text: 'Add \u20b9$payableAmount to Wallet',
+              text: 'Add $rupeeUniCode$payableAmount to Wallet',
               onTap: () => MyRoute.push(
                   context, WalletScreen(fromCart: true, amount: payableAmount)),
             ),
@@ -118,8 +118,9 @@ class _CartScreenState extends State<CartScreen> {
                                     Text(
                                       '${e['quantity'].toInt()}',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
                                     ),
                                     Flexible(
                                       child: IconButton(

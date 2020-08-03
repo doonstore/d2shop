@@ -103,3 +103,11 @@ class Address {
 
 enum PreferncesType { DoorBell, WhatsApp }
 enum TransactionType { Credited, Debited }
+
+Map<String, Object> getWalletMap(int amount, TransactionType type) {
+  return {
+    'amount': amount,
+    'date': DateTime.now().toString(),
+    'type': type == TransactionType.Credited ? 'Credited' : 'Debited'
+  };
+}

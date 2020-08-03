@@ -9,7 +9,7 @@ class SearchWidget extends StatelessWidget {
     return Container(
       width: width(context),
       color: kPrimaryColor,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -20,7 +20,7 @@ class SearchWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
