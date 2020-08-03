@@ -31,3 +31,6 @@ List<Color> kBackgroundColorsList = [
   Colors.purpleAccent[200],
   Colors.pink[200]
 ];
+
+/// Strings
+const String rupeeUniCode = '\u20b9';

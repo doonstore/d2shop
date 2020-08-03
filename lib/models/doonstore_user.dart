@@ -6,6 +6,8 @@ class DoonStoreUser {
   Map<String, dynamic> address;
   DateTime lastLogin;
   bool doorBellStatus, whatsAppNotificationSetting;
+  num wallet;
+  List transactions;
 
   DoonStoreUser(
       {this.userId,
@@ -15,6 +17,8 @@ class DoonStoreUser {
       this.whatsAppNotificationSetting,
       this.phone,
       this.address,
+      this.wallet,
+      this.transactions,
       this.photoUrl,
       this.lastLogin});
 
@@ -23,11 +27,13 @@ class DoonStoreUser {
         displayName: user.displayName ?? '',
         photoUrl: user.photoUrl ?? '',
         address: {},
+        transactions: [],
         doorBellStatus: false,
         whatsAppNotificationSetting: false,
         email: user.email ?? '',
         lastLogin: user.metadata.lastSignInTime ?? DateTime.now(),
         phone: user.phoneNumber,
+        wallet: 0,
       );
 
   factory DoonStoreUser.fromJson(Map data) => DoonStoreUser(
@@ -37,8 +43,10 @@ class DoonStoreUser {
       displayName: data['displayName'] ?? '',
       doorBellStatus: data['doorBellStatus'] ?? false,
       lastLogin: (data['lastLogin'] as Timestamp).toDate(),
+      transactions: data['transactions'],
       phone: data['phone'],
       photoUrl: data['photoUrl'] ?? '',
+      wallet: data['wallet'] ?? 0,
       whatsAppNotificationSetting:
           data['whatsAppNotificationSetting'] ?? false);
 
@@ -51,7 +59,9 @@ class DoonStoreUser {
         'email': email ?? '',
         'photoUrl': photoUrl ?? '',
         'phone': phone,
+        'transactions': transactions,
         'lastLogin': Timestamp.fromDate(lastLogin),
+        'wallet': wallet
       };
 }
 
@@ -92,3 +102,4 @@ class Address {
 }
 
 enum PreferncesType { DoorBell, WhatsApp }
+enum TransactionType { Credited, Debited }

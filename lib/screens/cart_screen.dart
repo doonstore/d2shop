@@ -52,7 +52,8 @@ class _CartScreenState extends State<CartScreen> {
             child: Utils.basicBtn(
               context,
               text: 'Add \u20b9$payableAmount to Wallet',
-              onTap: () => MyRoute.push(context, WalletScreen()),
+              onTap: () => MyRoute.push(
+                  context, WalletScreen(fromCart: true, amount: payableAmount)),
             ),
           ),
         ),
