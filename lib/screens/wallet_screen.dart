@@ -1,7 +1,9 @@
 import 'package:d2shop/config/secrets.dart';
 import 'package:d2shop/models/doonstore_user.dart';
+import 'package:d2shop/screens/view_transactions.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -45,8 +47,14 @@ class _WalletScreenState extends State<WalletScreen> {
         Provider.of<ApplicationState>(context, listen: false).user;
 
     num amount = int.parse(amountTEC.text);
+    num newAmount = doonStoreUser.wallet + amount;
 
-    Map<String, Object> data = getWalletMap(amount, TransactionType.Credited);
+    Map<String, Object> data = getWalletMap(
+        'Wallet refill',
+        'Payment ID: ' + response.paymentId,
+        amount,
+        newAmount,
+        TransactionType.Credited);
 
     doonStoreUser.transactions.add(data);
     doonStoreUser.wallet += amount;
@@ -128,6 +136,18 @@ class _WalletScreenState extends State<WalletScreen> {
                     '$rupeeUniCode ${value.user.wallet}',
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                   ),
+                  trailing: value.user.transactions.isNotEmpty
+                      ? FlatButton(
+                          onPressed: () =>
+                              MyRoute.push(context, ViewTransactions()),
+                          textColor: kPrimaryColor,
+                          child: Text('All transactions'),
+                        )
+                      : FlatButton(
+                          onPressed: null,
+                          textColor: kPrimaryColor,
+                          child: Text('No transactions'),
+                        ),
                 ),
               ),
               Padding(

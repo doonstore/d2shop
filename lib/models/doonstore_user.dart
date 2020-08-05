@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DoonStoreUser {
-  String userId, displayName, email, phone, photoUrl;
+  String userId, displayName, email, phone, photoUrl, lastLogin;
   Map<String, dynamic> address;
-  DateTime lastLogin;
   bool doorBellStatus, whatsAppNotificationSetting;
   num wallet;
   List transactions;
@@ -31,7 +29,7 @@ class DoonStoreUser {
         doorBellStatus: false,
         whatsAppNotificationSetting: false,
         email: user.email ?? '',
-        lastLogin: user.metadata.lastSignInTime ?? DateTime.now(),
+        lastLogin: user.metadata.lastSignInTime ?? '',
         phone: user.phoneNumber,
         wallet: 0,
       );
@@ -42,7 +40,7 @@ class DoonStoreUser {
       address: data['address'] ?? {},
       displayName: data['displayName'] ?? '',
       doorBellStatus: data['doorBellStatus'] ?? false,
-      lastLogin: (data['lastLogin'] as Timestamp).toDate(),
+      lastLogin: data['lastLogin'] ?? '',
       transactions: data['transactions'],
       phone: data['phone'],
       photoUrl: data['photoUrl'] ?? '',
@@ -60,7 +58,7 @@ class DoonStoreUser {
         'photoUrl': photoUrl ?? '',
         'phone': phone,
         'transactions': transactions,
-        'lastLogin': Timestamp.fromDate(lastLogin),
+        'lastLogin': lastLogin,
         'wallet': wallet
       };
 }
@@ -104,10 +102,14 @@ class Address {
 enum PreferncesType { DoorBell, WhatsApp }
 enum TransactionType { Credited, Debited }
 
-Map<String, Object> getWalletMap(int amount, TransactionType type) {
+Map<String, Object> getWalletMap(String title, String desc, int amount,
+    int newBalance, TransactionType type) {
   return {
+    'title': title,
+    'desc': desc,
     'amount': amount,
     'date': DateTime.now().toString(),
-    'type': type == TransactionType.Credited ? 'Credited' : 'Debited'
+    'type': type == TransactionType.Credited ? 'Credited' : 'Debited',
+    'newBalance': newBalance,
   };
 }
