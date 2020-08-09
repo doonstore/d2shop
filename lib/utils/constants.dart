@@ -13,14 +13,13 @@ final CollectionReference requestRef = _firestore.collection('requests');
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 
-RoundedRectangleBorder rounded(double circluar) => RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(circluar),
-    );
+RoundedRectangleBorder rounded(double circluar) =>
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(circluar));
 
 /// Colors
 const Color kPrimaryColor = Color.fromRGBO(65, 160, 209, 1);
 
-List<Color> kBackgroundColorsList = [
+final List<Color> kBackgroundColorsList = <Color>[
   Colors.blue[200],
   Colors.teal[200],
   Colors.orange[200],
@@ -31,3 +30,6 @@ List<Color> kBackgroundColorsList = [
   Colors.purpleAccent[200],
   Colors.pink[200]
 ];
+
+/// Strings
+const String rupeeUniCode = '\u20b9';

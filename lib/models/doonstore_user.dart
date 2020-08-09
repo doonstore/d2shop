@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DoonStoreUser {
-  String userId, displayName, email, phone, photoUrl;
+  String userId, displayName, email, phone, photoUrl, lastLogin;
   Map<String, dynamic> address;
-  DateTime lastLogin;
   bool doorBellStatus, whatsAppNotificationSetting;
+  num wallet;
+  List transactions;
 
   DoonStoreUser(
       {this.userId,
@@ -15,6 +15,8 @@ class DoonStoreUser {
       this.whatsAppNotificationSetting,
       this.phone,
       this.address,
+      this.wallet,
+      this.transactions,
       this.photoUrl,
       this.lastLogin});
 
@@ -23,11 +25,13 @@ class DoonStoreUser {
         displayName: user.displayName ?? '',
         photoUrl: user.photoUrl ?? '',
         address: {},
+        transactions: [],
         doorBellStatus: false,
         whatsAppNotificationSetting: false,
         email: user.email ?? '',
-        lastLogin: user.metadata.lastSignInTime ?? DateTime.now(),
+        lastLogin: user.metadata.lastSignInTime ?? '',
         phone: user.phoneNumber,
+        wallet: 0,
       );
 
   factory DoonStoreUser.fromJson(Map data) => DoonStoreUser(
@@ -36,9 +40,11 @@ class DoonStoreUser {
       address: data['address'] ?? {},
       displayName: data['displayName'] ?? '',
       doorBellStatus: data['doorBellStatus'] ?? false,
-      lastLogin: (data['lastLogin'] as Timestamp).toDate(),
+      lastLogin: data['lastLogin'] ?? '',
+      transactions: data['transactions'],
       phone: data['phone'],
       photoUrl: data['photoUrl'] ?? '',
+      wallet: data['wallet'] ?? 0,
       whatsAppNotificationSetting:
           data['whatsAppNotificationSetting'] ?? false);
 
@@ -51,7 +57,9 @@ class DoonStoreUser {
         'email': email ?? '',
         'photoUrl': photoUrl ?? '',
         'phone': phone,
-        'lastLogin': Timestamp.fromDate(lastLogin),
+        'transactions': transactions,
+        'lastLogin': lastLogin,
+        'wallet': wallet
       };
 }
 
@@ -92,3 +100,16 @@ class Address {
 }
 
 enum PreferncesType { DoorBell, WhatsApp }
+enum TransactionType { Credited, Debited }
+
+Map<String, Object> getWalletMap(String title, String desc, int amount,
+    int newBalance, TransactionType type) {
+  return {
+    'title': title,
+    'desc': desc,
+    'amount': amount,
+    'date': DateTime.now().toString(),
+    'type': type == TransactionType.Credited ? 'Credited' : 'Debited',
+    'newBalance': newBalance,
+  };
+}

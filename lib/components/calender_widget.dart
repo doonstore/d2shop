@@ -33,7 +33,8 @@ class CalenderWidget extends StatelessWidget {
                   final String day = date.split(',').first;
                   final String dateValue = DateFormat.d().format(dateTime);
 
-                  bool selectedValue = value.deliveryDate.day == dateTime.day;
+                  bool selectedValue =
+                      value.deliveryDate.day + 1 == dateTime.day;
 
                   return GestureDetector(
                     onTap: () {
