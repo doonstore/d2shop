@@ -118,7 +118,7 @@ class InfoCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(category.photoUrl, width: 100),
+              Image.network(category.photoUrl, width: 100),
               Expanded(
                 child: ListTile(
                   title: Text(

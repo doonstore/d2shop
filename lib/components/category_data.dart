@@ -59,7 +59,7 @@ class CategoryData extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         padding: EdgeInsets.all(2),
-                        child: Image.asset(
+                        child: Image.network(
                           dataList[index].photoUrl,
                           width: width(context) * 0.23,
                         ),

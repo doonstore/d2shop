@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:d2shop/components/delivery_date_card.dart';
 import 'package:d2shop/components/item_info.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
@@ -73,7 +74,10 @@ class _CartScreenState extends State<CartScreen> {
                     'Due to high demand, some items may not be available earlier',
               ),
               SizedBox(height: 10),
-              DeliveryDate(dateTime: dateTime),
+              DeliveryDate(
+                dateTime: dateTime,
+                desc: 'Nothing scheduled on this date yet',
+              ),
               SizedBox(height: 15),
               ArrivingBy(),
               SizedBox(height: 15),
@@ -296,50 +300,6 @@ class ArrivingBy extends StatelessWidget {
       child: Text(
         'ARRIVING BY 9 AM',
         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-      ),
-    );
-  }
-}
-
-class DeliveryDate extends StatelessWidget {
-  const DeliveryDate({
-    Key key,
-    @required this.dateTime,
-  }) : super(key: key);
-
-  final DateTime dateTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: kPrimaryColor.withOpacity(0.2),
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        children: [
-          Text(
-            '${dateTime.day}\n${DateFormat.MMM().format(dateTime).toUpperCase()}',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
-          ),
-          Expanded(
-            child: ListTile(
-              title: Text(
-                '${DateFormat.MMMMEEEEd().format(dateTime).split(',').first}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
-              subtitle: Text(
-                'Nothing scheduled on this date yet',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          )
-        ],
       ),
     );
   }

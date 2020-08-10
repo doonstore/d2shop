@@ -76,7 +76,7 @@ class ViewTransactions extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Updated balance $rupeeUniCode ${data['newBalance']}',
+                          'Updated balance $rupeeUniCode${data['newBalance']}',
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.black45,
