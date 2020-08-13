@@ -101,6 +101,7 @@ class Address {
 
 enum PreferncesType { DoorBell, WhatsApp }
 enum TransactionType { Credited, Debited }
+
 Map<String, Object> getWalletMap(String title, String desc, int amount,
     int newBalance, TransactionType type) {
   return {
