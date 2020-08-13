@@ -29,7 +29,7 @@ class DoonStoreUser {
         doorBellStatus: false,
         whatsAppNotificationSetting: false,
         email: user.email ?? '',
-        lastLogin: user.metadata.lastSignInTime ?? '',
+        lastLogin: user.metadata.lastSignInTime.toString(),
         phone: user.phoneNumber,
         wallet: 0,
       );
@@ -41,8 +41,8 @@ class DoonStoreUser {
       displayName: data['displayName'] ?? '',
       doorBellStatus: data['doorBellStatus'] ?? false,
       lastLogin: data['lastLogin'] ?? '',
-      transactions: data['transactions'],
-      phone: data['phone'],
+      transactions: data['transactions'] ?? [],
+      phone: data['phone'] ?? '',
       photoUrl: data['photoUrl'] ?? '',
       wallet: data['wallet'] ?? 0,
       whatsAppNotificationSetting:
@@ -101,7 +101,6 @@ class Address {
 
 enum PreferncesType { DoorBell, WhatsApp }
 enum TransactionType { Credited, Debited }
-
 Map<String, Object> getWalletMap(String title, String desc, int amount,
     int newBalance, TransactionType type) {
   return {

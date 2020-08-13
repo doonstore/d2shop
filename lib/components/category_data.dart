@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d2shop/components/category_info.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -16,74 +17,71 @@ class CategoryData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Text(
-              'Explore Categories',
-              style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.w700,
-                fontSize: 15.sp,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 15),
+          child: Text(
+            'Explore Categories',
+            style: TextStyle(
+              color: Colors.black54,
+              fontWeight: FontWeight.w700,
+              fontSize: 15.sp,
             ),
           ),
-          SizedBox(height: 15),
-          Expanded(
-            child: GridView.builder(
-              itemCount: dataList.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 35,
-              ),
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () => MyRoute.push(
-                  context,
-                  CategoryInfo(
-                    category: dataList[index],
-                    colorCode: index % 8,
-                  ),
+        ),
+        SizedBox(height: 15),
+        Expanded(
+          child: GridView.builder(
+            itemCount: dataList.length,
+            padding: EdgeInsets.all(5),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 35,
+            ),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => MyRoute.push(
+                context,
+                CategoryInfo(
+                  category: dataList[index],
+                  colorCode: index % 8,
                 ),
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color:
-                              kBackgroundColorsList[index % 8].withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.all(2),
-                        child: Image.network(
-                          dataList[index].photoUrl,
-                          width: width(context) * 0.23,
-                        ),
+              ),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color:
+                            kBackgroundColorsList[index % 8].withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: dataList[index].photoUrl,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        dataList[index].name,
-                        style: GoogleFonts.ubuntu(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13.sp,
-                        ),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.clip,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      dataList[index].name,
+                      style: GoogleFonts.ubuntu(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13.sp,
                       ),
-                    )
-                  ],
-                ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,
+                    ),
+                  )
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

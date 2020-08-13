@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d2shop/components/calender_widget.dart';
 import 'package:d2shop/components/category_data.dart';
@@ -71,13 +72,13 @@ class _GalleryPageState extends State<GalleryPage> {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Container(
-            height: 180,
+            height: 150,
             decoration: BoxDecoration(color: Colors.grey[200]),
           );
         final List<FeaturedModel> docs = snapshot.data;
 
         return Container(
-          height: 180,
+          height: 150,
           child: ListView.builder(
             itemBuilder: (context, index) {
               return Container(
@@ -86,16 +87,14 @@ class _GalleryPageState extends State<GalleryPage> {
                 color: Colors.grey[100],
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: docs.length == 0
-                      ? Placeholder()
-                      : Image.network(
-                          docs[index].photoUrl,
-                          fit: BoxFit.cover,
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: docs[index].photoUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },
-            itemCount: docs.isEmpty ? 5 : docs.length,
+            itemCount: docs.length,
             scrollDirection: Axis.horizontal,
           ),
         );
@@ -136,7 +135,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
   double getSize(int length) {
     if (length < 3)
-      return 150;
+      return 180;
     else if (length >= 3 && length < 6)
       return 300;
     else if (length >= 6 && length < 9)

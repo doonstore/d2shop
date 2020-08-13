@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d2shop/components/address_screnn.dart';
 import 'package:d2shop/helper/edit_user_prefernces.dart';
 import 'package:d2shop/config/shared_services.dart';
@@ -220,7 +221,7 @@ class AccountSectionHeader extends StatelessWidget {
                       color: Colors.white70,
                       size: width(context) * 0.12,
                     )
-                  : Image.network(state.user.photoUrl),
+                  : CachedNetworkImage(imageUrl: state.user.photoUrl),
             ),
           ),
           SizedBox(height: 15),
