@@ -73,7 +73,7 @@ class ApplicationState extends ChangeNotifier {
       onTap: () => MyRoute.push(context, CartScreen()),
       child: Container(
         height: 55,
-        margin: EdgeInsets.fromLTRB(15, 0, 15, 15),
+        margin: EdgeInsets.fromLTRB(12, 0, 12, 10),
         color: Colors.transparent,
         child: Card(
           color: kPrimaryColor,

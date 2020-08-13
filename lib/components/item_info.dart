@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ItemInfo extends StatelessWidget {
@@ -16,14 +16,14 @@ class ItemInfo extends StatelessWidget {
       builder: (context, value, child) {
         return ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          leading: Image.asset(item.photoUrl),
+          leading: CachedNetworkImage(imageUrl: item.photoUrl),
           title: Text(
             item.name,
-            style: GoogleFonts.ptSans(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            '\u20b9${item.price} (${item.quantityValue} ${item.quantityUnit})',
-            style: GoogleFonts.montserrat(fontWeight: FontWeight.w700),
+            '$rupeeUniCode${item.price} (${item.quantityValue} ${item.quantityUnit})',
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
           trailing: !isCart
               ? value.cart.containsKey(item.id)

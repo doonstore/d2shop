@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d2shop/components/item_info.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
@@ -118,7 +119,11 @@ class InfoCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset(category.photoUrl, width: 100),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child:
+                    CachedNetworkImage(imageUrl: category.photoUrl, width: 100),
+              ),
               Expanded(
                 child: ListTile(
                   title: Text(
