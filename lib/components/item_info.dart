@@ -4,7 +4,6 @@ import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class ItemInfo extends StatelessWidget {
