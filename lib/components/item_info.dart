@@ -22,7 +22,7 @@ class ItemInfo extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            '$rupeeUniCode${item.price} (${item.quantityValue} ${item.quantityUnit})',
+            '$rupeeUniCode${item.price} (${item.quantityUnit})',
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
           trailing: !isCart

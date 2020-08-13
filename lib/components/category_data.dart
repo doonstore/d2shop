@@ -35,11 +35,9 @@ class CategoryData extends StatelessWidget {
         Expanded(
           child: GridView.builder(
             itemCount: dataList.length,
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(10),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 35,
-            ),
+                crossAxisCount: 3, mainAxisSpacing: 15),
             itemBuilder: (context, index) => GestureDetector(
               onTap: () => MyRoute.push(
                 context,
@@ -48,34 +46,34 @@ class CategoryData extends StatelessWidget {
                   colorCode: index % 8,
                 ),
               ),
-              child: Stack(
+              child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.topCenter,
+                  Expanded(
                     child: Container(
                       decoration: BoxDecoration(
                         color:
                             kBackgroundColorsList[index % 8].withOpacity(0.3),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: CachedNetworkImage(
-                        imageUrl: dataList[index].photoUrl,
-                        fit: BoxFit.cover,
+                      padding: EdgeInsets.all(3),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: CachedNetworkImage(
+                          imageUrl: dataList[index].photoUrl,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      dataList[index].name,
-                      style: GoogleFonts.ubuntu(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13.sp,
-                      ),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,
+                  Text(
+                    dataList[index].name,
+                    style: GoogleFonts.ubuntu(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13.sp,
                     ),
-                  )
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
+                  ),
                 ],
               ),
             ),

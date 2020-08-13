@@ -67,12 +67,14 @@ class ViewTransactions extends StatelessWidget {
                     subtitle: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          data['desc'],
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.w400,
+                        Expanded(
+                          child: Text(
+                            data['desc'],
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.black45,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                         Text(

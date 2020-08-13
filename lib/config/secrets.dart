@@ -1,1 +1,1 @@
-const RAZOPRPAY_KEY = '';
+const RAZOPRPAY_KEY = 'rzp_test_2PoErLMghMRbLJ';

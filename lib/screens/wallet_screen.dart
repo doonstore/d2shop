@@ -30,8 +30,6 @@ class _WalletScreenState extends State<WalletScreen> {
     '$rupeeUniCode 2000'
   ];
 
-  bool upi = true, card = false;
-
   @override
   void initState() {
     super.initState();
@@ -89,6 +87,7 @@ class _WalletScreenState extends State<WalletScreen> {
       _razorpay.open(options);
     } catch (e) {
       Utils.showMessage(e, basic: true);
+      _razorpay.clear();
     }
   }
 
@@ -210,11 +209,9 @@ class _WalletScreenState extends State<WalletScreen> {
                     text: 'ADD MONEY',
                     onTap: () {
                       if (amountTEC.text.isNotEmpty) {
-                        // int amount = int.parse(amountTEC.text) * 100;
+                        int amount = int.parse(amountTEC.text) * 100;
 
-                        Utils.showMessage("Please add key to contiue.",
-                            basic: true);
-                        // openCheckout(amount);
+                        openCheckout(amount);
                       } else
                         Utils.showMessage(
                             "Please enter some amount to contiue.",
