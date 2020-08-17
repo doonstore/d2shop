@@ -10,6 +10,10 @@ class ViewTransactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, value, child) {
+      List _dataList = value.user.transactions;
+      _dataList.sort((a, b) =>
+          DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -26,9 +30,9 @@ class ViewTransactions extends StatelessWidget {
           ),
         ),
         body: ListView.builder(
-          itemCount: value.user.transactions.length,
+          itemCount: _dataList.length,
           itemBuilder: (context, index) {
-            Map<String, dynamic> data = value.user.transactions[index];
+            Map<String, dynamic> data = _dataList[index];
 
             return Container(
               padding: EdgeInsets.all(20),

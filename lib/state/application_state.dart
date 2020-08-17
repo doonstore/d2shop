@@ -70,7 +70,15 @@ class ApplicationState extends ChangeNotifier {
 
   clearCart() {
     cart.clear();
+    deliveryDate = DateTime.now();
     notifyListeners();
+  }
+
+  num getWalletAmount() {
+    if (user.wallet > getCurrentPrice())
+      return user.wallet - getCurrentPrice();
+    else
+      return 0;
   }
 
   Widget showCart(BuildContext context) {

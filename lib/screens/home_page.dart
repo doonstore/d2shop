@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:d2shop/components/drawer.dart';
-import 'package:d2shop/screens/category_screen.dart';
 import 'package:d2shop/screens/chat_screen.dart';
 import 'package:d2shop/screens/gallery_page.dart';
+import 'package:d2shop/screens/orders_screen.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _tabs = <Widget>[
     GalleryPage(globalKey: _globalKey),
-    CategoryScreen(),
+    OrdersScreen(),
     WalletScreen(),
     ChatScreen()
   ];

@@ -24,7 +24,11 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   Duration addOneDay = Duration(days: 1);
 
-  int fee = 3, cartLength, payableAmount;
+  num fee = 3,
+      cartLength,
+      payableAmount,
+      amountToAdd = 0,
+      walletAvailableBalance;
 
   bool loading = false;
 
@@ -68,7 +72,7 @@ class _CartScreenState extends State<CartScreen> {
       user: user.toMap(),
       total: payableAmount,
       itemList: itemList,
-      deliveryDate: DateTime.now().toString(),
+      deliveryDate: state.deliveryDate.toString(),
     );
 
     placeOrder(orderModel).then((value) {
@@ -94,6 +98,14 @@ class _CartScreenState extends State<CartScreen> {
     return Consumer<ApplicationState>(builder: (context, value, child) {
       cartLength = value.cart.length;
       payableAmount = value.getCurrentPrice().toInt() + fee;
+
+      walletAvailableBalance = value.getWalletAmount() - fee;
+      if (walletAvailableBalance < 0) walletAvailableBalance = 0;
+
+      if (value.getWalletAmount() <= 0)
+        amountToAdd = payableAmount.toDouble() - value.user.wallet;
+      else
+        amountToAdd = 0;
 
       return Scaffold(
         appBar: AppBar(
@@ -132,12 +144,12 @@ class _CartScreenState extends State<CartScreen> {
                           )
                         : Utils.basicBtn(
                             context,
-                            text: 'Add $rupeeUniCode$payableAmount to Wallet',
+                            text: 'Add $rupeeUniCode$amountToAdd to Wallet',
                             onTap: () => MyRoute.push(
                               context,
                               WalletScreen(
                                 fromCart: true,
-                                amount: payableAmount.toDouble(),
+                                amount: amountToAdd.toDouble(),
                               ),
                             ),
                           ),
@@ -261,13 +273,15 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    text('Cart amount', '\u20b9${value.getCurrentPrice()}'),
-                    text('Service fee', '\u20b93.00'),
+                    text('Cart amount',
+                        '$rupeeUniCode${value.getCurrentPrice()}'),
+                    text('Service fee', '$rupeeUniCode$fee'),
                     Divider(height: 5, color: Colors.black54),
-                    text('Amount to pay', '\u20b9$payableAmount'),
+                    text('Amount to pay', '$rupeeUniCode$payableAmount'),
                     Divider(height: 5, color: Colors.black54),
-                    text('Wallet available balance', '\u20b90.0'),
-                    text('Amount to add', '\u20b9$payableAmount'),
+                    text('Wallet available balance',
+                        '$rupeeUniCode$walletAvailableBalance'),
+                    text('Amount to add', '$rupeeUniCode$amountToAdd'),
                     SizedBox(height: 60),
                   ],
                 ),
