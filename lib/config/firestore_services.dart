@@ -20,6 +20,12 @@ Stream<List<Item>> get listOfItems {
       .map((q) => q.documents.map((e) => Item.fromJson(e.data)).toList());
 }
 
+Stream<List<OrderModel>> get getOrders {
+  return orderRef
+      .snapshots()
+      .map((q) => q.documents.map((e) => OrderModel.fromJson(e.data)).toList());
+}
+
 // Service Fee
 Future<num> get serviceFee {
   return servicesRef

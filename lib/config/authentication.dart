@@ -1,5 +1,6 @@
 import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/helper/user_input.dart';
+import 'package:d2shop/state/application_state.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animations/animations.dart';
@@ -10,6 +11,7 @@ import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -96,11 +98,14 @@ redirectUser(AuthResult result, BuildContext context) {
   getUser(result.user).then((DoonStoreUser user) {
     if (user != null) {
       Utils.showMessage('Successfully Signed In.');
+
       if (user.displayName.isEmpty)
         MyRoute.push(context, UserInput(doonStoreUser: user, isSettingUp: true),
             replaced: true);
-      else
+      else {
+        Provider.of<ApplicationState>(context, listen: false).setUser(user);
         MyRoute.push(context, HomePage(), replaced: true);
+      }
     }
   }).catchError((e) {
     Utils.showMessage('Error: $e', error: true);
