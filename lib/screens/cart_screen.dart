@@ -47,6 +47,7 @@ class _CartScreenState extends State<CartScreen> {
     int newAmount = user.wallet - payableAmount;
     String desc = '';
     List<Map> itemList = [];
+    List<num> noOfProducts = [];
 
     state.cart.forEach((key, value) {
       itemList.add((value['item'] as Item).toJson());
@@ -55,6 +56,7 @@ class _CartScreenState extends State<CartScreen> {
     state.cart.forEach((key, value) {
       Item item = value['item'] as Item;
       desc += '${item.name} (${item.quantityUnit}) * ${value['quantity']}\n';
+      noOfProducts.add(value['quantity'] as num);
     });
 
     Map<String, Object> data = getWalletMap(
@@ -73,6 +75,8 @@ class _CartScreenState extends State<CartScreen> {
       total: payableAmount,
       itemList: itemList,
       deliveryDate: state.deliveryDate.toString(),
+      orderDate: DateTime.now().toString(),
+      noOfProducts: noOfProducts,
     );
 
     placeOrder(orderModel).then((value) {

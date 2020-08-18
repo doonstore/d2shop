@@ -72,13 +72,19 @@ class Item {
 }
 
 class OrderModel {
-  String id, deliveryDate;
+  String id, deliveryDate, orderDate;
   Map user;
-  List itemList;
+  List itemList, noOfProducts;
   num total;
 
   OrderModel(
-      {this.id, this.itemList, this.user, this.total, this.deliveryDate});
+      {this.id,
+      this.itemList,
+      this.user,
+      this.total,
+      this.deliveryDate,
+      this.orderDate,
+      this.noOfProducts});
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
@@ -87,6 +93,8 @@ class OrderModel {
       itemList: json['itemList'],
       total: json['total'],
       deliveryDate: json['deliveryDate'],
+      orderDate: json['orderDate'],
+      noOfProducts: json['noOfProducts'],
     );
   }
 
@@ -97,6 +105,8 @@ class OrderModel {
       'itemList': itemList,
       'total': total,
       'deliveryDate': deliveryDate,
+      'orderDate': orderDate,
+      'noOfProducts': noOfProducts
     };
   }
 }
