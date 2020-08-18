@@ -38,14 +38,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
             actions: [
               SizedBox(width: 10),
               IconButton(
-                icon: FaIcon(FontAwesomeIcons.retweet),
+                icon: FaIcon(
+                  FontAwesomeIcons.retweet,
+                  color: Colors.black,
+                ),
                 onPressed: () {
                   setState(() {
                     isShowingPrevious = !isShowingPrevious;
                   });
                 },
-                tooltip: 'Tap to view previous',
-                color: Colors.black,
+                tooltip: 'Previous Orders',
               )
             ],
           ),
@@ -72,11 +74,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         ),
                         if (!isToday)
                           GestureDetector(
-                            onTap: () => MyRoute.push(
-                              context,
-                              SearchScreen(),
-                              replaced: true,
-                            ),
+                            onTap: () =>
+                                MyRoute.push(context, CategoryExplorer()),
                             child: Container(
                               color: Colors.white,
                               padding: EdgeInsets.symmetric(horizontal: 25),
