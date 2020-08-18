@@ -4,7 +4,7 @@ class DoonStoreUser {
   String userId, displayName, email, phone, photoUrl, lastLogin;
   Map<String, dynamic> address;
   bool doorBellStatus, whatsAppNotificationSetting;
-  num wallet;
+  int wallet;
   List transactions;
 
   DoonStoreUser(

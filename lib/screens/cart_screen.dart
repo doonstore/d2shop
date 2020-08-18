@@ -1,13 +1,17 @@
 import 'package:animations/animations.dart';
 import 'package:d2shop/components/delivery_date_card.dart';
 import 'package:d2shop/components/item_info.dart';
+import 'package:d2shop/config/firestore_services.dart';
+import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
+import 'package:d2shop/screens/my_account.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -20,14 +24,92 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   Duration addOneDay = Duration(days: 1);
 
+  num fee = 3,
+      cartLength,
+      payableAmount,
+      amountToAdd = 0,
+      walletAvailableBalance;
+
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  openCheckout(ApplicationState state) {
+    setState(() {
+      loading = true;
+    });
+
+    DoonStoreUser user = state.user;
+    int newAmount = user.wallet - payableAmount;
+    String desc = '';
+    List<Map> itemList = [];
+    List<num> noOfProducts = [];
+
+    state.cart.forEach((key, value) {
+      itemList.add((value['item'] as Item).toJson());
+    });
+
+    state.cart.forEach((key, value) {
+      Item item = value['item'] as Item;
+      desc += '${item.name} (${item.quantityUnit}) * ${value['quantity']}\n';
+      noOfProducts.add(value['quantity'] as num);
+    });
+
+    Map<String, Object> data = getWalletMap(
+        '$cartLength Item${cartLength > 1 ? 's' : ''} - Ordered',
+        desc,
+        payableAmount,
+        newAmount,
+        TransactionType.Debited);
+
+    user.transactions.add(data);
+    user.wallet -= payableAmount;
+
+    OrderModel orderModel = OrderModel(
+      id: "${user.displayName}_${DateTime.now().millisecondsSinceEpoch}",
+      user: user.toMap(),
+      total: payableAmount,
+      itemList: itemList,
+      deliveryDate: state.deliveryDate.toString(),
+      orderDate: DateTime.now().toString(),
+      noOfProducts: noOfProducts,
+    );
+
+    placeOrder(orderModel).then((value) {
+      userRef.document(user.userId).updateData(user.toMap()).then((value) {
+        Provider.of<ApplicationState>(context, listen: false).setUser(user);
+        Provider.of<ApplicationState>(context, listen: false).clearCart();
+        if (Navigator.canPop(context)) Navigator.pop(context);
+        Utils.showMessage("Your order has been successfully placed.");
+      });
+    });
+  }
+
+  init() async {
+    fee = await serviceFee;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.now().add(addOneDay);
     if (dateTime.hour > 22 && dateTime.hour <= 23) dateTime.add(addOneDay);
 
     return Consumer<ApplicationState>(builder: (context, value, child) {
-      int cartLength = value.cart.length;
-      double payableAmount = value.getCurrentPrice() + 3.0;
+      cartLength = value.cart.length;
+      payableAmount = value.getCurrentPrice().toInt() + fee;
+
+      walletAvailableBalance = value.getWalletAmount() - fee;
+      if (walletAvailableBalance < 0) walletAvailableBalance = 0;
+
+      if (value.getWalletAmount() <= 0)
+        amountToAdd = payableAmount.toDouble() - value.user.wallet;
+      else
+        amountToAdd = 0;
 
       return Scaffold(
         appBar: AppBar(
@@ -50,12 +132,31 @@ class _CartScreenState extends State<CartScreen> {
           color: Colors.white,
           padding: EdgeInsets.all(8),
           child: Center(
-            child: Utils.basicBtn(
-              context,
-              text: 'Add $rupeeUniCode$payableAmount to Wallet',
-              onTap: () => MyRoute.push(
-                  context, WalletScreen(fromCart: true, amount: payableAmount)),
-            ),
+            child: loading
+                ? SpinKitFadingCircle(color: kPrimaryColor)
+                : value.user.address.isEmpty
+                    ? Utils.basicBtn(
+                        context,
+                        text: 'Add Address',
+                        onTap: () => MyRoute.push(context, AccountScreen()),
+                      )
+                    : value.user.wallet >= payableAmount
+                        ? Utils.basicBtn(
+                            context,
+                            text: 'Place Order',
+                            onTap: () => openCheckout(value),
+                          )
+                        : Utils.basicBtn(
+                            context,
+                            text: 'Add $rupeeUniCode$amountToAdd to Wallet',
+                            onTap: () => MyRoute.push(
+                              context,
+                              WalletScreen(
+                                fromCart: true,
+                                amount: amountToAdd.toDouble(),
+                              ),
+                            ),
+                          ),
           ),
         ),
         body: SingleChildScrollView(
@@ -176,13 +277,15 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     SizedBox(height: 15),
-                    text('Cart amount', '\u20b9${value.getCurrentPrice()}'),
-                    text('Service fee', '\u20b93.00'),
+                    text('Cart amount',
+                        '$rupeeUniCode${value.getCurrentPrice()}'),
+                    text('Service fee', '$rupeeUniCode$fee'),
                     Divider(height: 5, color: Colors.black54),
-                    text('Amount to pay', '\u20b9$payableAmount'),
+                    text('Amount to pay', '$rupeeUniCode$payableAmount'),
                     Divider(height: 5, color: Colors.black54),
-                    text('Wallet available balance', '\u20b90.0'),
-                    text('Amount to add', '\u20b9$payableAmount'),
+                    text('Wallet available balance',
+                        '$rupeeUniCode$walletAvailableBalance'),
+                    text('Amount to add', '$rupeeUniCode$amountToAdd'),
                     SizedBox(height: 60),
                   ],
                 ),

@@ -78,7 +78,7 @@ class CalenderWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 15),
               child: Text(
-                'Noting scheduled for tomorrow',
+                'Nothing scheduled for tomorrow',
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,

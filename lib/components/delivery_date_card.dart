@@ -3,19 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DeliveryDate extends StatelessWidget {
-  const DeliveryDate({
-    Key key,
-    this.desc,
-    @required this.dateTime,
-  }) : super(key: key);
+  const DeliveryDate(
+      {Key key, this.desc, @required this.dateTime, this.backroundColor = true})
+      : super(key: key);
 
   final DateTime dateTime;
   final String desc;
+  final backroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kPrimaryColor.withOpacity(0.2),
+      color: backroundColor ? kPrimaryColor.withOpacity(0.2) : Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 25),
       child: Row(
         children: [
@@ -33,13 +32,15 @@ class DeliveryDate extends StatelessWidget {
                   fontSize: 20,
                 ),
               ),
-              subtitle: Text(
-                desc,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
+              subtitle: desc.isNotEmpty
+                  ? Text(
+                      desc,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    )
+                  : null,
             ),
           )
         ],

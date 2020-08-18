@@ -144,31 +144,31 @@ class InfoCard extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 15),
-          Text(
-            'Suggestions',
-            style: TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 16.sp,
-            ),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 100,
-            child: ListView.separated(
-              separatorBuilder: (context, index) => SizedBox(width: 15),
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => Container(
-                width: 100,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Placeholder(),
-              ),
-            ),
-          )
+          // SizedBox(height: 15),
+          // Text(
+          //   'Suggestions',
+          //   style: TextStyle(
+          //     color: Colors.blueGrey,
+          //     fontSize: 16.sp,
+          //   ),
+          // ),
+          // SizedBox(height: 10),
+          // SizedBox(
+          //   height: 100,
+          //   child: ListView.separated(
+          //     separatorBuilder: (context, index) => SizedBox(width: 15),
+          //     itemCount: 10,
+          //     scrollDirection: Axis.horizontal,
+          //     itemBuilder: (context, index) => Container(
+          //       width: 100,
+          //       decoration: BoxDecoration(
+          //         color: Colors.white,
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //       child: Placeholder(),
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

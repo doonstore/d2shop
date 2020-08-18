@@ -68,6 +68,19 @@ class ApplicationState extends ChangeNotifier {
     this.categoryList = dataList;
   }
 
+  clearCart() {
+    cart.clear();
+    deliveryDate = DateTime.now();
+    notifyListeners();
+  }
+
+  num getWalletAmount() {
+    if (user.wallet > getCurrentPrice())
+      return user.wallet - getCurrentPrice();
+    else
+      return 0;
+  }
+
   Widget showCart(BuildContext context) {
     return InkWell(
       onTap: () => MyRoute.push(context, CartScreen()),
@@ -98,7 +111,7 @@ class ApplicationState extends ChangeNotifier {
                       ),
                     ),
                     Text(
-                      '\u20b9${getCurrentPrice()}',
+                      '$rupeeUniCode${getCurrentPrice()}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

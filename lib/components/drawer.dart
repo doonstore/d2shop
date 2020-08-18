@@ -1,4 +1,5 @@
 import 'package:d2shop/screens/my_account.dart';
+import 'package:d2shop/screens/view_transactions.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
@@ -40,16 +41,19 @@ class CustomDrawer extends StatelessWidget {
                 dataCard(
                   title: 'Wallet Balance',
                   iconData: FontAwesomeIcons.wallet,
-                  onTapCallback: () => MyRoute.push(
-                    context,
-                    WalletScreen(fromCart: true),
-                  ),
-                  trailing: tralingContainer('\u20b9 0.0'),
+                  onTapCallback: () =>
+                      MyRoute.push(context, WalletScreen(fromCart: true)),
+                  trailing:
+                      tralingContainer('$rupeeUniCode ${value.user.wallet}'),
                 ),
                 dataCard(
-                    title: 'Wallet Transactions',
-                    iconData: FontAwesomeIcons.history,
-                    onTapCallback: () {}),
+                  title: 'Wallet Transactions',
+                  iconData: FontAwesomeIcons.history,
+                  onTapCallback: () => MyRoute.push(
+                    context,
+                    ViewTransactions(),
+                  ),
+                ),
                 dataCard(
                   title: 'Refer and Save',
                   iconData: FontAwesomeIcons.shareAlt,

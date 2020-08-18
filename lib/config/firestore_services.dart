@@ -19,3 +19,21 @@ Stream<List<Item>> get listOfItems {
       .snapshots()
       .map((q) => q.documents.map((e) => Item.fromJson(e.data)).toList());
 }
+
+Stream<List<OrderModel>> get getOrders {
+  return orderRef
+      .snapshots()
+      .map((q) => q.documents.map((e) => OrderModel.fromJson(e.data)).toList());
+}
+
+// Service Fee
+Future<num> get serviceFee {
+  return servicesRef
+      .document('serviceFee')
+      .get()
+      .then((value) => value['value']);
+}
+
+Future<void> placeOrder(OrderModel orderModel) {
+  return orderRef.document(orderModel.id).setData(orderModel.toJson());
+}
