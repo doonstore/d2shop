@@ -1,3 +1,4 @@
+import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/screens/cart_screen.dart';
@@ -11,11 +12,14 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Map<String, dynamic>> cart;
   DateTime deliveryDate;
   List<Category> categoryList;
+  CouponModel couponModel;
+  double discount = 0.0;
 
   ApplicationState() {
     cart = Map<String, Map<String, dynamic>>();
     deliveryDate = DateTime.now();
     categoryList = <Category>[];
+    couponModel = CouponModel();
   }
 
   addItemToTheCart(Item item) {
@@ -56,6 +60,18 @@ class ApplicationState extends ChangeNotifier {
 
   setUser(DoonStoreUser doonStoreUser) {
     this.user = doonStoreUser;
+    notifyListeners();
+  }
+
+  setCoupon(CouponModel model) {
+    this.couponModel = model;
+    discount = getCurrentPrice() * (model.benifitValue / 100);
+    notifyListeners();
+  }
+
+  removeCoupon() {
+    this.couponModel = null;
+    discount = 0.0;
     notifyListeners();
   }
 

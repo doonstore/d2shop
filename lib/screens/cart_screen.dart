@@ -107,9 +107,9 @@ class _CartScreenState extends State<CartScreen> {
 
     return Consumer<ApplicationState>(builder: (context, value, child) {
       cartLength = value.cart.length;
-      payableAmount = value.getCurrentPrice().toInt() + fee;
+      payableAmount = value.getCurrentPrice().toInt() + fee - value.discount;
 
-      walletAvailableBalance = value.getWalletAmount() - fee;
+      walletAvailableBalance = value.getWalletAmount() - fee + value.discount;
       if (walletAvailableBalance < 0) walletAvailableBalance = 0;
 
       if (value.getWalletAmount() <= 0)
@@ -261,56 +261,71 @@ class _CartScreenState extends State<CartScreen> {
                       );
                     },
                   ),
-                  Builder(
-                    builder: (context) => Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey[200], width: 1.5),
-                              borderRadius: BorderRadius.circular(12),
-                              color: Colors.teal.withOpacity(0.1),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.grey[200], width: 1.5),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.teal.withOpacity(0.1),
+                          ),
+                          child: ListTile(
+                            dense: true,
+                            title: Text(
+                              value.couponModel?.promoCode ??
                                   'Got a coupon card?',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                                MaterialButton(
-                                  elevation: 0.0,
-                                  onPressed: () async {
-                                    showModal(
-                                      context: context,
-                                      builder: (context) => CouponCard(),
-                                    );
-                                  },
-                                  child: Text('APPLY'),
-                                  textColor: kPrimaryColor,
-                                  color: Colors.teal[100].withOpacity(0.1),
-                                )
-                              ],
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            subtitle: value.couponModel?.message != null
+                                ? Text(value.couponModel.message)
+                                : null,
+                            trailing: MaterialButton(
+                              elevation: 0.0,
+                              onPressed: value.couponModel?.promoCode != null
+                                  ? () {
+                                      Provider.of<ApplicationState>(context,
+                                              listen: false)
+                                          .removeCoupon();
+                                    }
+                                  : () async {
+                                      showModal(
+                                        context: context,
+                                        builder: (context) => CouponCard(),
+                                      );
+                                    },
+                              child: value.couponModel?.promoCode != null
+                                  ? Text('Remove')
+                                  : Text('APPLY'),
+                              textColor: kPrimaryColor,
+                              color: Colors.teal[100].withOpacity(0.1),
                             ),
                           ),
-                          SizedBox(height: 15),
-                          text('Cart amount',
-                              '$rupeeUniCode${value.getCurrentPrice()}'),
-                          text('Service fee', '$rupeeUniCode$fee'),
+                        ),
+                        SizedBox(height: 15),
+                        text('Cart amount',
+                            '$rupeeUniCode${value.getCurrentPrice()}'),
+                        text('Service fee', '$rupeeUniCode$fee'),
+                        Divider(height: 5, color: Colors.black54),
+                        if (value.couponModel?.promoCode != null) ...{
+                          text('Discount (${value.couponModel.benifitValue}%)',
+                              '- $rupeeUniCode${value.discount}'),
                           Divider(height: 5, color: Colors.black54),
-                          text('Amount to pay', '$rupeeUniCode$payableAmount'),
-                          Divider(height: 5, color: Colors.black54),
-                          text('Wallet available balance',
-                              '$rupeeUniCode$walletAvailableBalance'),
-                          text('Amount to add', '$rupeeUniCode$amountToAdd'),
-                          SizedBox(height: 60),
-                        ],
-                      ),
+                        },
+                        text('Amount to pay', '$rupeeUniCode$payableAmount'),
+                        Divider(height: 5, color: Colors.black54),
+                        text('Wallet available balance',
+                            '$rupeeUniCode$walletAvailableBalance'),
+                        text('Amount to add', '$rupeeUniCode$amountToAdd'),
+                        SizedBox(height: 60),
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -450,15 +465,25 @@ class _CouponCardState extends State<CouponCard> {
                     if (_tec.text.isNotEmpty) {
                       CouponModel couponModel = await checkCoupon(_tec.text);
 
-                      // Add Logic
-
                       if (couponModel.message == null) {
                         Utils.showMessage("Invalid Promo Code!", error: true);
                         Navigator.pop(context);
                         return;
                       }
 
-                      Utils.showMessage("Message: ${couponModel.message}");
+                      if (DateTime.parse(couponModel.validTill)
+                          .difference(DateTime.now())
+                          .isNegative) {
+                        Utils.showMessage("Promo Code has been expired!",
+                            error: true);
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      Utils.showMessage(
+                          "${couponModel.promoCode} has been applied. ${couponModel.message}");
+                      Provider.of<ApplicationState>(context, listen: false)
+                          .setCoupon(couponModel);
                       Navigator.pop(context);
                     }
                   },
