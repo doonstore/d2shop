@@ -10,6 +10,7 @@ final CollectionReference featuredRef = _firestore.collection('featured');
 final CollectionReference requestRef = _firestore.collection('requests');
 final CollectionReference orderRef = _firestore.collection('orders');
 final CollectionReference servicesRef = _firestore.collection('services');
+final CollectionReference couponRef = _firestore.collection('coupons');
 
 /// Resposniveness
 double width(BuildContext context) => MediaQuery.of(context).size.width;

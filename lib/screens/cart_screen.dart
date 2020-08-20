@@ -2,6 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:d2shop/components/delivery_date_card.dart';
 import 'package:d2shop/components/item_info.dart';
 import 'package:d2shop/config/firestore_services.dart';
+import 'package:d2shop/helper/side_item_info.dart';
+import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/screens/my_account.dart';
@@ -13,8 +15,10 @@ import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -23,6 +27,8 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   Duration addOneDay = Duration(days: 1);
+
+  double _value = 1.0;
 
   num fee = 3,
       cartLength,
@@ -101,9 +107,9 @@ class _CartScreenState extends State<CartScreen> {
 
     return Consumer<ApplicationState>(builder: (context, value, child) {
       cartLength = value.cart.length;
-      payableAmount = value.getCurrentPrice().toInt() + fee;
+      payableAmount = value.getCurrentPrice().toInt() + fee - value.discount;
 
-      walletAvailableBalance = value.getWalletAmount() - fee;
+      walletAvailableBalance = value.getWalletAmount() - fee + value.discount;
       if (walletAvailableBalance < 0) walletAvailableBalance = 0;
 
       if (value.getWalletAmount() <= 0)
@@ -159,138 +165,170 @@ class _CartScreenState extends State<CartScreen> {
                           ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              NotificationHeader(
-                heading:
-                    'Earliest delivery date ${DateFormat.MMMEd().format(dateTime)}.',
-                desc:
-                    'Thank you for choosing Doon Store. We take a day to verify your address on your first delivery to ensure smooth deliveries in the future.',
-              ),
-              NotificationHeader(
-                heading: 'Review delivery date(s)',
-                desc:
-                    'Due to high demand, some items may not be available earlier',
-              ),
-              SizedBox(height: 10),
-              DeliveryDate(
-                dateTime: dateTime,
-                desc: 'Nothing scheduled on this date yet',
-              ),
-              SizedBox(height: 15),
-              ArrivingBy(),
-              SizedBox(height: 15),
-              ...value.cart.values.toList().map(
-                (e) {
-                  Item item = e['item'];
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[200]),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+        body: AnimatedOpacity(
+          opacity: _value,
+          duration: Duration(milliseconds: 300),
+          child: IgnorePointer(
+            ignoring: _value == 0.3,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  NotificationHeader(
+                    heading:
+                        'Earliest delivery date ${DateFormat.MMMEd().format(dateTime)}.',
+                    desc:
+                        'Thank you for choosing Doon Store. We take a day to verify your address on your first delivery to ensure smooth deliveries in the future.',
+                  ),
+                  NotificationHeader(
+                    heading: 'Review delivery date(s)',
+                    desc:
+                        'Due to high demand, some items may not be available earlier',
+                  ),
+                  SizedBox(height: 10),
+                  DeliveryDate(
+                    dateTime: dateTime,
+                    desc: 'Nothing scheduled on this date yet',
+                  ),
+                  SizedBox(height: 15),
+                  SideItemInfo("ARRIVING BY 9 AM"),
+                  SizedBox(height: 15),
+                  ...value.cart.values.toList().map(
+                    (e) {
+                      Item item = e['item'];
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[200]),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            ItemInfo(item: item, isCart: true),
+                            Container(
+                              width: width(context),
+                              height: 40,
+                              color: kPrimaryColor.withOpacity(0.1),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  MaterialButton(
+                                    onPressed: () => deleteDialog(value, item),
+                                    child: Text('Delete'),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Flexible(
+                                          child: IconButton(
+                                            icon: FaIcon(
+                                              FontAwesomeIcons.minus,
+                                              color: Colors.black54,
+                                            ),
+                                            onPressed: () => value
+                                                .removeItemFromTheCart(item),
+                                          ),
+                                        ),
+                                        Text(
+                                          '${e['quantity'].toInt()}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: IconButton(
+                                            icon: FaIcon(
+                                              FontAwesomeIcons.plus,
+                                              color: Colors.black54,
+                                            ),
+                                            onPressed: () =>
+                                                value.addItemToTheCart(item),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15),
                     child: Column(
                       children: [
-                        ItemInfo(item: item, isCart: true),
                         Container(
-                          width: width(context),
-                          height: 40,
-                          color: kPrimaryColor.withOpacity(0.1),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              MaterialButton(
-                                onPressed: () => deleteDialog(value, item),
-                                child: Text('Delete'),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Flexible(
-                                      child: IconButton(
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.minus,
-                                          color: Colors.black54,
-                                        ),
-                                        onPressed: () =>
-                                            value.removeItemFromTheCart(item),
-                                      ),
-                                    ),
-                                    Text(
-                                      '${e['quantity'].toInt()}',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: IconButton(
-                                        icon: FaIcon(
-                                          FontAwesomeIcons.plus,
-                                          color: Colors.black54,
-                                        ),
-                                        onPressed: () =>
-                                            value.addItemToTheCart(item),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.grey[200], width: 1.5),
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.teal.withOpacity(0.1),
                           ),
-                        )
+                          child: ListTile(
+                            dense: true,
+                            title: Text(
+                              value.couponModel?.promoCode ??
+                                  'Got a coupon card?',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                            subtitle: value.couponModel?.message != null
+                                ? Text(value.couponModel.message)
+                                : null,
+                            trailing: MaterialButton(
+                              elevation: 0.0,
+                              onPressed: value.couponModel?.promoCode != null
+                                  ? () {
+                                      Provider.of<ApplicationState>(context,
+                                              listen: false)
+                                          .removeCoupon();
+                                    }
+                                  : () async {
+                                      showModal(
+                                        context: context,
+                                        builder: (context) => CouponCard(),
+                                      );
+                                    },
+                              child: value.couponModel?.promoCode != null
+                                  ? Text('Remove')
+                                  : Text('APPLY'),
+                              textColor: kPrimaryColor,
+                              color: Colors.teal[100].withOpacity(0.1),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        text('Cart amount',
+                            '$rupeeUniCode${value.getCurrentPrice()}'),
+                        text('Service fee', '$rupeeUniCode$fee'),
+                        Divider(height: 5, color: Colors.black54),
+                        if (value.couponModel?.promoCode != null) ...{
+                          text('Discount (${value.couponModel.benifitValue}%)',
+                              '- $rupeeUniCode${value.discount}'),
+                          Divider(height: 5, color: Colors.black54),
+                        },
+                        text('Amount to pay', '$rupeeUniCode$payableAmount'),
+                        Divider(height: 5, color: Colors.black54),
+                        text('Wallet available balance',
+                            '$rupeeUniCode$walletAvailableBalance'),
+                        text('Amount to add', '$rupeeUniCode$amountToAdd'),
+                        SizedBox(height: 60),
                       ],
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[200], width: 1.5),
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.teal.withOpacity(0.1),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Got a coupon card?',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          MaterialButton(
-                            elevation: 0.0,
-                            onPressed: () {},
-                            child: Text('APPLY'),
-                            textColor: kPrimaryColor,
-                            color: Colors.teal[100].withOpacity(0.1),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    text('Cart amount',
-                        '$rupeeUniCode${value.getCurrentPrice()}'),
-                    text('Service fee', '$rupeeUniCode$fee'),
-                    Divider(height: 5, color: Colors.black54),
-                    text('Amount to pay', '$rupeeUniCode$payableAmount'),
-                    Divider(height: 5, color: Colors.black54),
-                    text('Wallet available balance',
-                        '$rupeeUniCode$walletAvailableBalance'),
-                    text('Amount to add', '$rupeeUniCode$amountToAdd'),
-                    SizedBox(height: 60),
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
         ),
       );
@@ -387,22 +425,77 @@ class NotificationHeader extends StatelessWidget {
   }
 }
 
-class ArrivingBy extends StatelessWidget {
-  const ArrivingBy({
-    Key key,
-  }) : super(key: key);
+class CouponCard extends StatefulWidget {
+  @override
+  _CouponCardState createState() => _CouponCardState();
+}
+
+class _CouponCardState extends State<CouponCard> {
+  final TextEditingController _tec = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: kPrimaryColor, width: 2),
-        borderRadius: BorderRadius.horizontal(right: Radius.circular(20)),
+    return AlertDialog(
+      title: Text(
+        "APPLY PROMO",
+        style: GoogleFonts.oxygen(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w900,
+        ),
       ),
-      child: Text(
-        'ARRIVING BY 9 AM',
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+      scrollable: true,
+      content: Column(
+        children: [
+          TextFormField(
+            controller: _tec,
+            decoration: Utils.inputDecoration("Apply Coupon",
+                hint: "Enter promo coupon here"),
+            style: Utils.formTextStyle(),
+            textCapitalization: TextCapitalization.characters,
+          ),
+          SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                child: Utils.basicBtn(
+                  context,
+                  text: 'APPLY',
+                  onTap: () async {
+                    if (_tec.text.isNotEmpty) {
+                      CouponModel couponModel = await checkCoupon(_tec.text);
+
+                      if (couponModel.message == null) {
+                        Utils.showMessage("Invalid Promo Code!", error: true);
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      if (DateTime.parse(couponModel.validTill)
+                          .difference(DateTime.now())
+                          .isNegative) {
+                        Utils.showMessage("Promo Code has been expired!",
+                            error: true);
+                        Navigator.pop(context);
+                        return;
+                      }
+
+                      Utils.showMessage(
+                          "${couponModel.promoCode} has been applied. ${couponModel.message}");
+                      Provider.of<ApplicationState>(context, listen: false)
+                          .setCoupon(couponModel);
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+              ),
+              IconButton(
+                icon: FaIcon(FontAwesomeIcons.times),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

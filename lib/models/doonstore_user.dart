@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class DoonStoreUser {
   String userId, displayName, email, phone, photoUrl, lastLogin;
-  Map<String, dynamic> address;
+  Map<String, dynamic> address, coupons;
   bool doorBellStatus, whatsAppNotificationSetting;
   int wallet;
   List transactions;
@@ -16,23 +16,24 @@ class DoonStoreUser {
       this.phone,
       this.address,
       this.wallet,
+      this.coupons,
       this.transactions,
       this.photoUrl,
       this.lastLogin});
 
   factory DoonStoreUser.fromFirebase(FirebaseUser user) => DoonStoreUser(
-        userId: user.uid,
-        displayName: user.displayName ?? '',
-        photoUrl: user.photoUrl ?? '',
-        address: {},
-        transactions: [],
-        doorBellStatus: false,
-        whatsAppNotificationSetting: false,
-        email: user.email ?? '',
-        lastLogin: user.metadata.lastSignInTime.toString(),
-        phone: user.phoneNumber,
-        wallet: 0,
-      );
+      userId: user.uid,
+      displayName: user.displayName ?? '',
+      photoUrl: user.photoUrl ?? '',
+      address: {},
+      transactions: [],
+      doorBellStatus: false,
+      whatsAppNotificationSetting: false,
+      email: user.email ?? '',
+      lastLogin: user.metadata.lastSignInTime.toString(),
+      phone: user.phoneNumber,
+      wallet: 0,
+      coupons: {});
 
   factory DoonStoreUser.fromJson(Map data) => DoonStoreUser(
       userId: data['userId'],
@@ -45,8 +46,8 @@ class DoonStoreUser {
       phone: data['phone'] ?? '',
       photoUrl: data['photoUrl'] ?? '',
       wallet: data['wallet'] ?? 0,
-      whatsAppNotificationSetting:
-          data['whatsAppNotificationSetting'] ?? false);
+      whatsAppNotificationSetting: data['whatsAppNotificationSetting'] ?? false,
+      coupons: data['coupons']);
 
   Map<String, dynamic> toMap() => {
         'userId': userId,
@@ -59,7 +60,8 @@ class DoonStoreUser {
         'phone': phone,
         'transactions': transactions,
         'lastLogin': lastLogin,
-        'wallet': wallet
+        'wallet': wallet,
+        'coupons': coupons
       };
 }
 

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:d2shop/components/address_screnn.dart';
+import 'package:d2shop/components/address_screen.dart';
 import 'package:d2shop/helper/edit_user_prefernces.dart';
 import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/helper/user_input.dart';
@@ -64,123 +64,127 @@ class _AccountScreenState extends State<AccountScreen> {
               ignoring: _value == 0.3,
               child: SingleChildScrollView(
                 child: Builder(
-                  builder: (context) => Column(
-                    children: [
-                      AccountSectionHeader(),
-                      SizedBox(height: 10),
-                      AccountSectionCards(
-                        title: 'Profile Details',
-                        subtitle:
-                            '${value.user.displayName.isNotEmpty ? value.user.displayName + ',' : ''} ${value.user.phone}\n${value.user.email}',
-                        leadingIcon: FontAwesomeIcons.userCheck,
-                        onTapCallback: () {
-                          showBottomSheet(
-                            context: context,
-                            builder: (context) =>
-                                UserInput(doonStoreUser: value.user),
-                          );
-                        },
-                        isThreeLine: value.user.email.isNotEmpty,
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'My Address',
-                        subtitle: value.user.address != null
-                            ? '${getAddress(value.user.address)[0]}\n${getAddress(value.user.address)[1]}, ${getAddress(value.user.address)[2]}'
-                            : 'No address',
-                        leadingIcon: FontAwesomeIcons.locationArrow,
-                        onTapCallback: () {
-                          showBottomSheet(
-                            context: context,
-                            builder: (context) =>
-                                AddressScreen(doonStoreUser: value.user),
-                          );
-                        },
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'Wallet',
-                        subtitle: '\u20b90 Balance',
-                        leadingIcon: FontAwesomeIcons.rupeeSign,
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'Doorbell Settings',
-                        subtitle: doorBellSetting
-                            ? 'Ring the bell'
-                            : 'Do not ring the doorbell.',
-                        leadingIcon: doorBellSetting
-                            ? FontAwesomeIcons.bell
-                            : FontAwesomeIcons.bellSlash,
-                        onTapCallback: () async {
-                          setState(() {
-                            _value = 0.3;
-                          });
-                          bool val = await SharedService.doorBellSetting;
-                          var controller = showBottomSheet(
-                            context: context,
-                            builder: (context) => EditUserPrefernces(
-                              value: val ? 1 : 0,
-                              type: PreferncesType.DoorBell,
-                            ),
-                          );
-                          controller.closed.then((value) => this.setState(() {
-                                _value = 1.0;
-                              }));
-                        },
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'WhatsApp Notification',
-                        subtitle: whatsAppNotification
-                            ? 'Recieve updates on WhatsApp'
-                            : 'Do not send updates on WhatsApp',
-                        leadingIcon: FontAwesomeIcons.whatsapp,
-                        onTapCallback: () async {
-                          setState(() {
-                            _value = 0.3;
-                          });
-                          bool val =
-                              await SharedService.whatsappNotificationSettings;
-                          var controller = showBottomSheet(
-                            context: context,
-                            builder: (context) => EditUserPrefernces(
-                              value: val ? 1 : 0,
-                              type: PreferncesType.WhatsApp,
-                            ),
-                          );
-                          controller.closed.then((value) => this.setState(() {
-                                _value = 1.0;
-                              }));
-                        },
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'Privacy Policy',
-                        leadingIcon: FontAwesomeIcons.infoCircle,
-                        onTapCallback: () async {
-                          final String url = 'https:www.google.com';
-                          if (await canLaunch(url)) launch(url);
-                        },
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'Content Policy',
-                        leadingIcon: FontAwesomeIcons.infoCircle,
-                        onTapCallback: () async {
-                          final String url = 'https:www.google.com';
-                          if (await canLaunch(url)) launch(url);
-                        },
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5),
-                      AccountSectionCards(
-                        title: 'Logout',
-                        leadingIcon: FontAwesomeIcons.signOutAlt,
-                        onTapCallback: () => signOut(context),
-                      ),
-                      Divider(color: Colors.black12, indent: 5, endIndent: 5)
-                    ],
-                  ),
+                  builder: (context) {
+                    List<String> _address = getAddress(value.user.address);
+
+                    return Column(
+                      children: [
+                        AccountSectionHeader(),
+                        SizedBox(height: 10),
+                        AccountSectionCards(
+                          title: 'Profile Details',
+                          subtitle:
+                              '${value.user.displayName.isNotEmpty ? value.user.displayName + ',' : ''} ${value.user.phone}\n${value.user.email}',
+                          leadingIcon: FontAwesomeIcons.userCheck,
+                          onTapCallback: () {
+                            showBottomSheet(
+                              context: context,
+                              builder: (context) =>
+                                  UserInput(doonStoreUser: value.user),
+                            );
+                          },
+                          isThreeLine: value.user.email.isNotEmpty,
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'My Address',
+                          subtitle: value.user.address != null
+                              ? '${_address[0]}\n${_address[1]}, ${_address[2]}'
+                              : 'No address',
+                          leadingIcon: FontAwesomeIcons.locationArrow,
+                          onTapCallback: () {
+                            showBottomSheet(
+                              context: context,
+                              builder: (context) =>
+                                  AddressScreen(doonStoreUser: value.user),
+                            );
+                          },
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'Wallet',
+                          subtitle: '\u20b90 Balance',
+                          leadingIcon: FontAwesomeIcons.rupeeSign,
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'Doorbell Settings',
+                          subtitle: doorBellSetting
+                              ? 'Ring the bell'
+                              : 'Do not ring the doorbell.',
+                          leadingIcon: doorBellSetting
+                              ? FontAwesomeIcons.bell
+                              : FontAwesomeIcons.bellSlash,
+                          onTapCallback: () async {
+                            setState(() {
+                              _value = 0.3;
+                            });
+                            bool val = await SharedService.doorBellSetting;
+                            var controller = showBottomSheet(
+                              context: context,
+                              builder: (context) => EditUserPrefernces(
+                                value: val ? 1 : 0,
+                                type: PreferncesType.DoorBell,
+                              ),
+                            );
+                            controller.closed.then((value) => this.setState(() {
+                                  _value = 1.0;
+                                }));
+                          },
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'WhatsApp Notification',
+                          subtitle: whatsAppNotification
+                              ? 'Recieve updates on WhatsApp'
+                              : 'Do not send updates on WhatsApp',
+                          leadingIcon: FontAwesomeIcons.whatsapp,
+                          onTapCallback: () async {
+                            setState(() {
+                              _value = 0.3;
+                            });
+                            bool val = await SharedService
+                                .whatsappNotificationSettings;
+                            var controller = showBottomSheet(
+                              context: context,
+                              builder: (context) => EditUserPrefernces(
+                                value: val ? 1 : 0,
+                                type: PreferncesType.WhatsApp,
+                              ),
+                            );
+                            controller.closed.then((value) => this.setState(() {
+                                  _value = 1.0;
+                                }));
+                          },
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'Privacy Policy',
+                          leadingIcon: FontAwesomeIcons.infoCircle,
+                          onTapCallback: () async {
+                            final String url = 'https:www.google.com';
+                            if (await canLaunch(url)) launch(url);
+                          },
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'Content Policy',
+                          leadingIcon: FontAwesomeIcons.infoCircle,
+                          onTapCallback: () async {
+                            final String url = 'https:www.google.com';
+                            if (await canLaunch(url)) launch(url);
+                          },
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5),
+                        AccountSectionCards(
+                          title: 'Logout',
+                          leadingIcon: FontAwesomeIcons.signOutAlt,
+                          onTapCallback: () => signOut(context),
+                        ),
+                        Divider(color: Colors.black12, indent: 5, endIndent: 5)
+                      ],
+                    );
+                  },
                 ),
               ),
             ),

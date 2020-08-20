@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:d2shop/components/category_explorer.dart';
 import 'package:d2shop/components/delivery_date_card.dart';
-import 'package:d2shop/components/side_item_info.dart';
 import 'package:d2shop/config/firestore_services.dart';
+import 'package:d2shop/helper/side_item_info.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
@@ -29,7 +29,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              'Orders',
+              !isShowingPrevious ? 'Orders' : 'Previous Orders',
               style: TextStyle(color: Colors.black),
             ),
             centerTitle: true,

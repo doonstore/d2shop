@@ -77,28 +77,6 @@ class _CategoryInfoState extends State<CategoryInfo> {
   }
 }
 
-class ShowDataItems extends StatelessWidget {
-  const ShowDataItems({Key key, this.index, @required this.color})
-      : super(key: key);
-
-  final Color color;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: Text(
-        'Heading #$index',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text('10 items'),
-      children: [
-        ListView.builder(itemBuilder: (context, index) => ItemInfo(item: null))
-      ],
-    );
-  }
-}
-
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key key,

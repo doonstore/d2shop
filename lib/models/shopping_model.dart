@@ -11,13 +11,15 @@ class Category {
     this.itemList,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-        id: json['id'],
-        name: json['name'],
-        photoUrl: json['photoUrl'],
-        isFeatured: json['isFeatured'],
-        itemList: json['itemList'],
-      );
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      id: json['id'],
+      name: json['name'],
+      photoUrl: json['photoUrl'],
+      isFeatured: json['isFeatured'],
+      itemList: json['itemList'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
