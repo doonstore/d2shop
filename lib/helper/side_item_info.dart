@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class SideItemInfo extends StatelessWidget {
   final String text;
-
   const SideItemInfo(this.text);
 
   @override

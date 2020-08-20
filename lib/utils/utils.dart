@@ -17,7 +17,6 @@ class Utils {
       toastLength: Toast.LENGTH_SHORT,
       gravity: basic ? ToastGravity.BOTTOM : ToastGravity.CENTER,
       backgroundColor: error ? Colors.red : basic ? Colors.black : Colors.green,
-      fontSize: 15.sp,
     );
   }
 
