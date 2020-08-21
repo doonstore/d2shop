@@ -28,9 +28,9 @@ class DeliveryDate extends StatelessWidget {
               title: Text(
                 '${DateFormat.MMMMEEEEd().format(dateTime).split(',').first}',
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   fontSize: 20,
-                  color: Colors.black87,
+                  color: Colors.blueGrey[700],
                 ),
               ),
               subtitle: desc.isNotEmpty

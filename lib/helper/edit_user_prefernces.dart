@@ -2,6 +2,7 @@ import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,8 +44,8 @@ class _EditUserPreferncesState extends State<EditUserPrefernces> {
           children: [
             Text(
               widget.type == PreferncesType.DoorBell
-                  ? 'Doorbell Settings'
-                  : 'WhatsApp Notifications',
+                  ? Strings.doorBell
+                  : Strings.whatsApp,
               style: GoogleFonts.oxygen(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
@@ -56,8 +57,8 @@ class _EditUserPreferncesState extends State<EditUserPrefernces> {
                   flex: 2,
                   child: Text(
                     widget.type == PreferncesType.DoorBell
-                        ? 'Should we ring the bell every time we deliver?'
-                        : 'Get OTP and order updates through WhatsApp?',
+                        ? Strings.shouldWeRingBell
+                        : Strings.getUpdatesOnWhatsapp,
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: Colors.black54,

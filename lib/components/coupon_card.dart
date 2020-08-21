@@ -1,6 +1,7 @@
 import 'package:d2shop/config/firestore_services.dart';
 import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,7 +33,7 @@ class _CouponCardState extends State<CouponCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Apply Promo",
+            Strings.applyPromo,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -41,8 +42,8 @@ class _CouponCardState extends State<CouponCard> {
           SizedBox(height: 15),
           TextFormField(
             controller: _tec,
-            decoration: Utils.inputDecoration("Promo Code",
-                hint: "Enter promo code here"),
+            decoration: Utils.inputDecoration(Strings.promoCard,
+                hint: Strings.enterPromo),
             style: Utils.formTextStyle(),
             textCapitalization: TextCapitalization.characters,
           ),

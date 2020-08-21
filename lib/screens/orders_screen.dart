@@ -10,9 +10,11 @@ import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -88,7 +90,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             children: [
                               DeliveryDate(
                                 dateTime: dateTime,
-                                desc: isToday ? 'No orders for this day' : '',
+                                desc: isToday ? Strings.noOrders : '',
                                 backroundColor: isToday,
                               ),
                               if (!isToday)
@@ -101,22 +103,28 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                         EdgeInsets.symmetric(horizontal: 25),
                                     child: Row(
                                       children: [
-                                        CircleAvatar(
-                                          child: FaIcon(
-                                            FontAwesomeIcons.plus,
-                                            color: Colors.white,
-                                            size: 20,
+                                        Material(
+                                          shape: CircleBorder(),
+                                          color: kPrimaryColor,
+                                          elevation: 4.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: FaIcon(
+                                              FontAwesomeIcons.plus,
+                                              color: Colors.white,
+                                              size: 18,
+                                            ),
                                           ),
-                                          backgroundColor: kPrimaryColor,
                                         ),
                                         Expanded(
                                           child: ListTile(
                                             title: Text(
                                               'ADD PRODUCT',
-                                              style: TextStyle(
+                                              style: GoogleFonts.ptSans(
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 15,
                                                 color: kPrimaryColor,
+                                                letterSpacing: 1.1,
                                               ),
                                             ),
                                           ),

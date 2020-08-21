@@ -31,14 +31,12 @@ class _GalleryPageState extends State<GalleryPage> {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.bars,
-                size: 20,
-              ),
+              icon:
+                  FaIcon(FontAwesomeIcons.bars, size: 20, color: Colors.white),
               onPressed: () => widget.globalKey.currentState.openDrawer(),
             ),
             centerTitle: true,
-            title: Text('Home'),
+            title: Text('Home', style: TextStyle(color: Colors.white)),
             elevation: 0.0,
           ),
           bottomSheet: state.cart.isNotEmpty ? state.showCart(context) : null,
@@ -52,7 +50,11 @@ class _GalleryPageState extends State<GalleryPage> {
                   padding: const EdgeInsets.all(18),
                   child: Text(
                     'Featured',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.blueGrey[700],
+                    ),
                   ),
                 ),
                 featuredSection(),

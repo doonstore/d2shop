@@ -13,6 +13,7 @@ void main() {
       statusBarBrightness: Brightness.dark,
       statusBarColor: kPrimaryColor,
       statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 

@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     ['Home', FontAwesomeIcons.home],
     ['Orders', FontAwesomeIcons.shoppingCart],
     ['Wallet', FontAwesomeIcons.wallet],
-    ['Chat', FontAwesomeIcons.comment]
+    ['Support', FontAwesomeIcons.comments]
   ];
 
   List<Widget> _tabs = <Widget>[

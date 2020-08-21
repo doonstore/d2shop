@@ -98,7 +98,7 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: br(5),
                 child:
                     CachedNetworkImage(imageUrl: category.photoUrl, width: 100),
               ),

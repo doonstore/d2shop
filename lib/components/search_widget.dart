@@ -1,4 +1,5 @@
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +17,7 @@ class SearchWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 6),
             child: Text(
-              'What can we get you?',
+              Strings.whatCan,
               style: TextStyle(
                 fontSize: 18.sp,
                 color: Colors.white,

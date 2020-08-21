@@ -3,6 +3,7 @@ import 'package:d2shop/screens/view_transactions.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -34,7 +35,7 @@ class CustomDrawer extends StatelessWidget {
                   endIndent: 10,
                 ),
                 dataCard(
-                  title: 'Wallet Balance',
+                  title: Strings.walletBalance,
                   iconData: FontAwesomeIcons.wallet,
                   onTapCallback: () =>
                       MyRoute.push(context, WalletScreen(fromCart: true)),
@@ -42,7 +43,7 @@ class CustomDrawer extends StatelessWidget {
                       tralingContainer('$rupeeUniCode ${value.user.wallet}'),
                 ),
                 dataCard(
-                  title: 'Wallet Transactions',
+                  title: Strings.walletTransactions,
                   iconData: FontAwesomeIcons.history,
                   onTapCallback: () => MyRoute.push(
                     context,
@@ -50,18 +51,18 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 dataCard(
-                  title: 'Notifications',
+                  title: Strings.notifications,
                   iconData: FontAwesomeIcons.bell,
                   onTapCallback: () {},
                 ),
                 dataCard(
-                  title: 'Refer and Save',
+                  title: Strings.referAndSave,
                   iconData: FontAwesomeIcons.shareAlt,
                   onTapCallback: () {},
                   trailing: tralingContainer('Code'),
                 ),
                 dataCard(
-                  title: 'Support & FAQs',
+                  title: Strings.supportAndFaq,
                   iconData: FontAwesomeIcons.questionCircle,
                   onTapCallback: () {},
                 ),

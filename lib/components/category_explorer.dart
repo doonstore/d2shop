@@ -5,6 +5,7 @@ import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/screens/request_product.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,7 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
             autofocus: true,
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: 'Search for milk & groceries...',
+              hintText: Strings.searchFor,
               isDense: true,
             ),
             style: TextStyle(fontWeight: FontWeight.w600),
@@ -148,18 +149,13 @@ class NoDataWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Looks like we don\'t have this product listed yet',
+                  Strings.dontHave,
                   style: GoogleFonts.oxygen(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
+                      fontSize: 14.sp, fontWeight: FontWeight.w600),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 15),
-                Text(
-                  'Tell us what you are looking for and we will do our best to list at the earliest',
-                  textAlign: TextAlign.center,
-                ),
+                Text(Strings.tellUs, textAlign: TextAlign.center),
                 SizedBox(height: 15),
                 SizedBox(
                   width: double.infinity,
@@ -167,7 +163,7 @@ class NoDataWidget extends StatelessWidget {
                     borderSide: BorderSide(color: Colors.blue[400]),
                     splashColor: Colors.blue,
                     onPressed: () => MyRoute.push(context, RequestProduct()),
-                    child: Text('Request a product'),
+                    child: Text(Strings.requestProduct),
                   ),
                 )
               ],

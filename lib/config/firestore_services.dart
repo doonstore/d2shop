@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:d2shop/models/chat_model.dart';
 import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/models/featured_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
@@ -27,6 +28,11 @@ Stream<List<OrderModel>> get getOrders {
       .map((q) => q.documents.map((e) => OrderModel.fromJson(e.data)).toList());
 }
 
+Stream<List<SupportMessages>> getMessages(String userId) {
+  return chatRef.where("userId", isEqualTo: userId).snapshots().map(
+      (q) => q.documents.map((e) => SupportMessages.fromJson(e.data)).toList());
+}
+
 // Service Fee
 Future<num> get serviceFee {
   return servicesRef
@@ -51,4 +57,8 @@ Future<CouponModel> checkCoupon(String promoCode) {
 Future<List<OrderModel>> getOrdersDocument() {
   return orderRef.getDocuments().then(
       (q) => q.documents.map((e) => OrderModel.fromJson(e.data)).toList());
+}
+
+Future<void> sendMessageToSupport(SupportMessages supportMessages) {
+  return chatRef.document(supportMessages.id).setData(supportMessages.toJson());
 }

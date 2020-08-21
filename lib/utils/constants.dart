@@ -11,6 +11,7 @@ final CollectionReference requestRef = _firestore.collection('requests');
 final CollectionReference orderRef = _firestore.collection('orders');
 final CollectionReference servicesRef = _firestore.collection('services');
 final CollectionReference couponRef = _firestore.collection('coupons');
+final CollectionReference chatRef = _firestore.collection('chats');
 
 /// Resposniveness
 double width(BuildContext context) => MediaQuery.of(context).size.width;
@@ -22,7 +23,8 @@ RoundedRectangleBorder rounded(double circluar) =>
     RoundedRectangleBorder(borderRadius: br(circluar));
 
 /// Colors
-const Color kPrimaryColor = Color.fromRGBO(65, 160, 209, 1);
+// const Color kPrimaryColor = Color.fromRGBO(65, 160, 209, 1);
+const Color kPrimaryColor = Color.fromRGBO(70, 180, 210, 1);
 
 final List<Color> kBackgroundColorsList = <Color>[
   Colors.blue[200],
