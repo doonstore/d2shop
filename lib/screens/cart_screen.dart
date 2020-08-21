@@ -16,7 +16,6 @@ import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -424,82 +423,6 @@ class NotificationHeader extends StatelessWidget {
             desc,
             style: TextStyle(fontSize: 12),
           )
-        ],
-      ),
-    );
-  }
-}
-
-class CouponCard extends StatefulWidget {
-  @override
-  _CouponCardState createState() => _CouponCardState();
-}
-
-class _CouponCardState extends State<CouponCard> {
-  final TextEditingController _tec = TextEditingController();
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        "APPLY PROMO",
-        style: GoogleFonts.oxygen(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w900,
-        ),
-      ),
-      scrollable: true,
-      content: Column(
-        children: [
-          TextFormField(
-            controller: _tec,
-            decoration: Utils.inputDecoration("Apply Coupon",
-                hint: "Enter promo coupon here"),
-            style: Utils.formTextStyle(),
-            textCapitalization: TextCapitalization.characters,
-          ),
-          SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                child: Utils.basicBtn(
-                  context,
-                  text: 'APPLY',
-                  onTap: () async {
-                    if (_tec.text.isNotEmpty) {
-                      CouponModel couponModel = await checkCoupon(_tec.text);
-
-                      if (couponModel.message == null) {
-                        Utils.showMessage("Invalid Promo Code!", error: true);
-                        Navigator.pop(context);
-                        return;
-                      }
-
-                      if (DateTime.parse(couponModel.validTill)
-                          .difference(DateTime.now())
-                          .isNegative) {
-                        Utils.showMessage("Promo Code has been expired!",
-                            error: true);
-                        Navigator.pop(context);
-                        return;
-                      }
-
-                      Utils.showMessage(
-                          "${couponModel.promoCode} has been applied. ${couponModel.message}");
-                      Provider.of<ApplicationState>(context, listen: false)
-                          .setCoupon(couponModel);
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ),
-              IconButton(
-                icon: FaIcon(FontAwesomeIcons.times),
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ),
         ],
       ),
     );
