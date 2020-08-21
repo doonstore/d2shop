@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
               color: Colors.blueGrey,
               fontSize: 16.sp,
               letterSpacing: 1.2,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
             enabled: !isLoading,
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 heading,
                 style: GoogleFonts.montserrat(
                   fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
               ),

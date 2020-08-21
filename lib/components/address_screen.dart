@@ -1,6 +1,7 @@
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _AddressScreenState extends State<AddressScreen> {
         });
       }
     } else
-      Utils.showMessage('Please select apartment', error: true);
+      Utils.showMessage('Please select an apartment', error: true);
   }
 
   @override
@@ -66,9 +67,9 @@ class _AddressScreenState extends State<AddressScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Residency Type',
+              Strings.residencyType,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 fontSize: 18.sp,
                 color: Colors.black87,
               ),
@@ -76,20 +77,19 @@ class _AddressScreenState extends State<AddressScreen> {
             SizedBox(height: 20),
             Row(
               children: [
-                residentalTypeChooser(addressType == 0, 0, 'Apartment'),
+                residentalTypeChooser(addressType == 0, 0, Strings.apartment),
                 SizedBox(width: 4),
-                residentalTypeChooser(addressType == 1, 1, 'Individual House')
+                residentalTypeChooser(addressType == 1, 1, Strings.house)
               ],
             ),
             SizedBox(height: 15),
             DropdownSearch<String>(
-              hint: 'Apartment / Society',
-              label: 'Apartment / Society',
+              hint: Strings.apartmentOrSociety,
+              label: Strings.apartmentOrSociety,
               showSearchBox: true,
               items: itemList,
               searchBoxDecoration: Utils.inputDecoration('Search..', hint: ''),
-              validator: (value) =>
-                  value == null ? 'Please select a value' : null,
+              validator: (value) => value == null ? Strings.selectValue : null,
               onSaved: (newValue) => _apartment = newValue,
               onChanged: (value) => _apartment = value,
               selectedItem: _apartment ?? '--Select--',
@@ -102,10 +102,10 @@ class _AddressScreenState extends State<AddressScreen> {
                     initialValue: widget.doonStoreUser.address.isNotEmpty
                         ? getAddress(widget.doonStoreUser.address)[1]
                         : '',
-                    decoration: Utils.inputDecoration('Tower / Block'),
+                    decoration: Utils.inputDecoration(Strings.towerOrBlock),
                     style: Utils.formTextStyle(),
                     validator: (value) =>
-                        value.trim().isEmpty ? 'This field is required.' : null,
+                        value.trim().isEmpty ? Strings.fieldRequired : null,
                     onSaved: (newValue) => _block = newValue.trim(),
                   ),
                 ),
@@ -115,17 +115,17 @@ class _AddressScreenState extends State<AddressScreen> {
                     initialValue: widget.doonStoreUser.address.isNotEmpty
                         ? getAddress(widget.doonStoreUser.address)[2]
                         : '',
-                    decoration: Utils.inputDecoration('Flat / House No.'),
+                    decoration: Utils.inputDecoration(Strings.flatOrHouse),
                     style: Utils.formTextStyle(),
                     validator: (value) =>
-                        value.trim().isEmpty ? 'This field is required.' : null,
+                        value.trim().isEmpty ? Strings.fieldRequired : null,
                     onSaved: (newValue) => _houseNo = newValue.trim(),
                   ),
                 ),
               ],
             ),
             SizedBox(height: 20),
-            Utils.basicBtn(context, text: 'Confirm', onTap: submit)
+            Utils.basicBtn(context, text: Strings.confirm, onTap: submit)
           ],
         ),
       ),
@@ -150,7 +150,7 @@ class _AddressScreenState extends State<AddressScreen> {
               child: Text(
                 text,
                 style: GoogleFonts.oxygen(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   color: value == 0 ? Colors.white : Colors.black,
                   fontSize: 15.sp,
                 ),

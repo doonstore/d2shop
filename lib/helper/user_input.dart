@@ -87,7 +87,7 @@ class _UserInputState extends State<UserInput> {
             Text(
               'Profile Details',
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 fontSize: 20.sp,
               ),
             ),
@@ -156,7 +156,7 @@ class _UserInputState extends State<UserInput> {
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.black45,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
                 children: [
                   TextSpan(

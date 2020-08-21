@@ -34,11 +34,6 @@ class CustomDrawer extends StatelessWidget {
                   endIndent: 10,
                 ),
                 dataCard(
-                  title: 'My Subscriptions',
-                  iconData: FontAwesomeIcons.retweet,
-                  onTapCallback: () {},
-                ),
-                dataCard(
                   title: 'Wallet Balance',
                   iconData: FontAwesomeIcons.wallet,
                   onTapCallback: () =>
@@ -53,6 +48,11 @@ class CustomDrawer extends StatelessWidget {
                     context,
                     ViewTransactions(),
                   ),
+                ),
+                dataCard(
+                  title: 'Notifications',
+                  iconData: FontAwesomeIcons.bell,
+                  onTapCallback: () {},
                 ),
                 dataCard(
                   title: 'Refer and Save',
@@ -79,17 +79,12 @@ class CustomDrawer extends StatelessWidget {
       leading: FaIcon(FontAwesomeIcons.user, color: kPrimaryColor),
       title: Text(
         name,
-        style: GoogleFonts.ptSans(
-          fontSize: 17.sp,
-          color: Colors.black87,
-          fontWeight: FontWeight.w700,
+        style: GoogleFonts.openSans(
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w600,
         ),
       ),
-      trailing: FaIcon(
-        FontAwesomeIcons.chevronRight,
-        size: 20,
-        color: Colors.black,
-      ),
+      trailing: FaIcon(FontAwesomeIcons.chevronRight, size: 20),
     );
   }
 
@@ -108,7 +103,7 @@ class CustomDrawer extends StatelessWidget {
         title,
         style: TextStyle(
           fontSize: 13.sp,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 1.1,
         ),
       ),
@@ -116,14 +111,14 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Container tralingContainer(String text) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kPrimaryColor.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(20),
-      ),
+  Material tralingContainer(String text) {
+    return Material(
+      color: kPrimaryColor,
+      shape: StadiumBorder(),
+      animationDuration: Duration(milliseconds: 300),
+      elevation: 5.0,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.all(10),
         child: Text(
           text,
           style: TextStyle(

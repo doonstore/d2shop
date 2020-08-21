@@ -83,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
               hintText: 'Search for milk & groceries...',
               isDense: true,
             ),
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
         bottomSheet: value.cart.isNotEmpty ? value.showCart(context) : null,
@@ -100,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           style: TextStyle(
                             fontSize: 12.sp,
                             color: Colors.black45,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -135,7 +135,7 @@ class NoDataWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               color: Colors.black45,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(height: 25),

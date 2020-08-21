@@ -26,7 +26,7 @@ class CategoryData extends StatelessWidget {
             'Explore Categories',
             style: TextStyle(
               color: Colors.black54,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               fontSize: 15.sp,
             ),
           ),

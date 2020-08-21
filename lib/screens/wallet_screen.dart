@@ -133,7 +133,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   ),
                   subtitle: Text(
                     '$rupeeUniCode ${value.user.wallet}',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                   ),
                   trailing: value.user.transactions.isNotEmpty
                       ? FlatButton(

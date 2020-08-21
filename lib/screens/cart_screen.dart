@@ -1,11 +1,12 @@
 import 'package:animations/animations.dart';
+import 'package:d2shop/components/coupon_card.dart';
 import 'package:d2shop/components/delivery_date_card.dart';
 import 'package:d2shop/components/item_info.dart';
 import 'package:d2shop/config/firestore_services.dart';
 import 'package:d2shop/helper/side_item_info.dart';
-import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
+import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/screens/my_account.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
@@ -15,10 +16,10 @@ import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uuid/uuid.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -50,33 +51,34 @@ class _CartScreenState extends State<CartScreen> {
     });
 
     DoonStoreUser user = state.user;
-    int newAmount = user.wallet - payableAmount;
+    int newAmount = user.wallet - payableAmount.toInt();
     String desc = '';
     List<Map> itemList = [];
     List<num> noOfProducts = [];
 
     state.cart.forEach((key, value) {
-      itemList.add((value['item'] as Item).toJson());
+      itemList.add(value.item.toJson());
     });
 
     state.cart.forEach((key, value) {
-      Item item = value['item'] as Item;
-      desc += '${item.name} (${item.quantityUnit}) * ${value['quantity']}\n';
-      noOfProducts.add(value['quantity'] as num);
+      Item item = value.item;
+      desc += '${item.name} (${item.quantityUnit}) * ${value.quantity}\n';
+      noOfProducts.add(value.quantity);
     });
 
     Map<String, Object> data = getWalletMap(
-        '$cartLength Item${cartLength > 1 ? 's' : ''} - Ordered',
-        desc,
-        payableAmount,
-        newAmount,
-        TransactionType.Debited);
+      '$cartLength Item${cartLength > 1 ? 's' : ''} - Ordered',
+      desc,
+      payableAmount,
+      newAmount,
+      TransactionType.Debited,
+    );
 
     user.transactions.add(data);
-    user.wallet -= payableAmount;
+    user.wallet -= payableAmount.toInt();
 
     OrderModel orderModel = OrderModel(
-      id: "${user.displayName}_${DateTime.now().millisecondsSinceEpoch}",
+      id: "${user.displayName}_${Uuid().v4()}",
       user: user.toMap(),
       total: payableAmount,
       itemList: itemList,
@@ -195,7 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                   SizedBox(height: 15),
                   ...value.cart.values.toList().map(
                     (e) {
-                      Item item = e['item'];
+                      Item item = e.item;
                       return Container(
                         margin:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -229,14 +231,17 @@ class _CartScreenState extends State<CartScreen> {
                                               FontAwesomeIcons.minus,
                                               color: Colors.black54,
                                             ),
-                                            onPressed: () => value
-                                                .removeItemFromTheCart(item),
+                                            onPressed: () {
+                                              value.removeItemFromTheCart(item);
+                                              if (value.cart.length == 0)
+                                                Navigator.pop(context);
+                                            },
                                           ),
                                         ),
                                         Text(
-                                          '${e['quantity'].toInt()}',
+                                          '${e.quantity.toInt()}',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w600,
                                             fontSize: 15,
                                           ),
                                         ),
@@ -278,7 +283,7 @@ class _CartScreenState extends State<CartScreen> {
                               value.couponModel?.promoCode ??
                                   'Got a coupon card?',
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 14.sp,
                               ),
                             ),
@@ -367,7 +372,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(
                 'NO',
                 style:
-                    TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
               ),
             ),
             onPressed: () => Navigator.pop(context),
@@ -377,7 +382,7 @@ class _CartScreenState extends State<CartScreen> {
               child: Text(
                 'YES',
                 style: TextStyle(
-                    color: Colors.redAccent, fontWeight: FontWeight.w500),
+                    color: Colors.redAccent, fontWeight: FontWeight.w600),
               ),
             ),
             onPressed: () {
@@ -385,8 +390,7 @@ class _CartScreenState extends State<CartScreen> {
               if (value.cart.length > 1)
                 Navigator.pop(context);
               else {
-                Navigator.pop(context);
-                Navigator.pop(context);
+                MyRoute.push(context, HomePage(), replaced: true);
               }
             },
           )
@@ -419,82 +423,6 @@ class NotificationHeader extends StatelessWidget {
             desc,
             style: TextStyle(fontSize: 12),
           )
-        ],
-      ),
-    );
-  }
-}
-
-class CouponCard extends StatefulWidget {
-  @override
-  _CouponCardState createState() => _CouponCardState();
-}
-
-class _CouponCardState extends State<CouponCard> {
-  final TextEditingController _tec = TextEditingController();
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        "APPLY PROMO",
-        style: GoogleFonts.oxygen(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w900,
-        ),
-      ),
-      scrollable: true,
-      content: Column(
-        children: [
-          TextFormField(
-            controller: _tec,
-            decoration: Utils.inputDecoration("Apply Coupon",
-                hint: "Enter promo coupon here"),
-            style: Utils.formTextStyle(),
-            textCapitalization: TextCapitalization.characters,
-          ),
-          SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                child: Utils.basicBtn(
-                  context,
-                  text: 'APPLY',
-                  onTap: () async {
-                    if (_tec.text.isNotEmpty) {
-                      CouponModel couponModel = await checkCoupon(_tec.text);
-
-                      if (couponModel.message == null) {
-                        Utils.showMessage("Invalid Promo Code!", error: true);
-                        Navigator.pop(context);
-                        return;
-                      }
-
-                      if (DateTime.parse(couponModel.validTill)
-                          .difference(DateTime.now())
-                          .isNegative) {
-                        Utils.showMessage("Promo Code has been expired!",
-                            error: true);
-                        Navigator.pop(context);
-                        return;
-                      }
-
-                      Utils.showMessage(
-                          "${couponModel.promoCode} has been applied. ${couponModel.message}");
-                      Provider.of<ApplicationState>(context, listen: false)
-                          .setCoupon(couponModel);
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ),
-              IconButton(
-                icon: FaIcon(FontAwesomeIcons.times),
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ),
         ],
       ),
     );

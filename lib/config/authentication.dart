@@ -64,7 +64,7 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
             style: TextStyle(
               color: Colors.indigo,
               letterSpacing: 1.2,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
             onChanged: (value) => code = value,
           ),

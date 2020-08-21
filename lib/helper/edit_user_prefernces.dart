@@ -47,7 +47,7 @@ class _EditUserPreferncesState extends State<EditUserPrefernces> {
                   : 'WhatsApp Notifications',
               style: GoogleFonts.oxygen(
                 fontSize: 18.sp,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
               ),
             ),
             Row(

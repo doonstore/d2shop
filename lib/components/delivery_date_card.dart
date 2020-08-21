@@ -30,6 +30,7 @@ class DeliveryDate extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20,
+                  color: Colors.black87,
                 ),
               ),
               subtitle: desc.isNotEmpty

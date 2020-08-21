@@ -20,7 +20,7 @@ class SearchWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 color: Colors.white,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),

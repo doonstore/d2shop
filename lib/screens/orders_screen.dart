@@ -10,6 +10,7 @@ import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -22,25 +23,40 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   bool isShowingPrevious = false;
 
+  OrderModel _orderModel;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  init() async {
+    var list = await getOrdersDocument();
+
+    OrderModel orderModel = list
+        .where((element) =>
+            DateTime.parse(element.deliveryDate).day ==
+            DateTime.now().add(Duration(days: 1)).day)
+        .first;
+    setState(() {
+      _orderModel = orderModel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(
       builder: (context, value, child) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              !isShowingPrevious ? 'Orders' : 'Previous Orders',
-              style: TextStyle(color: Colors.black),
-            ),
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            elevation: 0.0,
+          appBar: Utils.appBar(
+            context,
+            title: !isShowingPrevious ? 'Orders' : 'Previous Orders',
             actions: [
               SizedBox(width: 10),
               IconButton(
                 icon: FaIcon(
-                  FontAwesomeIcons.retweet,
-                  color: Colors.black,
+                  FontAwesomeIcons.history,
+                  color: Colors.black87,
                 ),
                 onPressed: () {
                   setState(() {
@@ -51,63 +67,74 @@ class _OrdersScreenState extends State<OrdersScreen> {
               )
             ],
           ),
-          body: isShowingPrevious
-              ? StreamProvider<List<OrderModel>>.value(
+          body: !isShowingPrevious
+              ? Column(
+                  children: [
+                    if (_orderModel != null) ShowOrder(_orderModel),
+                    Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => Divider(),
+                        itemCount: 30,
+                        itemBuilder: (context, index) {
+                          DateTime dateTime =
+                              DateTime.now().add(Duration(days: index));
+                          bool isToday = dateTime.day == DateTime.now().day;
+
+                          if (_orderModel != null) if (index == 1)
+                            return SizedBox();
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              DeliveryDate(
+                                dateTime: dateTime,
+                                desc: isToday ? 'No orders for this day' : '',
+                                backroundColor: isToday,
+                              ),
+                              if (!isToday)
+                                GestureDetector(
+                                  onTap: () =>
+                                      MyRoute.push(context, CategoryExplorer()),
+                                  child: Container(
+                                    color: Colors.white,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 25),
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          child: FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            color: Colors.white,
+                                            size: 20,
+                                          ),
+                                          backgroundColor: kPrimaryColor,
+                                        ),
+                                        Expanded(
+                                          child: ListTile(
+                                            title: Text(
+                                              'ADD PRODUCT',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 15,
+                                                color: kPrimaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              : StreamProvider<List<OrderModel>>.value(
                   value: getOrders,
                   builder: (context, child) => PrevoiusOrder(value.user),
-                )
-              : ListView.separated(
-                  separatorBuilder: (context, index) => Divider(),
-                  itemCount: 30,
-                  itemBuilder: (context, index) {
-                    DateTime dateTime =
-                        DateTime.now().add(Duration(days: index));
-                    bool isToday = dateTime.day == DateTime.now().day;
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        DeliveryDate(
-                          dateTime: dateTime,
-                          desc: isToday ? 'No orders for this day' : '',
-                          backroundColor: isToday,
-                        ),
-                        if (!isToday)
-                          GestureDetector(
-                            onTap: () =>
-                                MyRoute.push(context, CategoryExplorer()),
-                            child: Container(
-                              color: Colors.white,
-                              padding: EdgeInsets.symmetric(horizontal: 25),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    child: FaIcon(
-                                      FontAwesomeIcons.plus,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    backgroundColor: kPrimaryColor,
-                                  ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                        'ADD PRODUCT',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 15,
-                                          color: kPrimaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                      ],
-                    );
-                  },
                 ),
         );
       },
@@ -134,43 +161,51 @@ class PrevoiusOrder extends StatelessWidget {
             itemCount: _dataList.length,
             itemBuilder: (context, index) {
               OrderModel orderModel = _dataList[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DeliveryDate(
-                    dateTime: DateTime.parse(orderModel.deliveryDate),
-                    desc: 'Order Placed!',
-                  ),
-                  SizedBox(height: 10),
-                  SideItemInfo("PENDING"),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(50, 10, 10, 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${orderModel.itemList.length} item(s).'),
-                        SizedBox(height: 10),
-                        ...orderModel.itemList.map(
-                          (e) {
-                            Item item = Item.fromJson(e);
-
-                            return ListTile(
-                              leading: CircleAvatar(
-                                child:
-                                    CachedNetworkImage(imageUrl: item.photoUrl),
-                              ),
-                              title:
-                                  Text("${item.name} (${item.quantityUnit})"),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              );
+              return ShowOrder(orderModel);
             },
           )
         : Center(child: Text(""));
+  }
+}
+
+class ShowOrder extends StatelessWidget {
+  final OrderModel orderModel;
+  const ShowOrder(this.orderModel);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        DeliveryDate(
+          dateTime: DateTime.parse(orderModel.deliveryDate),
+          desc: 'Order Placed!',
+        ),
+        SizedBox(height: 10),
+        SideItemInfo("PENDING"),
+        Container(
+          padding: EdgeInsets.fromLTRB(50, 10, 10, 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('${orderModel.itemList.length} item(s).'),
+              SizedBox(height: 10),
+              ...orderModel.itemList.map(
+                (e) {
+                  Item item = Item.fromJson(e);
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      child: CachedNetworkImage(imageUrl: item.photoUrl),
+                    ),
+                    title: Text("${item.name} (${item.quantityUnit})"),
+                  );
+                },
+              )
+            ],
+          ),
+        )
+      ],
+    );
   }
 }

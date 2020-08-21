@@ -47,3 +47,8 @@ Future<CouponModel> checkCoupon(String promoCode) {
       return CouponModel();
   });
 }
+
+Future<List<OrderModel>> getOrdersDocument() {
+  return orderRef.getDocuments().then(
+      (q) => q.documents.map((e) => OrderModel.fromJson(e.data)).toList());
+}

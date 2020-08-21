@@ -16,8 +16,10 @@ final CollectionReference couponRef = _firestore.collection('coupons');
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 
+BorderRadius br(double radius) => BorderRadius.circular(radius);
+
 RoundedRectangleBorder rounded(double circluar) =>
-    RoundedRectangleBorder(borderRadius: BorderRadius.circular(circluar));
+    RoundedRectangleBorder(borderRadius: br(circluar));
 
 /// Colors
 const Color kPrimaryColor = Color.fromRGBO(65, 160, 209, 1);
