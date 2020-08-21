@@ -36,18 +36,20 @@ class DoonStoreUser {
       coupons: {});
 
   factory DoonStoreUser.fromJson(Map data) => DoonStoreUser(
-      userId: data['userId'],
-      email: data['email'] ?? '',
-      address: data['address'] ?? {},
-      displayName: data['displayName'] ?? '',
-      doorBellStatus: data['doorBellStatus'] ?? false,
-      lastLogin: data['lastLogin'] ?? '',
-      transactions: data['transactions'] ?? [],
-      phone: data['phone'] ?? '',
-      photoUrl: data['photoUrl'] ?? '',
-      wallet: data['wallet'] ?? 0,
-      whatsAppNotificationSetting: data['whatsAppNotificationSetting'] ?? false,
-      coupons: data['coupons']);
+        userId: data['userId'],
+        email: data['email'] ?? '',
+        address: data['address'] ?? {},
+        displayName: data['displayName'] ?? '',
+        doorBellStatus: data['doorBellStatus'] ?? false,
+        lastLogin: data['lastLogin'] ?? '',
+        transactions: data['transactions'] ?? [],
+        phone: data['phone'] ?? '',
+        photoUrl: data['photoUrl'] ?? '',
+        wallet: data['wallet'] ?? 0,
+        whatsAppNotificationSetting:
+            data['whatsAppNotificationSetting'] ?? false,
+        coupons: data['coupons'] ?? {},
+      );
 
   Map<String, dynamic> toMap() => {
         'userId': userId,

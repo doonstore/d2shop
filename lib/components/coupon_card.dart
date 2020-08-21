@@ -1,5 +1,6 @@
 import 'package:d2shop/config/firestore_services.dart';
 import 'package:d2shop/models/coupon_model.dart';
+import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
@@ -68,6 +69,20 @@ class _CouponCardState extends State<CouponCard> {
                       error: true);
                   Navigator.pop(context);
                   return;
+                }
+
+                DoonStoreUser user =
+                    Provider.of<ApplicationState>(context, listen: false).user;
+
+                if (user.coupons.containsKey(couponModel.promoCode)) {
+                  int value = user.coupons[couponModel.promoCode] as int;
+                  if (value == couponModel.limit) {
+                    Utils.showMessage(
+                        "Maximum limit has been reached! You can't use it more than ${couponModel.limit} times.",
+                        error: true);
+                    Navigator.pop(context);
+                    return;
+                  }
                 }
 
                 Utils.showMessage(

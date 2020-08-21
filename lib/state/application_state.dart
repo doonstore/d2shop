@@ -8,6 +8,7 @@ import 'package:d2shop/utils/route.dart';
 import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationState extends ChangeNotifier {
   DoonStoreUser user;
@@ -88,15 +89,17 @@ class ApplicationState extends ChangeNotifier {
 
   clearCart() {
     cart.clear();
-    deliveryDate = DateTime.now();
+    deliveryDate = DateTime.now().add(Duration(days: 1));
+    couponModel = CouponModel();
     notifyListeners();
   }
 
   num getWalletAmount() {
-    if (user.wallet > getCurrentPrice())
-      return user.wallet - getCurrentPrice();
-    else
-      return 0;
+    return user.wallet - getCurrentPrice();
+    // if (user.wallet > getCurrentPrice())
+    //   return user.wallet - getCurrentPrice();
+    // else
+    //   return 0;
   }
 
   Widget showCart(BuildContext context) {
@@ -122,7 +125,7 @@ class ApplicationState extends ChangeNotifier {
                   children: [
                     Text(
                       '${cart.length} Item${cart.length > 1 ? '(s)' : ''}',
-                      style: TextStyle(
+                      style: GoogleFonts.ptSans(
                         color: Colors.white,
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -130,9 +133,9 @@ class ApplicationState extends ChangeNotifier {
                     ),
                     Text(
                       '$rupeeUniCode${getCurrentPrice()}',
-                      style: TextStyle(
+                      style: GoogleFonts.overpass(
                         color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

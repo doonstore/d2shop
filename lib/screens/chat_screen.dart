@@ -14,24 +14,27 @@ import 'package:uuid/uuid.dart';
 class ChatScreen extends StatelessWidget {
   final TextEditingController _tec = TextEditingController();
 
-  void sendMessage(BuildContext context) {
-    if (_tec.text.isNotEmpty) {
+  void sendMessage(BuildContext context, {bool fromSupport = false}) {
+    if (_tec.text.isNotEmpty || fromSupport) {
       DoonStoreUser user =
           Provider.of<ApplicationState>(context, listen: false).user;
 
       SupportMessages supportMessages = SupportMessages(
         id: Uuid().v4(),
         dateTime: DateTime.now().toString(),
-        from: user.userId,
-        to: 'support',
-        isUser: true,
-        message: _tec.text,
+        from: fromSupport ? 'support' : user.userId,
+        to: !fromSupport ? 'support' : user.userId,
+        isUser: !fromSupport,
+        message: fromSupport
+            ? "Hello There! Need help?\nReach out to us right here and we will get back to you as soon as we can!"
+            : _tec.text,
         userId: user.userId,
       );
 
       sendMessageToSupport(supportMessages).then((value) {
-        Utils.showMessage("Our support team will get back to you shortly.",
-            basic: true);
+        if (!fromSupport)
+          Utils.showMessage("Our support team will get back to you shortly.",
+              basic: true);
         _tec.text = '';
         _tec.clear();
       });
@@ -64,6 +67,7 @@ class ChatScreen extends StatelessWidget {
                   decoration:
                       Utils.inputDecoration("Type your message...", hint: ""),
                   style: Utils.formTextStyle(),
+                  textCapitalization: TextCapitalization.words,
                 ),
               ),
               IconButton(
@@ -79,25 +83,27 @@ class ChatScreen extends StatelessWidget {
             List<SupportMessages> chatList =
                 Provider.of<List<SupportMessages>>(context);
 
-            if (chatList != null)
-              chatList.sort(
-                (a, b) => DateTime.parse(b.dateTime)
-                    .millisecondsSinceEpoch
-                    .compareTo(
-                        DateTime.parse(a.dateTime).millisecondsSinceEpoch),
-              );
+            if (chatList == null)
+              return Container();
+            else if (chatList.length == 0) {
+              sendMessage(context, fromSupport: true);
+              return Center(child: Text('Start Conversation'));
+            }
 
-            return chatList != null && chatList.length > 0
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 80),
-                    child: ListView.builder(
-                      itemBuilder: (context, index) =>
-                          chatBubble(chatList[index], context),
-                      itemCount: chatList.length,
-                      reverse: true,
-                    ),
-                  )
-                : Text('');
+            chatList.sort(
+              (a, b) => DateTime.parse(b.dateTime)
+                  .millisecondsSinceEpoch
+                  .compareTo(DateTime.parse(a.dateTime).millisecondsSinceEpoch),
+            );
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 80),
+              child: ListView.builder(
+                itemBuilder: (context, index) =>
+                    chatBubble(chatList[index], context),
+                itemCount: chatList.length,
+                reverse: true,
+              ),
+            );
           },
         ),
       ),
@@ -121,17 +127,17 @@ class ChatScreen extends StatelessWidget {
           : null,
       title: Text(
         messages.message,
-        style: GoogleFonts.overpass(fontWeight: FontWeight.w600, fontSize: 16),
-        textAlign: isUser ? TextAlign.end : TextAlign.justify,
+        style: GoogleFonts.overpass(fontWeight: FontWeight.w600, fontSize: 14),
+        textAlign: isUser ? TextAlign.end : TextAlign.start,
       ),
       subtitle: Text(
-        DateFormat.jms().add_MMMEd().format(DateTime.parse(messages.dateTime)),
+        DateFormat.jms().add_MMMd().format(DateTime.parse(messages.dateTime)),
         style: GoogleFonts.dmSans(
           color: kPrimaryColor,
           fontWeight: FontWeight.w600,
           fontSize: 12,
         ),
-        textAlign: isUser ? TextAlign.end : TextAlign.justify,
+        textAlign: isUser ? TextAlign.end : TextAlign.start,
       ),
       trailing: isUser
           ? Material(

@@ -30,6 +30,7 @@ class _CartScreenState extends State<CartScreen> {
   Duration addOneDay = Duration(days: 1);
 
   double _value = 1.0;
+  DateTime dateTime = DateTime.now();
 
   num fee = 3,
       cartLength,
@@ -76,13 +77,23 @@ class _CartScreenState extends State<CartScreen> {
 
     user.transactions.add(data);
     user.wallet -= payableAmount.toInt();
+    if (state.couponModel.promoCode != null) {
+      String promo = state.couponModel.promoCode;
+
+      if (user.coupons.containsKey(promo)) {
+        int _value = user.coupons[promo] as int;
+        user.coupons[promo] = _value + 1;
+      } else {
+        user.coupons[promo] = 1;
+      }
+    }
 
     OrderModel orderModel = OrderModel(
       id: "${user.displayName}_${Uuid().v4()}",
       user: user.toMap(),
       total: payableAmount,
       itemList: itemList,
-      deliveryDate: state.deliveryDate.toString(),
+      deliveryDate: dateTime.toString(),
       orderDate: DateTime.now().toString(),
       noOfProducts: noOfProducts,
     );
@@ -104,7 +115,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.now().add(addOneDay);
+    dateTime = DateTime.now().add(addOneDay);
     if (dateTime.hour > 22 && dateTime.hour <= 23) dateTime.add(addOneDay);
 
     return Consumer<ApplicationState>(builder: (context, value, child) {
@@ -112,12 +123,13 @@ class _CartScreenState extends State<CartScreen> {
       payableAmount = value.getCurrentPrice().toInt() + fee - value.discount;
 
       walletAvailableBalance = value.getWalletAmount() - fee + value.discount;
-      if (walletAvailableBalance < 0) walletAvailableBalance = 0;
 
-      if (value.getWalletAmount() <= 0)
-        amountToAdd = payableAmount.toDouble() - value.user.wallet;
+      if (walletAvailableBalance < 0)
+        amountToAdd = walletAvailableBalance.abs();
       else
         amountToAdd = 0;
+
+      if (walletAvailableBalance < 0) walletAvailableBalance = 0;
 
       return Scaffold(
         appBar: AppBar(
@@ -161,7 +173,7 @@ class _CartScreenState extends State<CartScreen> {
                               context,
                               WalletScreen(
                                 fromCart: true,
-                                amount: amountToAdd.toDouble(),
+                                amount: amountToAdd.toInt(),
                               ),
                             ),
                           ),
@@ -319,7 +331,8 @@ class _CartScreenState extends State<CartScreen> {
                         Divider(height: 5, color: Colors.black54),
                         if (value.couponModel?.promoCode != null) ...{
                           text('Discount (${value.couponModel.benifitValue}%)',
-                              '- $rupeeUniCode${value.discount}'),
+                              '- $rupeeUniCode${value.discount}',
+                              color: Colors.green),
                           Divider(height: 5, color: Colors.black54),
                         },
                         text('Amount to pay', '$rupeeUniCode$payableAmount'),
@@ -340,7 +353,7 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
-  ListTile text(String title, String desc) {
+  ListTile text(String title, String desc, {Color color}) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 5),
       title: Text(
@@ -356,6 +369,7 @@ class _CartScreenState extends State<CartScreen> {
         style: TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 15,
+          color: color ?? Colors.black,
         ),
       ),
     );
