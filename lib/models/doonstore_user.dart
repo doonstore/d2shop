@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DoonStoreUser {
-  String userId, displayName, email, phone, photoUrl;
+  String userId, displayName, email, phone, photoUrl, token;
   Map<String, dynamic> address, coupons;
   bool doorBellStatus, whatsAppNotificationSetting;
   int wallet;
@@ -16,6 +16,7 @@ class DoonStoreUser {
       this.phone,
       this.address,
       this.wallet,
+      this.token,
       this.coupons,
       this.transactions,
       this.photoUrl});
@@ -43,6 +44,7 @@ class DoonStoreUser {
         phone: data['phone'] ?? '',
         photoUrl: data['photoUrl'] ?? '',
         wallet: data['wallet'] ?? 0,
+        token: data['token'],
         whatsAppNotificationSetting:
             data['whatsAppNotificationSetting'] ?? false,
         coupons: data['coupons'] ?? {},
@@ -59,7 +61,8 @@ class DoonStoreUser {
         'phone': phone,
         'transactions': transactions,
         'wallet': wallet,
-        'coupons': coupons
+        'coupons': coupons,
+        'token': token
       };
 }
 

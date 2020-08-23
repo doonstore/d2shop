@@ -1,11 +1,14 @@
 import 'package:animations/animations.dart';
 import 'package:d2shop/components/drawer.dart';
+import 'package:d2shop/models/message_model.dart';
 import 'package:d2shop/screens/chat_screen.dart';
 import 'package:d2shop/screens/gallery_page.dart';
 import 'package:d2shop/screens/orders_screen.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/utils.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,6 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   static GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   List bottomTabs = [
     ['Home', FontAwesomeIcons.home],
@@ -34,6 +38,28 @@ class _HomePageState extends State<HomePage> {
   ];
 
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        Message msg = Message.getMessage(message);
+        Utils.showMessage("Title: ${msg.title}, Body: ${msg.body}");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        Message msg = Message.getMessage(message);
+        Utils.showMessage("Title: ${msg.title}, Body: ${msg.body}");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        Message msg = Message.getMessage(message);
+        Utils.showMessage("Title: ${msg.title}, Body: ${msg.body}");
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

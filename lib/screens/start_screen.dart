@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:d2shop/screens/home_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -19,9 +20,11 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  FirebaseMessaging _firebaseMessaging;
   @override
   void initState() {
     super.initState();
+    _firebaseMessaging = FirebaseMessaging();
     init();
   }
 
@@ -29,7 +32,16 @@ class _StartScreenState extends State<StartScreen> {
     DoonStoreUser user = await getCurrentUser();
 
     if (user != null)
-      Timer(Duration(milliseconds: 300), () {
+      Timer(Duration(milliseconds: 300), () async {
+        if (user.token == null)
+          await _firebaseMessaging.getToken().then((value) {
+            user.token = value;
+            userRef
+                .document(user.userId)
+                .updateData(user.toMap())
+                .then((value) => _firebaseMessaging.subscribeToTopic("notify"));
+          });
+
         Provider.of<ApplicationState>(context, listen: false).setUser(user);
         MyRoute.push(context, HomePage(), replaced: true);
       });
