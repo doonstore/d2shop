@@ -54,7 +54,8 @@ class _CouponCardState extends State<CouponCard> {
             text: 'APPLY',
             onTap: () async {
               if (_tec.text.isNotEmpty) {
-                CouponModel couponModel = await checkCoupon(_tec.text);
+                CouponModel couponModel =
+                    await FirestoreServices().checkCoupon(_tec.text);
 
                 if (couponModel.message == null) {
                   Utils.showMessage("Invalid Promo Code!", error: true);

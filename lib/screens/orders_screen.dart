@@ -5,7 +5,6 @@ import 'package:d2shop/components/category_explorer.dart';
 import 'package:d2shop/components/delivery_date_card.dart';
 import 'package:d2shop/config/firestore_services.dart';
 import 'package:d2shop/helper/side_item_info.dart';
-import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -33,7 +32,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   init() async {
-    var list = await getOrdersDocument();
+    var list = await FirestoreServices().getOrdersDocument();
 
     OrderModel orderModel = list
         .where((element) =>
@@ -141,38 +140,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ],
                 )
               : StreamProvider<List<OrderModel>>.value(
-                  value: getOrders,
-                  builder: (context, child) => PrevoiusOrder(value.user),
+                  value: FirestoreServices().getOrders,
+                  builder: (context, child) {
+                    List<OrderModel> _dataList =
+                        Provider.of<List<OrderModel>>(context);
+
+                    if (_dataList != null)
+                      _dataList = _dataList
+                          .where((element) =>
+                              element.id.contains(value.user.displayName))
+                          .toList();
+
+                    return _dataList != null && _dataList.length > 0
+                        ? ListView.separated(
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: _dataList.length,
+                            itemBuilder: (context, index) =>
+                                ShowOrder(_dataList[index]))
+                        : SizedBox();
+                  },
                 ),
         );
       },
     );
-  }
-}
-
-class PrevoiusOrder extends StatelessWidget {
-  final DoonStoreUser user;
-  const PrevoiusOrder(this.user);
-
-  @override
-  Widget build(BuildContext context) {
-    List<OrderModel> _dataList = Provider.of<List<OrderModel>>(context);
-
-    if (_dataList != null)
-      _dataList = _dataList
-          .where((element) => element.id.contains(user.displayName))
-          .toList();
-
-    return _dataList != null && _dataList.length > 0
-        ? ListView.separated(
-            separatorBuilder: (context, index) => Divider(),
-            itemCount: _dataList.length,
-            itemBuilder: (context, index) {
-              OrderModel orderModel = _dataList[index];
-              return ShowOrder(orderModel);
-            },
-          )
-        : Center(child: Text(""));
   }
 }
 

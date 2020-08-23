@@ -70,7 +70,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
   StreamBuilder<List<FeaturedModel>> featuredSection() {
     return StreamBuilder<List<FeaturedModel>>(
-      stream: listOfFeaturedHeaders,
+      stream: FirestoreServices().listOfFeaturedHeaders,
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Container(

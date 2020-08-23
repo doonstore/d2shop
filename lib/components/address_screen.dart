@@ -1,3 +1,5 @@
+import 'package:d2shop/config/firestore_services.dart';
+import 'package:d2shop/models/apartment_model.dart';
 import 'package:d2shop/models/doonstore_user.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -19,11 +21,26 @@ class AddressScreen extends StatefulWidget {
 class _AddressScreenState extends State<AddressScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final List<String> itemList =
-      List<String>.generate(10, (index) => 'Apartment #$index');
+  List<String> apartmentList;
 
   String _apartment, _block, _houseNo;
   int addressType = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    List<ApartmentModel> _list = await FirestoreServices().apartments;
+    if (_list != null && _list.length > 1)
+      setState(() {
+        apartmentList = _list.map((e) => e.value).toList();
+      });
+    else
+      apartmentList = ["Dummy Data"];
+  }
 
   void submit() {
     if (_apartment != null) {
@@ -32,13 +49,9 @@ class _AddressScreenState extends State<AddressScreen> {
 
         DoonStoreUser user =
             Provider.of<ApplicationState>(context, listen: false).user;
-        Map<String, dynamic> address = {
-          'Apartment': _apartment,
-          'Block': _block,
-          'House No': _houseNo
-        };
 
-        widget.doonStoreUser.address = address;
+        widget.doonStoreUser.address =
+            addressToJson(_apartment, _block, _houseNo);
 
         userRef.document(user.userId).updateData(user.toMap()).then((value) {
           Utils.showMessage('Your address has been successfully updated');
@@ -54,79 +67,77 @@ class _AddressScreenState extends State<AddressScreen> {
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(20),
-      child: mainWidget(),
-    );
-  }
-
-  Widget mainWidget() {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              Strings.residencyType,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-                color: Colors.black87,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                Strings.residencyType,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                residentalTypeChooser(addressType == 0, 0, Strings.apartment),
-                SizedBox(width: 4),
-                residentalTypeChooser(addressType == 1, 1, Strings.house)
-              ],
-            ),
-            SizedBox(height: 15),
-            DropdownSearch<String>(
-              hint: Strings.apartmentOrSociety,
-              label: Strings.apartmentOrSociety,
-              showSearchBox: true,
-              items: itemList,
-              searchBoxDecoration: Utils.inputDecoration('Search..', hint: ''),
-              validator: (value) => value == null ? Strings.selectValue : null,
-              onSaved: (newValue) => _apartment = newValue,
-              onChanged: (value) => _apartment = value,
-              selectedItem: _apartment ?? '--Select--',
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    initialValue: widget.doonStoreUser.address.isNotEmpty
-                        ? getAddress(widget.doonStoreUser.address)[1]
-                        : '',
-                    decoration: Utils.inputDecoration(Strings.towerOrBlock),
-                    style: Utils.formTextStyle(),
-                    validator: (value) =>
-                        value.trim().isEmpty ? Strings.fieldRequired : null,
-                    onSaved: (newValue) => _block = newValue.trim(),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  residentalTypeChooser(addressType == 0, 0, Strings.apartment),
+                  SizedBox(width: 4),
+                  residentalTypeChooser(addressType == 1, 1, Strings.house)
+                ],
+              ),
+              SizedBox(height: 15),
+              DropdownSearch<String>(
+                hint: Strings.apartmentOrSociety,
+                label: Strings.apartmentOrSociety,
+                showSearchBox: true,
+                items: apartmentList,
+                searchBoxDecoration:
+                    Utils.inputDecoration('Search..', hint: ''),
+                validator: (value) =>
+                    value == null ? Strings.selectValue : null,
+                onSaved: (newValue) => _apartment = newValue,
+                onChanged: (value) => _apartment = value,
+                selectedItem: _apartment ?? '--Select--',
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: widget.doonStoreUser.address.isNotEmpty
+                          ? getAddress(widget.doonStoreUser.address)[1]
+                          : '',
+                      decoration: Utils.inputDecoration(Strings.towerOrBlock),
+                      style: Utils.formTextStyle(),
+                      validator: (value) =>
+                          value.trim().isEmpty ? Strings.fieldRequired : null,
+                      onSaved: (newValue) => _block = newValue.trim(),
+                    ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    initialValue: widget.doonStoreUser.address.isNotEmpty
-                        ? getAddress(widget.doonStoreUser.address)[2]
-                        : '',
-                    decoration: Utils.inputDecoration(Strings.flatOrHouse),
-                    style: Utils.formTextStyle(),
-                    validator: (value) =>
-                        value.trim().isEmpty ? Strings.fieldRequired : null,
-                    onSaved: (newValue) => _houseNo = newValue.trim(),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: widget.doonStoreUser.address.isNotEmpty
+                          ? getAddress(widget.doonStoreUser.address)[2]
+                          : '',
+                      decoration: Utils.inputDecoration(Strings.flatOrHouse),
+                      style: Utils.formTextStyle(),
+                      validator: (value) =>
+                          value.trim().isEmpty ? Strings.fieldRequired : null,
+                      onSaved: (newValue) => _houseNo = newValue.trim(),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Utils.basicBtn(context, text: Strings.confirm, onTap: submit)
-          ],
+                ],
+              ),
+              SizedBox(height: 20),
+              Utils.basicBtn(context, text: Strings.confirm, onTap: submit)
+            ],
+          ),
         ),
       ),
     );

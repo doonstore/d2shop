@@ -31,7 +31,7 @@ class ChatScreen extends StatelessWidget {
         userId: user.userId,
       );
 
-      sendMessageToSupport(supportMessages).then((value) {
+      FirestoreServices().sendMessageToSupport(supportMessages).then((value) {
         if (!fromSupport)
           Utils.showMessage("Our support team will get back to you shortly.",
               basic: true);
@@ -78,7 +78,7 @@ class ChatScreen extends StatelessWidget {
           ),
         ),
         body: StreamProvider<List<SupportMessages>>.value(
-          value: getMessages(value.user.userId),
+          value: FirestoreServices().getMessages(value.user.userId),
           builder: (context, child) {
             List<SupportMessages> chatList =
                 Provider.of<List<SupportMessages>>(context);

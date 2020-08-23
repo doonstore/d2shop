@@ -131,7 +131,6 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
     userRef.document(userData.userId).setData(userData.toMap());
   } else {
     userData = DoonStoreUser.fromJson(userFromDB.data);
-    userData.lastLogin = user.metadata.lastSignInTime.toString();
     userRef.document(userData.userId).updateData(userData.toMap());
   }
   return userData;

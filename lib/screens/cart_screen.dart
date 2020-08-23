@@ -98,7 +98,7 @@ class _CartScreenState extends State<CartScreen> {
       noOfProducts: noOfProducts,
     );
 
-    placeOrder(orderModel).then((value) {
+    FirestoreServices().placeOrder(orderModel).then((value) {
       userRef.document(user.userId).updateData(user.toMap()).then((value) {
         Provider.of<ApplicationState>(context, listen: false).setUser(user);
         Provider.of<ApplicationState>(context, listen: false).clearCart();
@@ -109,7 +109,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   init() async {
-    fee = await serviceFee;
+    fee = await FirestoreServices().serviceFee;
     setState(() {});
   }
 

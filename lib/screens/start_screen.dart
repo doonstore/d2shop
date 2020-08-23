@@ -43,14 +43,10 @@ class _StartScreenState extends State<StartScreen> {
     ScreenUtil.init(context, height: size.height, width: size.width);
 
     return Scaffold(
-      body: Container(
-        width: size.width,
-        height: size.height,
-        child: Center(
-          child: SpinKitRipple(
-            color: kPrimaryColor,
-            size: 100,
-          ),
+      body: Center(
+        child: SpinKitWave(
+          color: kPrimaryColor,
+          size: 50,
         ),
       ),
     );

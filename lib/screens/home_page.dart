@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
             return SharedAxisTransition(
               animation: primaryAnimation,
               secondaryAnimation: secondaryAnimation,
-              transitionType: SharedAxisTransitionType.scaled,
+              transitionType: SharedAxisTransitionType.horizontal,
               child: child,
             );
           },

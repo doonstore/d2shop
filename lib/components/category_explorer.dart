@@ -18,21 +18,6 @@ class CategoryExplorer extends StatefulWidget {
 }
 
 class _CategoryExplorerState extends State<CategoryExplorer> {
-  @override
-  Widget build(BuildContext context) {
-    return StreamProvider<List<Item>>.value(
-      value: listOfItems,
-      builder: (context, child) => SearchScreen(),
-    );
-  }
-}
-
-class SearchScreen extends StatefulWidget {
-  @override
-  _SearchScreenState createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController queryController = TextEditingController();
 
   List<Item> dataList = [], filteredList = [];
@@ -63,60 +48,65 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    dataList = Provider.of<List<Item>>(context) ?? [];
-    categoryList = Provider.of<ApplicationState>(context).categoryList;
+    return StreamProvider<List<Item>>.value(
+      value: FirestoreServices().listOfItems,
+      builder: (context, child) {
+        dataList = Provider.of<List<Item>>(context) ?? [];
+        categoryList = Provider.of<ApplicationState>(context).categoryList;
 
-    return Consumer<ApplicationState>(
-      builder: (context, value, child) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0.0,
-          leading: IconButton(
-            icon: FaIcon(FontAwesomeIcons.chevronLeft),
-            onPressed: () => Navigator.pop(context),
-            color: Colors.black54,
-          ),
-          title: TextField(
-            controller: queryController,
-            autofocus: true,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: Strings.searchFor,
-              isDense: true,
+        return Consumer<ApplicationState>(
+          builder: (context, value, child) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0.0,
+              leading: IconButton(
+                icon: FaIcon(FontAwesomeIcons.chevronLeft),
+                onPressed: () => Navigator.pop(context),
+                color: Colors.black54,
+              ),
+              title: TextField(
+                controller: queryController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: Strings.searchFor,
+                  isDense: true,
+                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ),
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-        ),
-        bottomSheet: value.cart.isNotEmpty ? value.showCart(context) : null,
-        body: queryController.text.isEmpty
-            ? CategoryData(dataList: categoryList)
-            : filteredList.isNotEmpty
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          '${filteredList.length} results found for "${queryController.text}"',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.black45,
-                            fontWeight: FontWeight.w600,
+            bottomSheet: value.cart.isNotEmpty ? value.showCart(context) : null,
+            body: queryController.text.isEmpty
+                ? CategoryData(dataList: categoryList)
+                : filteredList.isNotEmpty
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              '${filteredList.length} results found for "${queryController.text}"',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: Colors.black45,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => Divider(),
-                          itemBuilder: (context, index) =>
-                              ItemInfo(item: filteredList[index]),
-                          itemCount: filteredList.length,
-                        ),
+                          Expanded(
+                            child: ListView.separated(
+                              separatorBuilder: (context, index) => Divider(),
+                              itemBuilder: (context, index) =>
+                                  ItemInfo(item: filteredList[index]),
+                              itemCount: filteredList.length,
+                            ),
+                          )
+                        ],
                       )
-                    ],
-                  )
-                : NoDataWidget(),
-      ),
+                    : NoDataWidget(),
+          ),
+        );
+      },
     );
   }
 }
