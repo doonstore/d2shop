@@ -1,6 +1,7 @@
 import 'package:d2shop/screens/home_page.dart';
 import 'package:d2shop/helper/user_input.dart';
 import 'package:d2shop/state/application_state.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:animations/animations.dart';
@@ -64,7 +65,7 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
             style: TextStyle(
               color: Colors.indigo,
               letterSpacing: 1.2,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
             onChanged: (value) => code = value,
           ),
@@ -80,10 +81,10 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
                       await _auth.signInWithCredential(credential);
                   redirectUser(result, context);
                 } else {
-                  Utils.showMessage('OTP should be of 6 digits.', error: true);
+                  Utils.showMessage(Strings.otpLimit, error: true);
                 }
               },
-              child: Text('Verify & Continue'),
+              child: Text(Strings.verifyAndContinue),
               textColor: Colors.white,
               color: Colors.indigo,
             )
@@ -97,7 +98,7 @@ Future<void> loginUsingPhoneNumber(BuildContext context, String number) async {
 redirectUser(AuthResult result, BuildContext context) {
   getUser(result.user).then((DoonStoreUser user) {
     if (user != null) {
-      Utils.showMessage('Successfully Signed In.');
+      Utils.showMessage(Strings.signedIn);
 
       if (user.displayName.isEmpty)
         MyRoute.push(context, UserInput(doonStoreUser: user, isSettingUp: true),
@@ -130,7 +131,6 @@ Future<DoonStoreUser> getUser(FirebaseUser user) async {
     userRef.document(userData.userId).setData(userData.toMap());
   } else {
     userData = DoonStoreUser.fromJson(userFromDB.data);
-    userData.lastLogin = user.metadata.lastSignInTime.toString();
     userRef.document(userData.userId).updateData(userData.toMap());
   }
   return userData;

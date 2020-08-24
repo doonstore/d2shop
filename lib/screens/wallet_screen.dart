@@ -12,7 +12,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class WalletScreen extends StatefulWidget {
   final bool fromCart;
-  final double amount;
+  final int amount;
   const WalletScreen({this.fromCart = false, this.amount});
 
   @override
@@ -64,6 +64,7 @@ class _WalletScreenState extends State<WalletScreen> {
       Utils.showMessage("Wallet credited with $rupeeUniCode $amount amount.");
       Provider.of<ApplicationState>(context, listen: false)
           .setUser(doonStoreUser);
+      if (widget.fromCart) Navigator.pop(context);
     });
   }
 
@@ -133,7 +134,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   ),
                   subtitle: Text(
                     '$rupeeUniCode ${value.user.wallet}',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                   ),
                   trailing: value.user.transactions.isNotEmpty
                       ? FlatButton(

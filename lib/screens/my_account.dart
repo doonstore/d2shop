@@ -6,6 +6,9 @@ import 'package:d2shop/helper/edit_user_prefernces.dart';
 import 'package:d2shop/config/shared_services.dart';
 import 'package:d2shop/helper/user_input.dart';
 import 'package:d2shop/models/doonstore_user.dart';
+import 'package:d2shop/screens/wallet_screen.dart';
+import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/config/authentication.dart';
 import 'package:d2shop/state/application_state.dart';
@@ -42,20 +45,14 @@ class _AccountScreenState extends State<AccountScreen> {
     return Consumer<ApplicationState>(
       builder: (context, value, child) {
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: _value == 0.3
+          appBar: Utils.appBar(
+            context,
+            title: "My Account",
+            backgroudColor: _value == 0.3
                 ? kPrimaryColor.withOpacity(0.220)
                 : kPrimaryColor.withOpacity(0.7),
-            elevation: 0.0,
-            centerTitle: true,
-            title: Text(
-              'My Account',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            color: Colors.white,
+            leading: true,
           ),
           body: AnimatedOpacity(
             opacity: _value,
@@ -103,8 +100,10 @@ class _AccountScreenState extends State<AccountScreen> {
                         Divider(color: Colors.black12, indent: 5, endIndent: 5),
                         AccountSectionCards(
                           title: 'Wallet',
-                          subtitle: '\u20b90 Balance',
+                          subtitle: '$rupeeUniCode${value.user.wallet} Balance',
                           leadingIcon: FontAwesomeIcons.rupeeSign,
+                          onTapCallback: () => MyRoute.push(
+                              context, WalletScreen(fromCart: true)),
                         ),
                         Divider(color: Colors.black12, indent: 5, endIndent: 5),
                         AccountSectionCards(
@@ -263,16 +262,12 @@ class AccountSectionCards extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20),
       onTap: onTapCallback,
-      leading: FaIcon(
-        leadingIcon,
-        color: kPrimaryColor.withOpacity(0.7),
-      ),
+      leading: FaIcon(leadingIcon, color: kPrimaryColor),
       isThreeLine: isThreeLine,
       title: Text(
         title,
         style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           fontSize: 16.sp,
         ),
       ),
@@ -288,7 +283,7 @@ class AccountSectionCards extends StatelessWidget {
           : null,
       trailing: FaIcon(
         FontAwesomeIcons.chevronRight,
-        color: kPrimaryColor.withOpacity(0.7),
+        color: kPrimaryColor.withOpacity(0.9),
       ),
     );
   }

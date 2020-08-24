@@ -60,7 +60,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                     return ExpansionTile(
                       title: Text(
                         title,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text('${itemList.length} items'),
                       children: itemList.map((e) => ItemInfo(item: e)).toList(),
@@ -98,7 +98,7 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: br(5),
                 child:
                     CachedNetworkImage(imageUrl: category.photoUrl, width: 100),
               ),
@@ -108,7 +108,7 @@ class InfoCard extends StatelessWidget {
                     category.name,
                     style: GoogleFonts.ubuntu(
                       fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   subtitle: Text(

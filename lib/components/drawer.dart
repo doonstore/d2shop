@@ -3,6 +3,7 @@ import 'package:d2shop/screens/view_transactions.dart';
 import 'package:d2shop/screens/wallet_screen.dart';
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:d2shop/utils/constants.dart';
@@ -34,12 +35,7 @@ class CustomDrawer extends StatelessWidget {
                   endIndent: 10,
                 ),
                 dataCard(
-                  title: 'My Subscriptions',
-                  iconData: FontAwesomeIcons.retweet,
-                  onTapCallback: () {},
-                ),
-                dataCard(
-                  title: 'Wallet Balance',
+                  title: Strings.walletBalance,
                   iconData: FontAwesomeIcons.wallet,
                   onTapCallback: () =>
                       MyRoute.push(context, WalletScreen(fromCart: true)),
@@ -47,7 +43,7 @@ class CustomDrawer extends StatelessWidget {
                       tralingContainer('$rupeeUniCode ${value.user.wallet}'),
                 ),
                 dataCard(
-                  title: 'Wallet Transactions',
+                  title: Strings.walletTransactions,
                   iconData: FontAwesomeIcons.history,
                   onTapCallback: () => MyRoute.push(
                     context,
@@ -55,13 +51,18 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 dataCard(
-                  title: 'Refer and Save',
+                  title: Strings.notifications,
+                  iconData: FontAwesomeIcons.bell,
+                  onTapCallback: () {},
+                ),
+                dataCard(
+                  title: Strings.referAndSave,
                   iconData: FontAwesomeIcons.shareAlt,
                   onTapCallback: () {},
                   trailing: tralingContainer('Code'),
                 ),
                 dataCard(
-                  title: 'Support & FAQs',
+                  title: Strings.supportAndFaq,
                   iconData: FontAwesomeIcons.questionCircle,
                   onTapCallback: () {},
                 ),
@@ -79,17 +80,12 @@ class CustomDrawer extends StatelessWidget {
       leading: FaIcon(FontAwesomeIcons.user, color: kPrimaryColor),
       title: Text(
         name,
-        style: GoogleFonts.ptSans(
-          fontSize: 17.sp,
-          color: Colors.black87,
-          fontWeight: FontWeight.w700,
+        style: GoogleFonts.openSans(
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w600,
         ),
       ),
-      trailing: FaIcon(
-        FontAwesomeIcons.chevronRight,
-        size: 20,
-        color: Colors.black,
-      ),
+      trailing: FaIcon(FontAwesomeIcons.chevronRight, size: 20),
     );
   }
 
@@ -108,7 +104,7 @@ class CustomDrawer extends StatelessWidget {
         title,
         style: TextStyle(
           fontSize: 13.sp,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 1.1,
         ),
       ),
@@ -116,14 +112,14 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Container tralingContainer(String text) {
-    return Container(
-      decoration: BoxDecoration(
-        color: kPrimaryColor.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(20),
-      ),
+  Material tralingContainer(String text) {
+    return Material(
+      color: kPrimaryColor,
+      shape: StadiumBorder(),
+      animationDuration: Duration(milliseconds: 300),
+      elevation: 5.0,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.all(10),
         child: Text(
           text,
           style: TextStyle(

@@ -31,7 +31,9 @@ dependencies:
   titled_navigation_bar: ^4.1.0
   razorpay_flutter: ^1.2.2
   cached_network_image: ^2.2.0+1
-
+  uuid: ^2.2.0
+  firebase_messaging: ^6.0.16
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -44,3 +46,4 @@ flutter:
   assets:
     - assets/item/
     - assets/category/
+    - assets/

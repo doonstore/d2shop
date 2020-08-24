@@ -1,5 +1,6 @@
 import 'package:d2shop/state/application_state.dart';
 import 'package:d2shop/utils/constants.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:d2shop/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,7 @@ class _RequestProductState extends State<RequestProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Give us some details of the product(s) you want on {APP NAME}',
+                'Give us some details of the product(s) you want on ${Strings.appName}',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               SizedBox(height: 15),

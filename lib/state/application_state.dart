@@ -1,23 +1,26 @@
 import 'package:d2shop/models/coupon_model.dart';
 import 'package:d2shop/models/doonstore_user.dart';
+import 'package:d2shop/models/item_cart_model.dart';
 import 'package:d2shop/models/shopping_model.dart';
 import 'package:d2shop/screens/cart_screen.dart';
 import 'package:d2shop/utils/constants.dart';
 import 'package:d2shop/utils/route.dart';
+import 'package:d2shop/utils/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ApplicationState extends ChangeNotifier {
   DoonStoreUser user;
-  Map<String, Map<String, dynamic>> cart;
+  Map<String, ItemCart> cart;
   DateTime deliveryDate;
   List<Category> categoryList;
   CouponModel couponModel;
   double discount = 0.0;
 
   ApplicationState() {
-    cart = Map<String, Map<String, dynamic>>();
-    deliveryDate = DateTime.now();
+    cart = Map<String, ItemCart>();
+    deliveryDate = DateTime.now().add(Duration(days: 1));
     categoryList = <Category>[];
     couponModel = CouponModel();
   }
@@ -26,14 +29,14 @@ class ApplicationState extends ChangeNotifier {
     if (cart.containsKey(item.id))
       cart.update(
         item.id,
-        (value) => {
-          'quantity': value['quantity'] + 1,
-          'totalPrice': value['totalPrice'] + item.price,
-          'item': item
-        },
+        (value) => ItemCart(
+          quantity: value.quantity + 1,
+          totalPrice: value.totalPrice + item.price,
+          item: item,
+        ),
       );
     else
-      cart[item.id] = {'quantity': 1, 'totalPrice': item.price, 'item': item};
+      cart[item.id] = ItemCart(quantity: 1, totalPrice: item.price, item: item);
 
     notifyListeners();
   }
@@ -42,14 +45,14 @@ class ApplicationState extends ChangeNotifier {
     if (full)
       cart.remove(item.id);
     else {
-      if (cart[item.id]['quantity'] > 1)
+      if (cart[item.id].quantity > 1)
         cart.update(
           item.id,
-          (value) => {
-            'quantity': value['quantity'] - 1,
-            'totalPrice': value['totalPrice'] - item.price,
-            'item': item
-          },
+          (value) => ItemCart(
+            quantity: value.quantity - 1,
+            totalPrice: value.totalPrice - item.price,
+            item: item,
+          ),
         );
       else
         cart.remove(item.id);
@@ -86,15 +89,17 @@ class ApplicationState extends ChangeNotifier {
 
   clearCart() {
     cart.clear();
-    deliveryDate = DateTime.now();
+    deliveryDate = DateTime.now().add(Duration(days: 1));
+    couponModel = CouponModel();
     notifyListeners();
   }
 
   num getWalletAmount() {
-    if (user.wallet > getCurrentPrice())
-      return user.wallet - getCurrentPrice();
-    else
-      return 0;
+    return user.wallet - getCurrentPrice();
+    // if (user.wallet > getCurrentPrice())
+    //   return user.wallet - getCurrentPrice();
+    // else
+    //   return 0;
   }
 
   Widget showCart(BuildContext context) {
@@ -120,29 +125,29 @@ class ApplicationState extends ChangeNotifier {
                   children: [
                     Text(
                       '${cart.length} Item${cart.length > 1 ? '(s)' : ''}',
-                      style: TextStyle(
+                      style: GoogleFonts.ptSans(
                         color: Colors.white,
                         fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
                       '$rupeeUniCode${getCurrentPrice()}',
-                      style: TextStyle(
+                      style: GoogleFonts.overpass(
                         color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
                 Spacer(),
                 Text(
-                  'Proceed to cart',
+                  Strings.proceedToCart,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 SizedBox(width: 10),
@@ -162,7 +167,7 @@ class ApplicationState extends ChangeNotifier {
   double getCurrentPrice() {
     double val = 0.0;
     cart.forEach((key, value) {
-      val += value['totalPrice'];
+      val += value.totalPrice;
     });
     return val;
   }
